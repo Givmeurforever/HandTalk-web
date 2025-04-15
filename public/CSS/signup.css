@@ -1,0 +1,77 @@
+.input-group {
+    display: flex;
+    gap: 10px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+    background: #fff;
+}
+
+input::placeholder {
+    color: #AFAFAF;
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-container input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
+
+.toggle-password img {
+    width: 100%;
+    height: auto;
+}
+
+button {
+    width: 100%;
+    background: #FFFFFF;
+    color: #FF9500;
+    border: 2px solid #FF9500;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: #FF9500;
+    color: white;
+}
+
+p {
+    font-size: 14px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+p a {
+    color: #B76CB8;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+p a:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,78 @@
+.kamus-container {
+    padding: 40px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+.title {
+    background-color: #FF9500;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px 10px 0 0;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.hasil-box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.hasil-gif {
+    flex: 1;
+    text-align: center;
+}
+
+
+.hasil-gif video {
+    width: 100%;
+    max-width: 320px;
+    border-radius: 12px;
+    object-fit: contain;
+}
+
+
+.hasil-kata {
+    flex: 1;
+    text-align: center;
+}
+
+.hasil-kata h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #333;
+}
+
+.not-found,
+.no-search {
+    padding: 30px;
+    font-size: 16px;
+    color: #555;
+    background-color: #f9f9f9;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hasil-box {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hasil-kata h1 {
+        font-size: 28px;
+    }
+}

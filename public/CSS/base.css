@@ -1,0 +1,311 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;700&display=swap');
+
+/* 🌍 Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    /* outline: 1px solid red; */
+}
+
+section {
+    scroll-margin-top: 100px; /* Sesuaikan dengan tinggi header kamu */
+}
+
+main {
+    padding-top: 80px;
+}
+
+
+body {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    background-color: #F7F7F8;
+}
+
+/* === 🏠 NAVBAR === */
+.navbar {
+    background-color: #FFF7F7;
+    padding: 15px 120px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    height: 80px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-container img {
+    height: 60px;
+}
+
+.logo-container a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+}
+
+/* === 🔎 SEARCH BAR === */
+.search-container {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 450px;
+}
+
+.search-container input {
+    border: none;
+    outline: none;
+    font-size: 16px;
+    flex: 1;
+    background: transparent;
+}
+
+.search-container button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* === 🔐 AUTH BUTTONS === */
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.auth-buttons .btn {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 7px;
+    font-weight: 700;
+}
+
+.signup {
+    background-color: transparent;
+    color: black;
+    border: 2px solid black;
+    padding: 8px 15px;
+    transition: 0.3s;
+}
+
+.signup:hover {
+    background-color: #FF9500;
+}
+
+.login {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 8px 15px;
+    transition: 0.3s;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.login:hover {
+    background-color: #FF9500;
+}
+
+/* === 📱 RESPONSIVE NAVBAR === */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 15px 20px;
+        flex-direction: column;
+        height: auto;
+        gap: 10px;
+    }
+
+    .search-container {
+        width: 300px;
+    }
+
+    .auth-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+/* 🌍 Footer Styles */
+.footer {
+    background-color: #FFF7F7;
+    padding: 40px 60px;
+    font-size: 0.9rem; 
+    margin-top: 50px;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap; /* Agar tetap rapi di layar kecil */
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: auto;
+    gap: 20px;
+}
+
+/* 🔹 Bagian Kiri */
+.footer-left {
+    flex: 1;
+    min-width: 250px; /* Supaya tidak terlalu kecil di layar kecil */
+}
+
+.footer-logo {
+    height: 60px;
+    margin-bottom: 15px;
+}
+
+.footer-left p {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+/* 🔹 Informasi Kontak */
+.footer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.contact-item img {
+    width: 18px;
+}
+
+/* 🔹 Bagian Tengah & Kanan */
+.footer-middle, .footer-right {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer-middle h4, .footer-right h4 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.footer-middle ul, .footer-right ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-middle ul li, .footer-right ul li {
+    margin-bottom: 6px;
+}
+
+.footer-middle ul li a, .footer-right ul li a {
+    text-decoration: none;
+    color: black;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.footer-middle ul li a:hover, .footer-right ul li a:hover {
+    color: #FF9500;
+}
+
+/* 🔹 Profil Sosial */
+.footer-social {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer-social h4 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 10px;
+}
+
+.social-box {
+    background-color: white;
+    padding: 8px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    transition: 0.3s;
+}
+
+.social-box:hover {
+    background-color: #FF9500;
+}
+
+.social-box img {
+    width: 18px;
+}
+
+/* 🔹 Garis Pemisah */
+.footer-divider {
+    width: 100%;
+    height: 1px;
+    background-color: #ddd;
+    margin: 20px 0;
+}
+
+/* 🔹 Copyright */
+.footer-bottom {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #555;
+    padding: 10px 0;
+}
+
+/* 📱 Responsiveness */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-left, .footer-middle, .footer-right, .footer-social {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .footer-contact {
+        align-items: center;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+}

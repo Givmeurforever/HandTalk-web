@@ -1,0 +1,157 @@
+/* Reset dasar untuk memastikan konsistensi di berbagai browser */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Gaya umum untuk body */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+    padding: 20px;
+}
+
+/* Tombol kembali ke kursus */
+.back-btn {
+    display: inline-block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: bold;
+}
+
+.back-btn:hover {
+    text-decoration: underline;
+}
+
+/* Header topik */
+.topik-header {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.topik-header h2 {
+    margin-bottom: 10px;
+}
+
+.topik-header .description {
+    font-size: 1rem;
+    color: #666;
+}
+
+/* Garis pemisah kursus */
+.course-divider {
+    border: 0;
+    height: 1px;
+    background: #ddd;
+    margin: 20px 0;
+}
+
+/* Kontainer utama untuk konten topik */
+.topik-body {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Bagian kiri untuk video dan deskripsi materi */
+.topik-left {
+    flex: 2;
+    min-width: 300px;
+}
+
+/* Kontainer video */
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* Rasio aspek 16:9 */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    background: #000;
+    margin-bottom: 20px;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Deskripsi materi */
+.materi-description {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+/* Bagian kanan untuk daftar materi */
+.topik-right {
+    flex: 1;
+    min-width: 250px;
+}
+
+.topik-right h3 {
+    margin-bottom: 10px;
+}
+
+/* Daftar materi */
+.materi-list {
+    list-style: none;
+}
+
+.materi-list li {
+    margin-bottom: 10px;
+}
+
+.materi-list a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.materi-list a:hover {
+    background-color: #f0f0f0;
+}
+
+.materi-list input[type="radio"] {
+    margin-right: 10px;
+}
+
+.materi-list .durasi {
+    margin-left: auto;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Materi aktif */
+.materi-list .active a {
+    background-color: #007BFF;
+    color: #ffffff;
+}
+
+.materi-list .active a:hover {
+    background-color: #0056b3;
+}
+
+/* Responsivitas */
+@media (max-width: 768px) {
+    .topik-body {
+        flex-direction: column;
+    }
+
+    .topik-left, .topik-right {
+        width: 100%;
+    }
+}
