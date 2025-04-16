@@ -35,7 +35,7 @@
                 <li><a href="{{ route('admin.latihan.index') }}"><i class="fas fa-book-open"></i> <span>Latihan</span></a></li>
                 <li><a href="{{ route('admin.kuis.index') }}"><i class="fas fa-graduation-cap"></i> <span>Kuis</span></a></li>
                 <li><a href="{{ route('admin.kamus.index') }}"><i class="fas fa-atlas"></i> <span>Kamus</span></a></li>
-                <li><a href="{{ route('admin.pengaturan.index') }}"><i class="fas fa-cog"></i> <span>Pengaturan</span></a></li>
+                {{-- <li><a href="{{ route('admin.pengaturan.index') }}"><i class="fas fa-cog"></i> <span>Pengaturan</span></a></li> --}}
                 <li>
                     <form action="#" method="POST">
                         @csrf

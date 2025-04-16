@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class TopikUSerController extends Controller
+class TopikUserController extends Controller
 {
     public function show($topikSlug, $materiSlug)
     {

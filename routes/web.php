@@ -12,6 +12,10 @@ use App\Http\Controllers\Admin\MateriController;
 use App\Http\Controllers\Admin\LatihanController;
 use App\Http\Controllers\Admin\KuisController;
 use App\Http\Controllers\Admin\PengaturanController;
+use App\Http\Controllers\KursusController as FrontKursusController;
+use App\Http\Controllers\LatihanController as FrontLatihanController;
+use App\Http\Controllers\KuisController as FrontKuisController;
+use App\Http\Controllers\KamusController as FrontKamusController;
     
 // ✨ Halaman Utama / Publik
 
@@ -23,6 +27,7 @@ Route::get('/kursus/{topikSlug}/{materiSlug}', [TopikUserController::class, 'sho
 Route::get('/kamus', [KamusUserController::class, 'index'])->name('kamus');
 Route::get('/settings', fn() => view('pages.settings'))->name('settings');
 Route::get('/tentang', fn() => view('pages.tentang'))->name('tentang');
+
 
 // Admin Dashboard
 
