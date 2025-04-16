@@ -14,6 +14,7 @@
 
     <!-- Dashboard CSS -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    @stack('styles')
 </head>
 <body>
     <div class="dashboard-container">
@@ -25,30 +26,31 @@
                     <span class="brand-name">HandTalk</span>
                 </div>
             </div>
-            
+        
             <ul class="sidebar-menu">
-                <li><a href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="{{ route('admin.pengguna') }}"><i class="fas fa-users"></i> Pengguna</a></li>
-                <li><a href="{{ route('admin.kursus') }}"><i class="fas fa-layer-group"></i> Kursus</a></li>
-                <li><a href="{{ route('admin.materi') }}"><i class="fas fa-book"></i> Materi</a></li>
-                <li><a href="{{ route('admin.latihan') }}"><i class="fas fa-book-open"></i> Latihan</a></li>
-                <li><a href="{{ route('admin.kuis') }}"><i class="fas fa-graduation-cap"></i> Kuis</a></li>
-                <li><a href="{{ route('admin.kamus') }}"><i class="fas fa-atlas"></i> Kamus</a></li>
-                <li><a href="{{ route('admin.pengaturan') }}"><i class="fas fa-cog"></i> Pengaturan</a></li>
+                <li><a href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                <li><a href="{{ route('admin.pengguna.index') }}"><i class="fas fa-users"></i> <span>Pengguna</span></a></li>
+                <li><a href="{{ route('admin.kursus.index') }}"><i class="fas fa-layer-group"></i> <span>Kursus</span></a></li>
+                <li><a href="{{ route('admin.materi.index') }}"><i class="fas fa-book"></i> <span>Materi</span></a></li>
+                <li><a href="{{ route('admin.latihan.index') }}"><i class="fas fa-book-open"></i> <span>Latihan</span></a></li>
+                <li><a href="{{ route('admin.kuis.index') }}"><i class="fas fa-graduation-cap"></i> <span>Kuis</span></a></li>
+                <li><a href="{{ route('admin.kamus.index') }}"><i class="fas fa-atlas"></i> <span>Kamus</span></a></li>
+                <li><a href="{{ route('admin.pengaturan.index') }}"><i class="fas fa-cog"></i> <span>Pengaturan</span></a></li>
                 <li>
                     <form action="#" method="POST">
                         @csrf
                         <button type="submit" class="logout-btn">
-                            <i class="fas fa-sign-out-alt"></i> Logout
+                            <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
                         </button>
                     </form>
                 </li>
             </ul>
-            
+        
             <div class="sidebar-footer">
                 <p>&copy; 2025 HandTalk</p>
             </div>
         </aside>
+        
 
         <!-- Main Content -->
         <main class="main-content">
@@ -59,21 +61,30 @@
                     <input type="text" placeholder="Cari...">
                 </div>
                 <div class="user-info">
-                    <div class="user-info">
-                        <div class="notifications">
+                    <div class="notification-wrapper">
+                        <div class="notifications" title="Notifikasi">
                             <i class="fas fa-bell"></i>
                             <span class="badge">3</span>
                         </div>
-                        <div class="user">
-                            <img src="{{ asset('img/profile-default.png') }}" alt="Avatar">
-                            <div class="user-details">
-                                <span class="user-name">Admin HandTalk</span>
-                                <span class="user-role">Super Admin</span>
-                            </div>
+                        <div class="notification-dropdown">
+                            <p><strong>Notifikasi Terbaru</strong></p>
+                            <ul>
+                                <li>User123 menyelesaikan materi A</li>
+                                <li>User456 mengerjakan kuis</li>
+                                <li>User789 mendaftar</li>
+                            </ul>
+                            <a href="{{ route('admin.notifications') }}" class="view-all">Lihat Semua</a>
                         </div>
                     </div>
-                    
+                    <a href="{{ route('admin.profile') }}" class="user" title="Lihat Profil Admin">
+                        <img src="{{ asset('img/profile-default.png') }}" alt="Avatar">
+                        <div class="user-details">
+                            <span class="user-name">Admin HandTalk</span>
+                            <span class="user-role">Super Admin</span>
+                        </div>
+                    </a>
                 </div>
+                               
             </div>
 
             <section class="content">
@@ -87,7 +98,7 @@
             document.querySelector('.sidebar')?.classList.toggle('collapsed');
             document.querySelector('.main-content')?.classList.toggle('expanded');
         });
-    </script>
+    </script>    
 
     @yield('scripts')
 </body>

@@ -1,5 +1,9 @@
-@extends('layouts.dashboard')
+@extends('layouts.dashboardadmin')
 @section('title', 'Manajemen Pengguna')
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/page-pengguna.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/table.css') }}">
+@endpush
 
 @section('content')
     <div class="content-header">
@@ -10,7 +14,7 @@
     @php
         $users = [
             ['id' => 1, 'nama' => 'Andi Setiawan', 'email' => 'andi@mail.com', 'role' => 'User'],
-            ['id' => 2, 'nama' => 'Budi Raharjo', 'email' => 'budi@mail.com', 'role' => 'Admin'],
+            ['id' => 2, 'nama' => 'Budi Raharjo', 'email' => 'budi@mail.com', 'role' => 'User'],
         ];
     @endphp
 

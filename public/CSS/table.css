@@ -1,0 +1,92 @@
+/* Table */
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Table Header */
+.table-custom thead {
+    background: #ff7f50;
+    color: white;
+}
+
+/* Table Row & Cell */
+.table-custom th,
+.table-custom td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+/* Hover Effect */
+.table-custom tr:hover {
+    background-color: #fff7f3;
+}
+
+/* Button dalam Tabel */
+.btn-aksi {
+    background-color: #ff7f50;
+    color: white;
+    padding: 6px 10px;
+    margin-right: 5px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.btn-aksi:hover {
+    background-color: #e96939;
+}
+
+/* Table Wrapper */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* Table Head */
+.data-table thead {
+    background: #ff7f50;
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+}
+
+/* Cell Padding */
+.data-table th,
+.data-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* Zebra Striping */
+.data-table tbody tr:nth-child(even) {
+    background: #fffaf7;
+}
+
+/* Hover Row */
+.data-table tbody tr:hover {
+    background-color: #fff0e8;
+}
+
+/* Aksi Link */
+.data-table td a {
+    color: #ff7f50;
+    font-weight: 500;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.data-table td a:hover {
+    text-decoration: underline;
+}

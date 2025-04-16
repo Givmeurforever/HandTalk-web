@@ -1,16 +1,16 @@
-@extends('layouts.dashboard')
+@extends('layouts.dashboardadmin')
 @section('title', 'Detail Pengguna')
 
 @section('content')
     <h1>Detail Pengguna</h1>
 
     @php
-        $user = ['nama' => 'Andi Setiawan', 'email' => 'andi@mail.com', 'role' => 'User'];
+        $user = ['id' => 1, 'nama' => 'Andi Setiawan', 'email' => 'andi@mail.com', 'role' => 'User'];
     @endphp
 
     <p><strong>Nama:</strong> {{ $user['nama'] }}</p>
     <p><strong>Email:</strong> {{ $user['email'] }}</p>
     <p><strong>Role:</strong> {{ $user['role'] }}</p>
 
-    <a href="{{ route('admin.pengguna.index') }}">← Kembali ke daftar pengguna</a>
+    <a href="{{ route('admin.pengguna.index') }}" class="btn-aksi">← Kembali</a>
 @endsection

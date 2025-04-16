@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class KamusController extends Controller
+class KamusUserController extends Controller
 {
     public function index(Request $request)
     {

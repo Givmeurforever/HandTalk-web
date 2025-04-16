@@ -1,4 +1,4 @@
-@extends('admin.layout')
+@extends('layouts.dashboardadmin')
 
 @section('title', 'Kelola Topik')
 
