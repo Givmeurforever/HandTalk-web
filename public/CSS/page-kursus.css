@@ -1,28 +1,144 @@
-.content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #fff;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+/* ======== TOPIK MANAGEMENT STYLING ======== */
+
+/* Tambahan khusus untuk halaman Topik */
+.badge {
+    font-size: 0.85em;
+    padding: 6px 10px;
+    font-weight: 500;
+    border-radius: 30px;
 }
 
-.content-header h1 {
-    font-size: 1.8rem;
-    color: #333;
-}
-
-.btn-primary {
-    background-color: #ff7f50;
+.badge-primary {
+    background-color: #4e73df;
     color: #fff;
-    padding: 10px 14px;
-    border-radius: 5px;
-    font-weight: 600;
-    text-decoration: none;
 }
 
-.btn-primary:hover {
-    background-color: #e96939;
+/* Custom file input styling */
+.custom-file-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.custom-file-label::after {
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+
+/* Image thumbnail styling */
+.img-thumbnail {
+    border: 1px solid #e3e6f0;
+    padding: 5px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.img-thumbnail:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Tooltip styling */
+[data-toggle="tooltip"] {
+    cursor: pointer;
+}
+
+/* Kosakata button styling */
+.btn-info {
+    background-color: #36b9cc;
+    border-color: #36b9cc;
+    color: #fff;
+}
+
+.btn-info:hover {
+    background-color: #2c9faf;
+    border-color: #2c9faf;
+}
+
+/* Animasi untuk cards */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Status badges with icons */
+.badge.status-active {
+    background-color: #1cc88a;
+    color: #fff;
+}
+
+.badge.status-active::before {
+    content: "\f058"; /* FontAwesome check circle icon */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 5px;
+}
+
+.badge.status-inactive {
+    background-color: #e74a3b;
+    color: #fff;
+}
+
+.badge.status-inactive::before {
+    content: "\f057"; /* FontAwesome times circle icon */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 5px;
+}
+
+/* Topic count styling */
+.total-kosakata {
+    font-weight: 600;
+    color: #4e73df;
+}
+
+/* Empty state styling */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: #d1d3e2;
+    margin-bottom: 15px;
+}
+
+.empty-state h4 {
+    color: #5a5c69;
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+
+.empty-state p {
+    color: #858796;
+    margin-bottom: 20px;
+}
+
+/* Modal untuk preview gambar */
+.modal-preview-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    /* Responsiveness tweaks for topik page */
+    .btn-group-vertical {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .btn-group-vertical .btn {
+        width: 100%;
+        margin-bottom: 5px;
+        border-radius: 4px !important;
+    }
+    
+    .table td {
+        white-space: nowrap;
+    }
 }

@@ -12,8 +12,60 @@ class KamusController extends Controller
      */
     public function index()
     {
-        return view('admin.kamus.index');
+        $pageTitle = 'Manajemen Kamus';
+
+        $categories = [
+            ['id' => 1, 'name' => 'Alfabet'],
+            ['id' => 2, 'name' => 'Angka'],
+            ['id' => 3, 'name' => 'Sapaan'],
+            ['id' => 4, 'name' => 'Keluarga'],
+            ['id' => 5, 'name' => 'Aktivitas Sehari-hari'],
+            ['id' => 6, 'name' => 'Tempat'],
+            ['id' => 7, 'name' => 'Makanan & Minuman'],
+        ];
+
+        $dictionary_items = [
+            [
+                'id' => 1,
+                'word' => 'Halo',
+                'category_id' => 3,
+                'category_name' => 'Sapaan',
+                'image' => 'huruf2.png',
+                'gif' => 'Saya.webm',
+                'views' => 245
+            ],
+            [
+                'id' => 2,
+                'word' => 'Terima Kasih',
+                'category_id' => 3,
+                'category_name' => 'Sapaan',
+                'image' => 'huruf1.png',
+                'gif' => 'Saya.webm',
+                'views' => 200
+            ],
+            [
+                'id' => 3,
+                'word' => 'A',
+                'category_id' => 1,
+                'category_name' => 'Alfabet',
+                'image' => 'angka1.png',
+                'gif' => 'Minum.webm',
+                'views' => 156
+            ],
+            [
+                'id' => 4,
+                'word' => 'Satu',
+                'category_id' => 2,
+                'category_name' => 'Angka',
+                'image' => 'angka2.png',
+                'gif' => 'satu.gif',
+                'views' => 112
+            ],
+        ];
+
+        return view('admin.kamus.index', compact('pageTitle', 'categories', 'dictionary_items'));
     }
+
 
     /**
      * Show the form for creating a new resource.

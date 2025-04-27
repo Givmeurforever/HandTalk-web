@@ -6,43 +6,33 @@ document.addEventListener('DOMContentLoaded', function () {
     const userFullName = document.getElementById('userFullName');
     const userProfileImg = document.getElementById('userProfileImg');
 
-    // 🔹 Proteksi tombol "Mulai Belajar"
+    // Proteksi tombol mulai belajar
     const mulaiBtn = document.querySelector('.mulai-belajar');
-    if (mulaiBtn) {
-        mulaiBtn.addEventListener('click', function (e) {
-            if (!user) {
-                e.preventDefault();
-                window.location.href = '/signup';
-            }
+    if (mulaiBtn && !user) {
+        mulaiBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = '/signup';
         });
     }
 
-
+    // Cek user login
     if (user) {
         userFullName.textContent = `${user.firstName} ${user.lastName}`;
         authButtons.style.display = 'none';
         userInfo.style.display = 'flex';
-
-        userInfo.addEventListener('click', () => {
-            window.location.href = '/settings';
-        });
     } else {
         authButtons.style.display = 'flex';
         userInfo.style.display = 'none';
     }
 
-    // 🔍 Proteksi search bar
+    // Proteksi search bar
     const searchInput = document.querySelector('.search-container input');
     const searchButton = document.querySelector('.search-container button');
+    const redirectIfNotLoggedIn = () => {
+        if (!user) window.location.href = '/signup';
+    };
 
     if (searchInput && searchButton) {
-        const redirectIfNotLoggedIn = () => {
-            if (!user) {
-                // alert('Silakan login terlebih dahulu untuk menggunakan fitur pencarian.');
-                window.location.href = '/signup';
-            }
-        };
-
         searchInput.addEventListener('focus', redirectIfNotLoggedIn);
         searchButton.addEventListener('click', (e) => {
             if (!user) {
@@ -51,4 +41,40 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    // Tooltip interaktif
+    const tooltipWrapper = document.querySelector('.user-name-tooltip');
+    const dropdown = document.querySelector('.user-dropdown');
+
+    if (tooltipWrapper && dropdown) {
+        let timeout;
+        const showDropdown = () => {
+            clearTimeout(timeout);
+            dropdown.style.display = 'block';
+            dropdown.style.opacity = '1';
+            dropdown.style.transform = 'translateY(0)';
+        };
+        const hideDropdown = () => {
+            timeout = setTimeout(() => {
+                dropdown.style.display = 'none';
+                dropdown.style.opacity = '0';
+            }, 200);
+        };
+
+        tooltipWrapper.addEventListener('mouseenter', showDropdown);
+        tooltipWrapper.addEventListener('mouseleave', hideDropdown);
+        dropdown.addEventListener('mouseenter', showDropdown);
+        dropdown.addEventListener('mouseleave', hideDropdown);
+    }
+
+    // Logout -> hapus localStorage
+    const logoutLink = document.getElementById('logoutLink');
+    if (logoutLink) {
+        logoutLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            localStorage.removeItem('user');
+            window.location.href = '/';
+        });
+    }
+
 });
