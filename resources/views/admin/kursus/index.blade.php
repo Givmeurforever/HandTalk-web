@@ -150,7 +150,7 @@
 </div>
 
 <!-- Modal Tambah Topik -->
-<div class="modal fade" id="tambahTopikModal" tabindex="-1" role="dialog" aria-labelledby="tambahTopikModalLabel" aria-hidden="true">
+{{-- <div class="modal fade" id="tambahTopikModal" tabindex="-1" role="dialog" aria-labelledby="tambahTopikModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -270,7 +270,7 @@
             </div>
         </div>
     </div>
-@endforeach
+@endforeach --}}
 
 @endsection
 

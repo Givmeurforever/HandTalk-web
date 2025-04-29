@@ -1,47 +1,499 @@
-/* Header */
-.content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #fff;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+/* page-kuis-index.css */
+/* CSS untuk halaman index kuis */
+
+/* Container utama */
+.kuis-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    padding: 24px;
 }
 
-.content-header h1 {
-    font-size: 1.8rem;
+/* Header halaman */
+.kuis-header {
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+}
+
+.kuis-header h1 {
     color: #333;
+    font-size: 24px;
+    font-weight: 600;
     margin: 0;
 }
 
-/* Tambah Button */
+.kuis-actions {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* Input pencarian */
+.search-container {
+    position: relative;
+}
+
+.search-container input {
+    background-color: #f5f7fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    padding: 8px 36px 8px 12px;
+    width: 220px;
+}
+
+.search-btn {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 14px;
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Filter dropdown */
+.filter-container select {
+    background-color: #f5f7fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    padding: 8px 24px 8px 12px;
+    width: 180px;
+}
+
+/* Tombol tambah */
 .btn-primary {
-    background-color: #ff7f50;
-    color: #fff;
-    padding: 10px 14px;
-    border-radius: 5px;
-    font-weight: 600;
+    align-items: center;
+    background-color: #4a90e2;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    font-size: 14px;
+    font-weight: 500;
+    gap: 8px;
+    padding: 8px 16px;
     text-decoration: none;
+    transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 .btn-primary:hover {
-    background-color: #e96939;
+    background-color: #3a7bc8;
+    box-shadow: 0 2px 6px rgba(74, 144, 226, 0.3);
 }
 
-/* Tombol Aksi */
-.btn-aksi {
-    display: inline-block;
-    background-color: #ff7f50;
-    color: white;
-    padding: 6px 10px;
+/* Kartu statistik */
+.kuis-stats {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    align-items: center;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    padding: 16px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.stat-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    align-items: center;
+    background-color: #e3f2fd;
+    border-radius: 50%;
+    color: #4a90e2;
+    display: flex;
+    font-size: 20px;
+    height: 48px;
+    justify-content: center;
+    margin-right: 16px;
+    width: 48px;
+}
+
+.stat-info h3 {
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 0 4px 0;
+}
+
+.stat-info p {
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Tabel kuis */
+.kuis-table-container {
+    margin-bottom: 24px;
+    overflow-x: auto;
+}
+
+.kuis-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.kuis-table th {
+    background-color: #f5f7fa;
+    border-bottom: 2px solid #ddd;
+    color: #555;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 16px;
+    text-align: left;
+}
+
+.kuis-table td {
+    border-bottom: 1px solid #eee;
+    color: #333;
+    font-size: 14px;
+    padding: 12px 16px;
+    vertical-align: middle;
+}
+
+.kuis-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Soal dan indikator media */
+.kuis-soal p {
+    margin: 0 0 6px 0;
+}
+
+.media-indicator {
+    background-color: #e8f4fd;
     border-radius: 4px;
-    font-size: 0.85rem;
-    text-decoration: none;
-    margin-right: 6px;
+    color: #4a90e2;
+    display: inline-block;
+    font-size: 12px;
+    padding: 2px 8px;
 }
 
-.btn-aksi:hover {
-    background-color: #e96939;
+/* Thumbnail media */
+.media-thumbnail {
+    border-radius: 4px;
+    height: 60px;
+    overflow: hidden;
+    position: relative;
+    width: 80px;
+}
+
+.media-thumbnail img {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+}
+
+.media-thumbnail.video {
+    position: relative;
+}
+
+.play-icon {
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    font-size: 14px;
+    height: 30px;
+    justify-content: center;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+}
+
+/* Tombol aksi */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-view, .btn-edit, .btn-delete {
+    align-items: center;
+    background-color: #f5f7fa;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    font-size: 14px;
+    height: 32px;
+    justify-content: center;
+    transition: background-color 0.3s;
+    width: 32px;
+}
+
+.btn-view {
+    color: #4a90e2;
+}
+
+.btn-view:hover {
+    background-color: #e3f2fd;
+}
+
+.btn-edit {
+    color: #ffa000;
+}
+
+.btn-edit:hover {
+    background-color: #fff8e1;
+}
+
+.btn-delete {
+    color: #f44336;
+}
+
+.btn-delete:hover {
+    background-color: #ffebee;
+}
+
+/* Pagination */
+.pagination {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px;
+}
+
+.pagination-btn {
+    align-items: center;
+    background-color: #f5f7fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    font-size: 14px;
+    gap: 8px;
+    padding: 8px 16px;
+    transition: background-color 0.3s;
+}
+
+.pagination-btn:hover {
+    background-color: #e3f2fd;
+}
+
+.pagination-btn.prev {
+    margin-right: auto;
+}
+
+.pagination-btn.next {
+    margin-left: auto;
+}
+
+.pagination-numbers {
+    display: flex;
+    gap: 4px;
+}
+
+.pagination-numbers a {
+    align-items: center;
+    border-radius: 4px;
+    color: #666;
+    display: flex;
+    font-size: 14px;
+    height: 32px;
+    justify-content: center;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+    width: 32px;
+}
+
+.pagination-numbers a:hover {
+    background-color: #e3f2fd;
+    color: #4a90e2;
+}
+
+.pagination-numbers a.active {
+    background-color: #4a90e2;
+    color: white;
+}
+
+.pagination-numbers span {
+    align-items: center;
+    color: #999;
+    display: flex;
+    font-size: 14px;
+    justify-content: center;
+    width: 32px;
+}
+
+/* Modal konfirmasi hapus */
+.modal {
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 100%;
+}
+
+.modal-header {
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 24px;
+}
+
+.modal-header h2 {
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.close-modal {
+    color: #999;
+    cursor: pointer;
+    font-size: 24px;
+    transition: color 0.3s;
+}
+
+.close-modal:hover {
+    color: #666;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-body p {
+    color: #666;
+    font-size: 14px;
+    margin: 0 0 16px 0;
+}
+
+.modal-footer {
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    padding: 16px 24px;
+}
+
+.btn {
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 16px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.btn-cancel {
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+.btn-cancel:hover {
+    background-color: #e0e0e0;
+}
+
+.btn-delete {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #e53935;
+    box-shadow: 0 2px 6px rgba(244, 67, 54, 0.3);
+}
+
+/* Responsif */
+@media (max-width: 992px) {
+    .kuis-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .kuis-actions {
+        margin-top: 16px;
+        width: 100%;
+    }
+    
+    .search-container input {
+        width: 100%;
+    }
+    
+    .filter-container select {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .kuis-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .search-container, .filter-container, .btn-primary {
+        width: 100%;
+    }
+    
+    .pagination {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .pagination-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .pagination-numbers {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .kuis-container {
+        padding: 16px;
+    }
+    
+    .kuis-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .kuis-table th:nth-child(3),
+    .kuis-table td:nth-child(3),
+    .kuis-table th:nth-child(5),
+    .kuis-table td:nth-child(5) {
+        display: none;
+    }
 }

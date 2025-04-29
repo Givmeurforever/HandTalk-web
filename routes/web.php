@@ -51,6 +51,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('pengguna/{id}', [App\Http\Controllers\Admin\PenggunaController::class, 'destroy'])->name('pengguna.destroy');
     Route::patch('pengguna/{id}/status', [App\Http\Controllers\Admin\PenggunaController::class, 'updateStatus'])->name('pengguna.status');
 
+    // kuis
+    Route::get('kuis', [App\Http\Controllers\Admin\KuisController::class, 'index'])->name('kuis.index');
+    Route::get('kuis/create', [App\Http\Controllers\Admin\KuisController::class, 'create'])->name('kuis.create');
+    Route::post('kuis', [App\Http\Controllers\Admin\KuisController::class, 'store'])->name('kuis.store');
+    Route::get('kuis/{kuis}', [App\Http\Controllers\Admin\KuisController::class, 'show'])->name('kuis.show');
+    Route::get('kuis/{kuis}/edit', [App\Http\Controllers\Admin\KuisController::class, 'edit'])->name('kuis.edit');
+    Route::put('kuis/{kuis}', [App\Http\Controllers\Admin\KuisController::class, 'update'])->name('kuis.update');
+    Route::delete('kuis/{kuis}', [App\Http\Controllers\Admin\KuisController::class, 'destroy'])->name('kuis.destroy');
+
     // Pengaturan (jika hanya 1 halaman)
     Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
 
