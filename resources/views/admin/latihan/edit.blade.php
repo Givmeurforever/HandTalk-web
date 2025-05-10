@@ -5,7 +5,7 @@
 @endpush
 
 @section('content')
-<h1>Tambah Latihan Baru</h1>
+<h1>Edit Latihan </h1>
 
 <form action="#" method="POST" enctype="multipart/form-data">
     @csrf

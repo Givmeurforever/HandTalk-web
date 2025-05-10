@@ -6,24 +6,22 @@
     padding: 0;
     box-sizing: border-box;
     scroll-behavior: smooth;
-    /* outline: 1px solid red; */
 }
-
-section {
-    scroll-margin-top: 100px; /* Sesuaikan dengan tinggi header kamu */
-}
-
-main {
-    padding-top: 80px;
-}
-
 
 body {
     font-family: 'Be Vietnam Pro', sans-serif;
     background-color: #F7F7F8;
 }
 
-/* === 🏠 NAVBAR === */
+main {
+    padding-top: 80px;
+}
+
+section {
+    scroll-margin-top: 100px;
+}
+
+/* === 🧭 NAVBAR (Header) === */
 .navbar {
     background-color: #FFF7F7;
     padding: 15px 120px;
@@ -56,7 +54,7 @@ body {
     color: black;
 }
 
-/* === 🔎 SEARCH BAR === */
+/* 🔍 Search */
 .search-container {
     display: flex;
     align-items: center;
@@ -81,7 +79,7 @@ body {
     cursor: pointer;
 }
 
-/* === 🔐 AUTH BUTTONS === */
+/* 🔐 Auth Buttons */
 .auth-buttons {
     display: flex;
     gap: 10px;
@@ -103,7 +101,8 @@ body {
     transition: 0.3s;
 }
 
-.signup:hover {
+.signup:hover,
+.login:hover {
     background-color: #FF9500;
 }
 
@@ -115,6 +114,7 @@ body {
     transition: 0.3s;
 }
 
+/* 👤 User Dropdown */
 .user-info {
     position: relative;
     display: flex;
@@ -123,70 +123,6 @@ body {
     cursor: pointer;
 }
 
-.user-name-tooltip {
-    position: relative;
-}
-
-.user-dropdown {
-    display: none;
-    position: absolute;
-    top: 110%;
-    right: 0;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-    padding: 10px 0;
-    z-index: 999;
-    min-width: 180px;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.3s ease;
-}
-
-.user-name-tooltip:hover .user-dropdown {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.user-dropdown a {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 20px;
-    color: #333;
-    text-decoration: none;
-    font-size: 0.95rem;
-    transition: background-color 0.2s;
-}
-
-.user-dropdown a i {
-    color: #ff7f50;
-    min-width: 20px;
-    text-align: center;
-}
-
-.user-dropdown a:hover {
-    background-color: #f8f8f8;
-    color: #000;
-}
-
-/* Arrow segitiga kecil */
-/* .user-dropdown::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    right: 20px;
-    border-width: 0 8px 8px 8px;
-    border-style: solid;
-    border-color: transparent transparent white transparent;
-}
-
-.user-name-tooltip:hover .user-dropdown {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-} */
 .profile-img {
     width: 32px;
     height: 32px;
@@ -194,11 +130,103 @@ body {
     object-fit: cover;
 }
 
-.login:hover {
-    background-color: #FF9500;
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
 }
 
-/* === 📱 RESPONSIVE NAVBAR === */
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Kontainer tooltip + dropdown */
+.user-dropdown-wrapper {
+    position: relative;
+}
+
+/* Tooltip teks nama */
+.user-name-tooltip {
+    cursor: pointer;
+}
+
+/* Dropdown menu */
+.user-dropdown {
+    display: none;
+    position: absolute;
+    top: 110%;
+    left: -50px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+    width: 220px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    overflow: hidden;
+}
+
+/* Tampilkan saat hover pada wrapper */
+.user-dropdown-wrapper:hover .user-dropdown {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.user-dropdown a,
+.user-dropdown form button.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    color: #333;
+    text-decoration: none;
+    font-size: 0.95rem;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s, padding-left 0.2s;
+}
+
+.user-dropdown a i,
+.logout-btn i {
+    color: #ff7f50;
+    min-width: 20px;
+    text-align: center;
+}
+
+.user-dropdown a:hover,
+.user-dropdown form button.logout-btn:hover {
+    background-color: #f0f0f0;
+    padding-left: 26px;
+}
+
+.logout-btn {
+    color: #c0392b;
+}
+
+/* 📱 Responsive Navbar */
 @media (max-width: 768px) {
     .navbar {
         padding: 15px 20px;
@@ -217,17 +245,17 @@ body {
     }
 }
 
-/* 🌍 Footer Styles */
+/* === 👣 FOOTER === */
 .footer {
     background-color: #FFF7F7;
     padding: 40px 60px;
-    font-size: 0.9rem; 
+    font-size: 0.9rem;
     margin-top: 50px;
 }
 
 .footer-container {
     display: flex;
-    flex-wrap: wrap; /* Agar tetap rapi di layar kecil */
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
     max-width: 1200px;
@@ -235,10 +263,10 @@ body {
     gap: 20px;
 }
 
-/* 🔹 Bagian Kiri */
+/* 🔹 Footer - Left */
 .footer-left {
     flex: 1;
-    min-width: 250px; /* Supaya tidak terlalu kecil di layar kecil */
+    min-width: 250px;
 }
 
 .footer-logo {
@@ -251,7 +279,7 @@ body {
     font-size: 0.95rem;
 }
 
-/* 🔹 Informasi Kontak */
+/* 🔹 Contact */
 .footer-contact {
     display: flex;
     flex-direction: column;
@@ -271,39 +299,45 @@ body {
     width: 18px;
 }
 
-/* 🔹 Bagian Tengah & Kanan */
-.footer-middle, .footer-right {
+/* 🔹 Middle & Right */
+.footer-middle,
+.footer-right {
     flex: 1;
     min-width: 200px;
 }
 
-.footer-middle h4, .footer-right h4 {
+.footer-middle h4,
+.footer-right h4 {
     font-size: 1rem;
     margin-bottom: 10px;
     color: #333;
 }
 
-.footer-middle ul, .footer-right ul {
+.footer-middle ul,
+.footer-right ul {
     list-style: none;
     padding: 0;
 }
 
-.footer-middle ul li, .footer-right ul li {
+.footer-middle ul li,
+.footer-right ul li {
     margin-bottom: 6px;
 }
 
-.footer-middle ul li a, .footer-right ul li a {
+.footer-middle ul li a,
+.footer-right ul li a {
     text-decoration: none;
     color: black;
     font-size: 0.9rem;
     transition: color 0.3s ease;
 }
 
-.footer-middle ul li a:hover, .footer-right ul li a:hover {
+.footer-middle ul li a:hover,
+.footer-right ul li a:hover {
     color: #FF9500;
 }
 
-/* 🔹 Profil Sosial */
+/* 🔹 Social */
 .footer-social {
     flex: 1;
     min-width: 200px;
@@ -339,7 +373,7 @@ body {
     width: 18px;
 }
 
-/* 🔹 Garis Pemisah */
+/* 🔹 Divider & Bottom */
 .footer-divider {
     width: 100%;
     height: 1px;
@@ -347,7 +381,6 @@ body {
     margin: 20px 0;
 }
 
-/* 🔹 Copyright */
 .footer-bottom {
     text-align: center;
     font-size: 0.85rem;
@@ -355,14 +388,17 @@ body {
     padding: 10px 0;
 }
 
-/* 📱 Responsiveness */
+/* 📱 Responsive Footer */
 @media (max-width: 768px) {
     .footer-container {
         flex-direction: column;
         text-align: center;
     }
 
-    .footer-left, .footer-middle, .footer-right, .footer-social {
+    .footer-left,
+    .footer-middle,
+    .footer-right,
+    .footer-social {
         text-align: center;
         margin-bottom: 20px;
     }

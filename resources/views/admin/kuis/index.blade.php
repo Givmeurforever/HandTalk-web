@@ -84,92 +84,44 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Data kuis akan diisi di sini -->
+                @foreach ($kuisList as $kuis)
                 <tr>
-                    <td>1</td>
+                    <td>{{ $kuis['id'] }}</td>
                     <td class="kuis-soal">
-                        <p>Apa arti dari gerakan isyarat ini?</p>
-                        <span class="media-indicator"><i class="fas fa-image"></i> Ada Gambar</span>
+                        <p>{{ $kuis['soal'] }}</p>
+                        @if ($kuis['media_type'] === 'image')
+                            <span class="media-indicator"><i class="fas fa-image"></i> Ada Gambar</span>
+                        @elseif ($kuis['media_type'] === 'video')
+                            <span class="media-indicator"><i class="fas fa-video"></i> Ada Video</span>
+                        @elseif ($kuis['media_type'] === 'gif')
+                            <span class="media-indicator"><i class="fas fa-file-video"></i> Ada GIF</span>
+                        @endif
                     </td>
-                    <td>Pengenalan Bahasa Isyarat</td>
+                    <td>{{ $kuis['topik'] }}</td>
                     <td>
-                        <div class="media-thumbnail">
-                            <img src="{{ asset('img/huruf1.jpg') }}" alt="Gambar Isyarat">
+                        <div class="media-thumbnail {{ $kuis['media_type'] === 'video' ? 'video' : '' }}">
+                            <img src="{{ asset($kuis['media_path']) }}" alt="Media Isyarat">
+                            @if ($kuis['media_type'] === 'video')
+                                <div class="play-icon"><i class="fas fa-play"></i></div>
+                            @endif
                         </div>
                     </td>
-                    <td>22 Apr 2025</td>
+                    <td>{{ $kuis['tanggal'] }}</td>
                     <td>
                         <div class="action-buttons">
-                            <a href="#" class="btn-view" title="Lihat Detail">
+                            <a href="{{ route('admin.kuis.show', $kuis['id']) }}" class="btn-view" title="Lihat Detail">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a href="#" class="btn-edit" title="Edit Kuis">
+                            <a href="{{ route('admin.kuis.edit', $kuis['id']) }}" class="btn-edit" title="Edit Kuis">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <button class="btn-delete" title="Hapus Kuis" data-id="1">
+                            <button class="btn-delete" title="Hapus Kuis" data-id="{{ $kuis['id'] }}">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td class="kuis-soal">
-                        <p>Bagaimana cara mengisyaratkan kata "Terima Kasih"?</p>
-                        <span class="media-indicator"><i class="fas fa-video"></i> Ada Video</span>
-                    </td>
-                    <td>Percakapan Dasar</td>
-                    <td>
-                        <div class="media-thumbnail video">
-                            <img src="{{ asset('images/placeholder-video.jpg') }}" alt="Video Isyarat">
-                            <div class="play-icon">
-                                <i class="fas fa-play"></i>
-                            </div>
-                        </div>
-                    </td>
-                    <td>20 Apr 2025</td>
-                    <td>
-                        <div class="action-buttons">
-                            <a href="#" class="btn-view" title="Lihat Detail">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="#" class="btn-edit" title="Edit Kuis">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <button class="btn-delete" title="Hapus Kuis" data-id="2">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td class="kuis-soal">
-                        <p>Identifikasi isyarat untuk huruf berikut</p>
-                    </td>
-                    <td>Alfabet dan Angka</td>
-                    <td>
-                        <div class="media-thumbnail">
-                            <img src="{{ asset('images/placeholder-isyarat.jpg') }}" alt="Gambar Isyarat">
-                        </div>
-                    </td>
-                    <td>18 Apr 2025</td>
-                    <td>
-                        <div class="action-buttons">
-                            <a href="#" class="btn-view" title="Lihat Detail">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="{{ route('admin.kuis.create') }}" class="btn-edit" title="Edit Kuis">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <button class="btn-delete" title="Hapus Kuis" data-id="3">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <!-- Lebih banyak data kuis -->
-            </tbody>
+                @endforeach
         </table>
     </div>
 

@@ -12,7 +12,34 @@ class KuisController extends Controller
      */
     public function index()
     {
-        return view('admin.kuis.index');
+        $kuisList = [
+            [
+                'id' => 1,
+                'soal' => 'Apa arti dari gerakan isyarat ini?',
+                'topik' => 'Pengenalan Bahasa Isyarat',
+                'media_type' => 'image',
+                'media_path' => 'img/huruf1.jpg',
+                'tanggal' => '22 Apr 2025'
+            ],
+            [
+                'id' => 2,
+                'soal' => 'Bagaimana cara mengisyaratkan kata "Terima Kasih"?',
+                'topik' => 'Percakapan Dasar',
+                'media_type' => 'video',
+                'media_path' => 'images/placeholder-video.jpg',
+                'tanggal' => '20 Apr 2025'
+            ],
+            [
+                'id' => 3,
+                'soal' => 'Identifikasi isyarat untuk huruf berikut',
+                'topik' => 'Alfabet dan Angka',
+                'media_type' => 'image',
+                'media_path' => 'images/placeholder-isyarat.jpg',
+                'tanggal' => '18 Apr 2025'
+            ],
+        ];
+
+        return view('admin.kuis.index', compact('kuisList'));
     }
 
     /**

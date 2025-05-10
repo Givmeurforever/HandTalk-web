@@ -12,8 +12,52 @@ class MateriController extends Controller
      */
     public function index()
     {
-        return view('admin.materi.index');
+        $materiList = [
+            [
+                'id' => 1,
+                'judul' => 'Pengenalan Bahasa Isyarat Indonesia',
+                'topik' => 'Perkenalan Bahasa Isyarat',
+                'urutan' => 1,
+                'status' => 'aktif',
+                'tanggal' => '05-03-2025'
+            ],
+            [
+                'id' => 2,
+                'judul' => 'Sejarah Bahasa Isyarat di Indonesia',
+                'topik' => 'Perkenalan Bahasa Isyarat',
+                'urutan' => 2,
+                'status' => 'aktif',
+                'tanggal' => '05-03-2025'
+            ],
+            [
+                'id' => 3,
+                'judul' => 'Cara Menggunakan Bahasa Isyarat',
+                'topik' => 'Perkenalan Bahasa Isyarat',
+                'urutan' => 3,
+                'status' => 'draft',
+                'tanggal' => '06-03-2025'
+            ],
+            [
+                'id' => 4,
+                'judul' => 'Pengenalan Huruf A-E',
+                'topik' => 'Alfabet',
+                'urutan' => 1,
+                'status' => 'aktif',
+                'tanggal' => '07-03-2025'
+            ],
+            [
+                'id' => 5,
+                'judul' => 'Pengenalan Huruf F-J',
+                'topik' => 'Alfabet',
+                'urutan' => 2,
+                'status' => 'aktif',
+                'tanggal' => '07-03-2025'
+            ]
+        ];
+
+        return view('admin.materi.index', compact('materiList'));
     }
+
 
     /**
      * Show the form for creating a new resource.

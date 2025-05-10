@@ -168,4 +168,14 @@ class PenggunaController extends Controller
         return redirect()->route('admin.pengguna.index')
             ->with('success', $message);
     }
+        public function create()
+    {
+        return view('admin.pengguna.create');
+    }
+        public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        return view('admin.pengguna.edit', compact('user'));
+    }
+
 }

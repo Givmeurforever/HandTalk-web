@@ -10,9 +10,9 @@
 <div class="materi-container">
     <div class="materi-header">
         <h1>Manajemen Materi</h1>
-        <button id="btnTambahMateri" class="btn-primary">
-            <i class="fas fa-plus"></i> Tambah Materi Baru
-        </button>
+        <a href="{{ route('admin.materi.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Tambah Kuis
+        </a>
     </div>
 
     <div class="materi-filter">
@@ -46,73 +46,30 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Data materi akan diisi di sini, berikut contoh tampilan -->
+                @foreach ($materiList as $materi)
                 <tr>
-                    <td>1</td>
-                    <td>Pengenalan Bahasa Isyarat Indonesia</td>
-                    <td>Perkenalan Bahasa Isyarat</td>
-                    <td>1</td>
-                    <td><span class="badge-active">Aktif</span></td>
-                    <td>05-03-2025</td>
+                    <td>{{ $materi['id'] }}</td>
+                    <td>{{ $materi['judul'] }}</td>
+                    <td>{{ $materi['topik'] }}</td>
+                    <td>{{ $materi['urutan'] }}</td>
+                    <td>
+                        <span class="badge-{{ $materi['status'] == 'aktif' ? 'active' : 'draft' }}">
+                            {{ ucfirst($materi['status']) }}
+                        </span>
+                    </td>
+                    <td>{{ $materi['tanggal'] }}</td>
                     <td class="action-buttons">
-                        <button class="btn-view" title="Lihat Detail"><i class="fas fa-eye"></i></button>
-                        <button class="btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
-                        <button class="btn-delete" title="Hapus"><i class="fas fa-trash"></i></button>
+                        <a href="{{ route('admin.materi.show', $materi['id']) }}" class="btn-view" title="Lihat Detail"><i class="fas fa-eye"></i></a>
+                        <a href="{{ route('admin.materi.edit', $materi['id']) }}" class="btn-edit" title="Edit"><i class="fas fa-edit"></i></a>
+                        <form action="{{ route('admin.materi.destroy', $materi['id']) }}" method="POST" style="display:inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn-delete" title="Hapus"><i class="fas fa-trash"></i></button>
+                        </form>
                     </td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Sejarah Bahasa Isyarat di Indonesia</td>
-                    <td>Perkenalan Bahasa Isyarat</td>
-                    <td>2</td>
-                    <td><span class="badge-active">Aktif</span></td>
-                    <td>05-03-2025</td>
-                    <td class="action-buttons">
-                        <button class="btn-view" title="Lihat Detail"><i class="fas fa-eye"></i></button>
-                        <button class="btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
-                        <button class="btn-delete" title="Hapus"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Cara Menggunakan Bahasa Isyarat</td>
-                    <td>Perkenalan Bahasa Isyarat</td>
-                    <td>3</td>
-                    <td><span class="badge-draft">Draft</span></td>
-                    <td>06-03-2025</td>
-                    <td class="action-buttons">
-                        <button class="btn-view" title="Lihat Detail"><i class="fas fa-eye"></i></button>
-                        <button class="btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
-                        <button class="btn-delete" title="Hapus"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>Pengenalan Huruf A-E</td>
-                    <td>Alfabet</td>
-                    <td>1</td>
-                    <td><span class="badge-active">Aktif</span></td>
-                    <td>07-03-2025</td>
-                    <td class="action-buttons">
-                        <button class="btn-view" title="Lihat Detail"><i class="fas fa-eye"></i></button>
-                        <button class="btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
-                        <button class="btn-delete" title="Hapus"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>Pengenalan Huruf F-J</td>
-                    <td>Alfabet</td>
-                    <td>2</td>
-                    <td><span class="badge-active">Aktif</span></td>
-                    <td>07-03-2025</td>
-                    <td class="action-buttons">
-                        <button class="btn-view" title="Lihat Detail"><i class="fas fa-eye"></i></button>
-                        <button class="btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
-                        <button class="btn-delete" title="Hapus"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            </tbody>
+                @endforeach
+            </tbody>                
         </table>
     </div>
 

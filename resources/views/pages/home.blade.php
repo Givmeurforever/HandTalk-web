@@ -17,7 +17,11 @@
             </div>
             <p class="hero-subtext">Cara termudah untuk belajar bahasa isyarat</p>
             <p class="hero-question">Tahukah kamu bahwa tangan kita bisa digunakan untuk berkomunikasi?</p>
-            <a href="{{ route('kursus') }}" class="btn primary mulai-belajar">Mulai Belajar</a>
+            @auth
+                <a href="{{ route('kursus') }}" class="btn primary mulai-belajar">Mulai Belajar</a>
+            @else
+                <a href="{{ route('login') }}" class="btn primary mulai-belajar">Mulai Belajar</a>
+            @endauth
         </div>
     </section>
     

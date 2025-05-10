@@ -6,6 +6,7 @@
     <title>HandTalk Admin Dashboard</title>
 
     <link rel="stylesheet" href="{{ asset('css/admin-style.css') }}">
+    <link rel="icon" type="image/png" href="img/Logo.png">
     <!-- Font Awesome untuk ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -42,19 +43,11 @@
                     </li>
 
                     <li class="{{ isActive('admin.pengguna') }}">
-                        <a href="#"><i class="fas fa-users"></i> Manajemen Pengguna</a>
-                        <ul class="submenu">
-                            <li><a href="{{ route('admin.pengguna.index') }}">Daftar Pengguna</a></li>
-                            <li><a href="#">Tambah Pengguna</a></li>
-                        </ul>
+                        <a href="{{ route('admin.pengguna.index') }}"><i class="fas fa-users"></i> Manajemen Pengguna</a>
                     </li>
 
                     <li class="{{ isActive('admin.kursus') }}">
-                        <a href="#"><i class="fas fa-book"></i> Manajemen Topik</a>
-                        <ul class="submenu">
-                            <li><a href="{{ route('admin.kursus.index') }}">Daftar Topik</a></li>
-                            <li><a href="#">Tambah Topik</a></li>
-                        </ul>
+                        <a href="{{ route('admin.kursus.index') }}"><i class="fas fa-book"></i> Manajemen Topik</a>
                     </li>
 
                     <li class="{{ isActive(['admin.materi', 'admin.latihan', 'admin.kuis']) }}">
@@ -67,12 +60,7 @@
                     </li>
 
                     <li class="{{ isActive('admin.kamus') }}">
-                        <a href="#"><i class="fas fa-book-open"></i> Manajemen Kamus</a>
-                        <ul class="submenu">
-                            <li><a href="{{ route('admin.kamus.index') }}">Daftar Item Kamus</a></li>
-                            <li><a href="#">Tambah Item Kamus</a></li>
-                            <li><a href="#">Kategori Kamus</a></li>
-                        </ul>
+                        <a href="{{ route('admin.kamus.index') }}"><i class="fas fa-book-open"></i> Manajemen Kamus</a>
                     </li>
 
                     <li class="{{ isActive('laporan') }}">

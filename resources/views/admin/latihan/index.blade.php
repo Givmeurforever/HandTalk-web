@@ -10,9 +10,12 @@
 <div class="latihan-container">
     <div class="latihan-header">
         <h1>Manajemen Latihan</h1>
-        <a href="{{ url('admin/latihan/create') }}" class="btn-primary">
-            <i class="fas fa-plus"></i> Tambah Latihan Baru
+        <a href="{{ route('admin.latihan.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Tambah Latihan baru
         </a>
+        {{-- <a href="#" class="btn-primary">
+            <i class="fas fa-plus"></i> Tambah Latihan Baru
+        </a> --}}
     </div>
 
     <div class="latihan-filter">
@@ -46,73 +49,30 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Data latihan akan diisi di sini, berikut contoh tampilan -->
+                @foreach ($latihanList as $latihan)
                 <tr>
-                    <td>1</td>
-                    <td>Apa gerakan isyarat untuk kata "Halo"?</td>
-                    <td>Sapaan Sehari-hari</td>
-                    <td>Lambaikan tangan terbuka ke arah lawan bicara</td>
-                    <td><span class="badge-media">Gambar</span></td>
-                    <td>10-03-2025</td>
+                    <td>{{ $latihan['id'] }}</td>
+                    <td>{{ $latihan['soal'] }}</td>
+                    <td>{{ $latihan['topik'] }}</td>
+                    <td>{{ $latihan['jawaban'] }}</td>
+                    <td><span class="badge-media">{{ $latihan['media'] }}</span></td>
+                    <td>{{ $latihan['tanggal'] }}</td>
                     <td class="action-buttons">
-                        <a href="{{ url('admin/latihan/read/1') }}" class="btn-view" title="Lihat Detail"><i class="fas fa-eye"></i></a>
-                        <a href="{{ url('admin/latihan/update/1') }}" class="btn-edit" title="Edit"><i class="fas fa-edit"></i></a>
-                        <a href="#" class="btn-delete" data-id="1" data-soal="Apa gerakan isyarat untuk kata 'Halo'?" title="Hapus"><i class="fas fa-trash"></i></a>
+                        <a href="{{ route('admin.latihan.show', $latihan['id']) }}" class="btn-view" title="Lihat Detail">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="{{ route('admin.latihan.edit', $latihan['id']) }}" class="btn-edit" title="Edit">
+
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="#" class="btn-delete" data-id="{{ $latihan['id'] }}" data-soal="{{ $latihan['soal'] }}" title="Hapus">
+                            <i class="fas fa-trash"></i>
+                        </a>
                     </td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Tunjukkan gerakan isyarat untuk huruf "A"</td>
-                    <td>Alfabet</td>
-                    <td>Telapak tangan menghadap ke depan, semua jari mengepal kecuali jempol yang tegak</td>
-                    <td><span class="badge-media">Video</span></td>
-                    <td>11-03-2025</td>
-                    <td class="action-buttons">
-                        <a href="{{ url('admin/latihan/read/2') }}" class="btn-view" title="Lihat Detail"><i class="fas fa-eye"></i></a>
-                        <a href="{{ url('admin/latihan/update/2') }}" class="btn-edit" title="Edit"><i class="fas fa-edit"></i></a>
-                        <a href="#" class="btn-delete" data-id="2" data-soal="Tunjukkan gerakan isyarat untuk huruf 'A'" title="Hapus"><i class="fas fa-trash"></i></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Bagaimana cara menunjukkan angka "5" dalam bahasa isyarat?</td>
-                    <td>Angka</td>
-                    <td>Telapak tangan terbuka dengan lima jari terentang</td>
-                    <td><span class="badge-media">GIF</span></td>
-                    <td>12-03-2025</td>
-                    <td class="action-buttons">
-                        <a href="{{ url('admin/latihan/read/3') }}" class="btn-view" title="Lihat Detail"><i class="fas fa-eye"></i></a>
-                        <a href="{{ url('admin/latihan/update/3') }}" class="btn-edit" title="Edit"><i class="fas fa-edit"></i></a>
-                        <a href="#" class="btn-delete" data-id="3" data-soal="Bagaimana cara menunjukkan angka '5' dalam bahasa isyarat?" title="Hapus"><i class="fas fa-trash"></i></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>Praktikkan gerakan isyarat untuk "Terima kasih"</td>
-                    <td>Sapaan Sehari-hari</td>
-                    <td>Tangan terbuka dengan jari-jari merapat, disentuhkan ke dagu kemudian digerakkan ke depan</td>
-                    <td><span class="badge-media">Video</span></td>
-                    <td>13-03-2025</td>
-                    <td class="action-buttons">
-                        <a href="{{ url('admin/latihan/read/4') }}" class="btn-view" title="Lihat Detail"><i class="fas fa-eye"></i></a>
-                        <a href="{{ url('admin/latihan/update/4') }}" class="btn-edit" title="Edit"><i class="fas fa-edit"></i></a>
-                        <a href="#" class="btn-delete" data-id="4" data-soal="Praktikkan gerakan isyarat untuk 'Terima kasih'" title="Hapus"><i class="fas fa-trash"></i></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>Tunjukkan bagaimana menyatakan "Saya mau belajar" dalam bahasa isyarat</td>
-                    <td>Perkenalan Bahasa Isyarat</td>
-                    <td>Kombinasi gerakan "saya", "mau", dan "belajar"</td>
-                    <td><span class="badge-media">Gambar</span></td>
-                    <td>14-03-2025</td>
-                    <td class="action-buttons">
-                        <a href="{{ url('admin/latihan/read/5') }}" class="btn-view" title="Lihat Detail"><i class="fas fa-eye"></i></a>
-                        <a href="{{ url('admin/latihan/update/5') }}" class="btn-edit" title="Edit"><i class="fas fa-edit"></i></a>
-                        <a href="#" class="btn-delete" data-id="5" data-soal="Tunjukkan bagaimana menyatakan 'Saya mau belajar' dalam bahasa isyarat" title="Hapus"><i class="fas fa-trash"></i></a>
-                    </td>
-                </tr>
+                @endforeach
             </tbody>
+                
         </table>
     </div>
 
@@ -162,7 +122,8 @@
                 const soal = this.getAttribute('data-soal');
                 
                 document.getElementById('deleteLatihan').textContent = soal;
-                document.getElementById('deleteForm').setAttribute('action', '{{ url("admin/latihan/delete") }}/' + id);
+                const baseDeleteUrl = '{{ route("admin.latihan.delete", "__id__") }}';
+                document.getElementById('deleteForm').setAttribute('action', baseDeleteUrl.replace('__id__', id));
                 document.getElementById('deleteModal').style.display = 'block';
             });
         });
