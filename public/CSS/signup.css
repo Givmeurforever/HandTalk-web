@@ -37,9 +37,19 @@ input::placeholder {
     height: 20px;
 }
 
-.toggle-password img {
-    width: 100%;
-    height: auto;
+.toggle-password-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #999;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.toggle-password-icon:hover {
+    color: #333;
 }
 
 button {

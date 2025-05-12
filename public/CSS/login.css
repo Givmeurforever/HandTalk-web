@@ -99,9 +99,19 @@ input::placeholder {
     height: 20px;
 }
 
-.toggle-password img {
-    width: 100%;
-    height: auto;
+.toggle-password-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #999;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.toggle-password-icon:hover {
+    color: #333;
 }
 
 button {
@@ -137,6 +147,26 @@ p a {
 p a:hover {
     text-decoration: underline;
 }
+
+.alert {
+    margin: 15px 0;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.alert-success {
+    background-color: #d1f0dc;
+    color: #256029;
+    border-left: 4px solid #28a745;
+}
+
+.alert-danger {
+    background-color: #fbeaea;
+    color: #a94442;
+    border-left: 4px solid #e74c3c;
+}
+
 
 @media (max-width: 768px) {
     .container {

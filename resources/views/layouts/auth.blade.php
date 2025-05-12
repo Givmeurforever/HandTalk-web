@@ -25,7 +25,6 @@
     </div>
 
     <!-- Script khusus halaman auth -->
-    <script src="{{ asset('JS/auth.js') }}"></script>
     @stack('scripts')
 </body>
 </html>

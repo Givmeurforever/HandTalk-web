@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NavigationController;
+use App\Http\Controllers\UserDashboardController;
 
 // ✨ Halaman publik
 Route::get('/', fn() => view('pages.home'))->name('home');
@@ -31,10 +32,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/kursus/{topikSlug}/{materiSlug}', [TopikUserController::class, 'show'])->name('topik.show');
     Route::get('/kamus', [KamusUserController::class, 'index'])->name('kamus');
     Route::get('/settings', [NavigationController::class, 'settings'])->name('settings');
+    Route::get('/dashboard',  [UserDashboardController::class, 'index'])->name('dashboard');
 });
-
-
-
 
 // Admin Dashboard
 

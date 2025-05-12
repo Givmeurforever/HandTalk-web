@@ -30,13 +30,12 @@ class AuthController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $profilePath = 'profile_pictures/default.png'; // default profile picture
+        $profilePath = 'profile_pictures/default.png';
         if ($request->hasFile('profile_picture')) {
             $profilePath = $request->file('profile_picture')->store('profile_pictures', 'public');
         }
 
-
-        $user = User::create([
+        User::create([
             'first_name' => $request->first_name,
             'last_name'  => $request->last_name,
             'name'       => $request->first_name . ' ' . $request->last_name,
@@ -45,8 +44,9 @@ class AuthController extends Controller
             'profile_picture' => $profilePath,
         ]);
 
-        return view('pages.home');
+        return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan login.');
     }
+
 
 
     public function showFormLogin()
@@ -63,7 +63,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/'); // Ganti dengan halaman tujuan setelah login
+            return redirect()->intended('/');
         }
 
         return back()->withErrors([
