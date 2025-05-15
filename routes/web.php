@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\SettingsController;
 
 // ✨ Halaman publik
 Route::get('/', fn() => view('pages.home'))->name('home');
@@ -33,6 +34,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/kamus', [KamusUserController::class, 'index'])->name('kamus');
     Route::get('/settings', [NavigationController::class, 'settings'])->name('settings');
     Route::get('/dashboard',  [UserDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/settings', [App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
+    Route::put('/settings', [App\Http\Controllers\SettingsController::class, 'update'])->name('settings.update');
+    Route::delete('/account', [App\Http\Controllers\SettingsController::class, 'deleteAccount'])->name('account.delete');
 });
 
 // Admin Dashboard

@@ -32,7 +32,7 @@
         
         <div class="password-container">
             <input type="password" name="password" placeholder="Password" required>
-            <i class="fas fa-eye toggle-password-icon"></i>
+            <i class="fas fa-eye-slash toggle-password-icon"></i>
         </div>
 
         <button type="submit">Login</button>
