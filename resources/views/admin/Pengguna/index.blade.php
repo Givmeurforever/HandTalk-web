@@ -1,7 +1,5 @@
 @extends('layouts.dashboardadmin')
-
 @section('title', 'Manajemen Pengguna - HandTalk')
-
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/page-pengguna.css') }}">
 @endpush
@@ -30,6 +28,12 @@
         </div>
     </div>
 
+    @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
+
     <div class="pengguna-stats">
         <div class="stat-card">
             <div class="stat-icon">
@@ -37,7 +41,7 @@
             </div>
             <div class="stat-info">
                 <h3>Total Pengguna</h3>
-                <p>246</p>
+                <p>{{ $totalUsers }}</p>
             </div>
         </div>
         <div class="stat-card">
@@ -46,7 +50,7 @@
             </div>
             <div class="stat-info">
                 <h3>Pengguna Aktif</h3>
-                <p>189</p>
+                <p>{{ $activeUsers }}</p>
             </div>
         </div>
         <div class="stat-card">
@@ -55,7 +59,7 @@
             </div>
             <div class="stat-info">
                 <h3>Pendaftar Baru</h3>
-                <p>24</p>
+                <p>{{ $newUsers }}</p>
                 <span class="stat-period">7 hari terakhir</span>
             </div>
         </div>
@@ -65,7 +69,7 @@
             </div>
             <div class="stat-info">
                 <h3>Progres Rata-rata</h3>
-                <p>67%</p>
+                <p>{{ $averageProgress }}%</p>
             </div>
         </div>
     </div>
@@ -82,210 +86,63 @@
                     <th>Aksi</th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- Data pengguna akan diisi di sini -->
+            <tbody id="penggunaTableBody">
+                @foreach ($users as $user)
                 <tr>
-                    <td>1</td>
+                    <td>{{ $user->id }}</td>
                     <td class="pengguna-info">
                         <div class="pengguna-avatar">
-                            <img src="{{ asset('img/huruf1.jpg') }}" alt="Foto Profil">
+                            <img src="{{ $user->profile_picture_url }}" alt="Foto Profil {{ $user->full_name }}">
                         </div>
                         <div class="pengguna-nama">
-                            <p>Ahmad Rizky</p>
-                            <span class="pengguna-tanggal">Bergabung: 15 Mar 2025</span>
+                            <p>{{ $user->full_name }}</p>
+                            <span class="pengguna-tanggal">Bergabung: {{ $user->created_at->format('d M Y') }}</span>
                         </div>
                     </td>
-                    <td>ahmad.rizky@example.com</td>
+                    <td>{{ $user->email }}</td>
                     <td>
                         <div class="progress-container">
                             <div class="progress-bar">
-                                <div class="progress" style="width: 75%"></div>
+                                <div class="progress" style="width: {{ $user->progress }}%"></div>
                             </div>
-                            <span class="progress-text">75%</span>
+                            <span class="progress-text">{{ $user->progress }}%</span>
                         </div>
                         <div class="progress-detail">
+                            <!-- Progress details would be populated dynamically based on user's actual progress -->
+                            <!-- This is placeholder data - replace with actual progress tracking -->
                             <span class="badge materi-complete">
-                                <i class="fas fa-book"></i> 6/8
+                                <i class="fas fa-book"></i> {{ floor($user->progress / 100 * 8) }}/8
                             </span>
                             <span class="badge latihan-complete">
-                                <i class="fas fa-tasks"></i> 5/8
+                                <i class="fas fa-tasks"></i> {{ floor($user->progress / 100 * 8) }}/8
                             </span>
                             <span class="badge kuis-complete">
-                                <i class="fas fa-question-circle"></i> 4/8
+                                <i class="fas fa-question-circle"></i> {{ floor($user->progress / 100 * 8) }}/8
                             </span>
                         </div>
                     </td>
-                    <td>28 Apr 2025</td>
+                    <td>{{ $user->last_activity ? $user->last_activity->format('d M Y') : 'Belum pernah' }}</td>
                     <td>
                         <div class="action-buttons">
-                            <a href="{{ route('admin.pengguna.show', 1) }}" class="btn-view" title="Lihat Detail">
+                            <a href="{{ route('admin.pengguna.show', $user->id) }}" class="btn-view" title="Lihat Detail">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a href="{{ route('admin.pengguna.edit', 1) }}" class="btn-edit" title="Edit Pengguna">
+                            <a href="{{ route('admin.pengguna.edit', $user->id) }}" class="btn-edit" title="Edit Pengguna">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <button class="btn-delete" title="Hapus Pengguna" data-id="1">
+                            <button class="btn-delete" title="Hapus Pengguna" data-id="{{ $user->id }}">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td class="pengguna-info">
-                        <div class="pengguna-avatar">
-                            <img src="{{ asset('images/avatars/user-2.jpg') }}" alt="Foto Profil">
-                        </div>
-                        <div class="pengguna-nama">
-                            <p>Siti Nuraini</p>
-                            <span class="pengguna-tanggal">Bergabung: 10 Apr 2025</span>
-                        </div>
-                    </td>
-                    <td>siti.nuraini@example.com</td>
-                    <td>
-                        <div class="progress-container">
-                            <div class="progress-bar">
-                                <div class="progress" style="width: 32%"></div>
-                            </div>
-                            <span class="progress-text">32%</span>
-                        </div>
-                        <div class="progress-detail">
-                            <span class="badge materi-complete">
-                                <i class="fas fa-book"></i> 3/8
-                            </span>
-                            <span class="badge latihan-complete">
-                                <i class="fas fa-tasks"></i> 2/8
-                            </span>
-                            <span class="badge kuis-complete">
-                                <i class="fas fa-question-circle"></i> 1/8
-                            </span>
-                        </div>
-                    </td>
-                    <td>29 Apr 2025</td>
-                    <td>
-                        <div class="action-buttons">
-                            <a href="{{ route('admin.pengguna.edit', 2) }}" class="btn-view" title="Lihat Detail">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="{{ route('admin.pengguna.edit', 2) }}" class="btn-edit" title="Edit Pengguna">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <button class="btn-delete" title="Hapus Pengguna" data-id="2">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td class="pengguna-info">
-                        <div class="pengguna-avatar">
-                            <img src="{{ asset('images/avatars/user-3.jpg') }}" alt="Foto Profil">
-                        </div>
-                        <div class="pengguna-nama">
-                            <p>Budi Santoso</p>
-                            <span class="pengguna-tanggal">Bergabung: 22 Mar 2025</span>
-                        </div>
-                    </td>
-                    <td>budi.santoso@example.com</td>
-                    <td>
-                        <div class="progress-container">
-                            <div class="progress-bar">
-                                <div class="progress" style="width: 100%"></div>
-                            </div>
-                            <span class="progress-text">100%</span>
-                        </div>
-                        <div class="progress-detail">
-                            <span class="badge materi-complete">
-                                <i class="fas fa-book"></i> 8/8
-                            </span>
-                            <span class="badge latihan-complete">
-                                <i class="fas fa-tasks"></i> 8/8
-                            </span>
-                            <span class="badge kuis-complete">
-                                <i class="fas fa-question-circle"></i> 8/8
-                            </span>
-                        </div>
-                    </td>
-                    <td>27 Apr 2025</td>
-                    <td>
-                        <div class="action-buttons">
-                            <a href="{{ route('admin.pengguna.show', 3) }}" class="btn-view" title="Lihat Detail">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="{{ route('admin.pengguna.edit', 3) }}" class="btn-edit" title="Edit Pengguna">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <button class="btn-delete" title="Hapus Pengguna" data-id="3">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td class="pengguna-info">
-                        <div class="pengguna-avatar">
-                            <img src="{{ asset('images/avatars/user-4.jpg') }}" alt="Foto Profil">
-                        </div>
-                        <div class="pengguna-nama">
-                            <p>Dewi Anggraini</p>
-                            <span class="pengguna-tanggal">Bergabung: 5 Apr 2025</span>
-                        </div>
-                    </td>
-                    <td>dewi.anggraini@example.com</td>
-                    <td>
-                        <div class="progress-container">
-                            <div class="progress-bar">
-                                <div class="progress" style="width: 62%"></div>
-                            </div>
-                            <span class="progress-text">62%</span>
-                        </div>
-                        <div class="progress-detail">
-                            <span class="badge materi-complete">
-                                <i class="fas fa-book"></i> 5/8
-                            </span>
-                            <span class="badge latihan-complete">
-                                <i class="fas fa-tasks"></i> 5/8
-                            </span>
-                            <span class="badge kuis-complete">
-                                <i class="fas fa-question-circle"></i> 3/8
-                            </span>
-                        </div>
-                    </td>
-                    <td>30 Apr 2025</td>
-                    <td>
-                        <div class="action-buttons">
-                            <a href="{{ route('admin.pengguna.show', 4) }}" class="btn-view" title="Lihat Detail">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="{{ route('admin.pengguna.edit', 4) }}" class="btn-edit" title="Edit Pengguna">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <button class="btn-delete" title="Hapus Pengguna" data-id="4">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
 
     <div class="pagination">
-        <button class="pagination-btn prev">
-            <i class="fas fa-chevron-left"></i> Sebelumnya
-        </button>
-        <div class="pagination-numbers">
-            <a href="#" class="active">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <span>...</span>
-            <a href="#">12</a>
-        </div>
-        <button class="pagination-btn next">
-            Selanjutnya <i class="fas fa-chevron-right"></i>
-        </button>
+        {{ $users->links() }}
     </div>
 </div>
 
@@ -351,7 +208,11 @@
         </div>
         <div class="modal-footer">
             <button class="btn btn-cancel" id="cancelDelete">Batal</button>
-            <button class="btn btn-delete" id="confirmDelete">Hapus</button>
+            <form id="deleteForm" action="" method="POST" style="display: inline;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-delete" id="confirmDelete">Hapus</button>
+            </form>
         </div>
     </div>
 </div>
@@ -366,9 +227,8 @@
         const deleteButtons = document.querySelectorAll('.btn-delete');
         const closeDeleteModal = document.querySelector('#deleteModal .close-modal');
         const cancelDelete = document.getElementById('cancelDelete');
-        const confirmDelete = document.getElementById('confirmDelete');
-        let deleteId = null;
-
+        const deleteForm = document.getElementById('deleteForm');
+        
         // Modal progress
         const progressModal = document.getElementById('progressModal');
         const viewButtons = document.querySelectorAll('.btn-view');
@@ -378,7 +238,8 @@
         // Buka modal hapus ketika tombol hapus diklik
         deleteButtons.forEach(button => {
             button.addEventListener('click', function() {
-                deleteId = this.getAttribute('data-id');
+                const userId = this.getAttribute('data-id');
+                deleteForm.action = `/admin/pengguna/${userId}`;
                 deleteModal.style.display = 'flex';
             });
         });
@@ -392,26 +253,17 @@
             deleteModal.style.display = 'none';
         });
 
-        // Aksi konfirmasi hapus
-        confirmDelete.addEventListener('click', function() {
-            // Di sini akan ditambahkan kode untuk menghapus data
-            console.log('Hapus pengguna dengan ID:', deleteId);
-            
-            // Setelah berhasil dihapus, tutup modal dan refresh halaman
-            deleteModal.style.display = 'none';
-            // window.location.reload();
-        });
-
         // Buka modal progress ketika tombol view diklik
         viewButtons.forEach(button => {
             button.addEventListener('click', function(e) {
                 e.preventDefault();
-                const userId = this.closest('tr').querySelector('td:first-child').textContent;
-                const userAvatar = this.closest('tr').querySelector('.pengguna-avatar img').src;
-                const userName = this.closest('tr').querySelector('.pengguna-nama p').textContent;
-                const userEmail = this.closest('tr').querySelector('td:nth-child(3)').textContent;
-                const joinDate = this.closest('tr').querySelector('.pengguna-tanggal').textContent;
-                const progressPercent = this.closest('tr').querySelector('.progress-text').textContent;
+                const row = this.closest('tr');
+                const userId = row.querySelector('td:first-child').textContent;
+                const userAvatar = row.querySelector('.pengguna-avatar img').src;
+                const userName = row.querySelector('.pengguna-nama p').textContent;
+                const userEmail = row.querySelector('td:nth-child(3)').textContent;
+                const joinDate = row.querySelector('.pengguna-tanggal').textContent;
+                const progressPercent = row.querySelector('.progress-text').textContent;
                 
                 // Isi data ke modal
                 document.getElementById('modalUserAvatar').src = userAvatar;
@@ -421,58 +273,70 @@
                 document.getElementById('modalOverallProgress').style.width = progressPercent;
                 document.getElementById('modalProgressText').textContent = progressPercent;
 
-                // Di sini akan menampilkan data progres per topik (dummy data untuk contoh)
-                const topicsProgressList = document.getElementById('topicsProgressList');
-                topicsProgressList.innerHTML = `
-                    <div class="topic-progress-item">
-                        <div class="topic-info">
-                            <h5>Pengenalan Bahasa Isyarat</h5>
-                            <div class="progress-container">
-                                <div class="progress-bar">
-                                    <div class="progress" style="width: 100%"></div>
+                // Lakukan AJAX request untuk mendapatkan detail progres
+                fetch(`/admin/pengguna/${userId}`)
+                    .then(response => {
+                        if(response.ok) return response.json();
+                        throw new Error('Gagal memuat data');
+                    })
+                    .then(data => {
+                        // Bila ada data progress dari server, tampilkan di sini
+                        // Untuk contoh, gunakan data dummy
+                        const topicsProgressList = document.getElementById('topicsProgressList');
+                        topicsProgressList.innerHTML = `
+                            <div class="topic-progress-item">
+                                <div class="topic-info">
+                                    <h5>Pengenalan Bahasa Isyarat</h5>
+                                    <div class="progress-container">
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 100%"></div>
+                                        </div>
+                                        <span class="progress-text">100%</span>
+                                    </div>
                                 </div>
-                                <span class="progress-text">100%</span>
-                            </div>
-                        </div>
-                        <div class="topic-badges">
-                            <span class="badge materi-complete"><i class="fas fa-book"></i> 1/1</span>
-                            <span class="badge latihan-complete"><i class="fas fa-tasks"></i> 1/1</span>
-                            <span class="badge kuis-complete"><i class="fas fa-question-circle"></i> 1/1</span>
-                        </div>
-                    </div>
-                    <div class="topic-progress-item">
-                        <div class="topic-info">
-                            <h5>Alfabet dan Angka</h5>
-                            <div class="progress-container">
-                                <div class="progress-bar">
-                                    <div class="progress" style="width: 85%"></div>
+                                <div class="topic-badges">
+                                    <span class="badge materi-complete"><i class="fas fa-book"></i> 1/1</span>
+                                    <span class="badge latihan-complete"><i class="fas fa-tasks"></i> 1/1</span>
+                                    <span class="badge kuis-complete"><i class="fas fa-question-circle"></i> 1/1</span>
                                 </div>
-                                <span class="progress-text">85%</span>
                             </div>
-                        </div>
-                        <div class="topic-badges">
-                            <span class="badge materi-complete"><i class="fas fa-book"></i> 1/1</span>
-                            <span class="badge latihan-complete"><i class="fas fa-tasks"></i> 1/1</span>
-                            <span class="badge kuis-incomplete"><i class="fas fa-question-circle"></i> 0/1</span>
-                        </div>
-                    </div>
-                    <div class="topic-progress-item">
-                        <div class="topic-info">
-                            <h5>Percakapan Dasar</h5>
-                            <div class="progress-container">
-                                <div class="progress-bar">
-                                    <div class="progress" style="width: 67%"></div>
+                            <div class="topic-progress-item">
+                                <div class="topic-info">
+                                    <h5>Alfabet dan Angka</h5>
+                                    <div class="progress-container">
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 85%"></div>
+                                        </div>
+                                        <span class="progress-text">85%</span>
+                                    </div>
                                 </div>
-                                <span class="progress-text">67%</span>
+                                <div class="topic-badges">
+                                    <span class="badge materi-complete"><i class="fas fa-book"></i> 1/1</span>
+                                    <span class="badge latihan-complete"><i class="fas fa-tasks"></i> 1/1</span>
+                                    <span class="badge kuis-incomplete"><i class="fas fa-question-circle"></i> 0/1</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="topic-badges">
-                            <span class="badge materi-complete"><i class="fas fa-book"></i> 1/1</span>
-                            <span class="badge latihan-complete"><i class="fas fa-tasks"></i> 1/1</span>
-                            <span class="badge kuis-incomplete"><i class="fas fa-question-circle"></i> 0/1</span>
-                        </div>
-                    </div>
-                `;
+                            <div class="topic-progress-item">
+                                <div class="topic-info">
+                                    <h5>Percakapan Dasar</h5>
+                                    <div class="progress-container">
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 67%"></div>
+                                        </div>
+                                        <span class="progress-text">67%</span>
+                                    </div>
+                                </div>
+                                <div class="topic-badges">
+                                    <span class="badge materi-complete"><i class="fas fa-book"></i> 1/1</span>
+                                    <span class="badge latihan-complete"><i class="fas fa-tasks"></i> 1/1</span>
+                                    <span class="badge kuis-incomplete"><i class="fas fa-question-circle"></i> 0/1</span>
+                                </div>
+                            </div>
+                        `;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
 
                 progressModal.style.display = 'flex';
             });
@@ -501,17 +365,176 @@
         const searchInput = document.getElementById('searchPengguna');
         searchInput.addEventListener('keyup', function(e) {
             if (e.key === 'Enter') {
-                // Logika pencarian akan ditambahkan di sini
-                console.log('Mencari:', this.value);
+                const query = this.value.trim();
+                if (query !== '') {
+                    searchUsers(query);
+                }
             }
         });
+
+        // Fungsi pencarian pengguna
+        function searchUsers(query) {
+            fetch(`/admin/pengguna/search?query=${encodeURIComponent(query)}`)
+                .then(response => {
+                    if (response.ok) return response.json();
+                    throw new Error('Gagal mencari data');
+                })
+                .then(data => {
+                    updateTableWithUsers(data.users);
+                    document.querySelector('.pagination').innerHTML = data.pagination;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
 
         // Filter status
         const filterStatus = document.getElementById('filterStatus');
         filterStatus.addEventListener('change', function() {
-            // Logika filter akan ditambahkan di sini
-            console.log('Filter status:', this.value);
+            const status = this.value;
+            filterUsers(status);
         });
+
+        // Fungsi filter pengguna
+        function filterUsers(status) {
+            fetch(`/admin/pengguna/filter?status=${encodeURIComponent(status)}`)
+                .then(response => {
+                    if (response.ok) return response.json();
+                    throw new Error('Gagal memfilter data');
+                })
+                .then(data => {
+                    updateTableWithUsers(data.users);
+                    document.querySelector('.pagination').innerHTML = data.pagination;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // Fungsi untuk memperbarui tabel dengan data pengguna
+        function updateTableWithUsers(users) {
+            const tableBody = document.getElementById('penggunaTableBody');
+            tableBody.innerHTML = '';
+
+            users.data.forEach(user => {
+                const row = document.createElement('tr');
+                
+                // Format tanggal
+                const createdDate = new Date(user.created_at);
+                const formattedCreatedDate = `${createdDate.getDate()} ${getMonthName(createdDate.getMonth())} ${createdDate.getFullYear()}`;
+                
+                let lastActivity = 'Belum pernah';
+                if (user.last_activity) {
+                    const lastDate = new Date(user.last_activity);
+                    lastActivity = `${lastDate.getDate()} ${getMonthName(lastDate.getMonth())} ${lastDate.getFullYear()}`;
+                }
+                
+                // Placeholder untuk progress
+                const progress = user.progress || Math.floor(Math.random() * 100);
+                const materiComplete = Math.floor(progress / 100 * 8);
+                const latihanComplete = Math.floor(progress / 100 * 8);
+                const kuisComplete = Math.floor(progress / 100 * 8);
+                
+                row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td class="pengguna-info">
+                        <div class="pengguna-avatar">
+                            <img src="${user.profile_picture_url || '/storage/profile_pictures/default.png'}" alt="Foto Profil">
+                        </div>
+                        <div class="pengguna-nama">
+                            <p>${user.first_name} ${user.last_name}</p>
+                            <span class="pengguna-tanggal">Bergabung: ${formattedCreatedDate}</span>
+                        </div>
+                    </td>
+                    <td>${user.email}</td>
+                    <td>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: ${progress}%"></div>
+                            </div>
+                            <span class="progress-text">${progress}%</span>
+                        </div>
+                        <div class="progress-detail">
+                            <span class="badge materi-complete">
+                                <i class="fas fa-book"></i> ${materiComplete}/8
+                            </span>
+                            <span class="badge latihan-complete">
+                                <i class="fas fa-tasks"></i> ${latihanComplete}/8
+                            </span>
+                            <span class="badge kuis-complete">
+                                <i class="fas fa-question-circle"></i> ${kuisComplete}/8
+                            </span>
+                        </div>
+                    </td>
+                    <td>${lastActivity}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="/admin/pengguna/${user.id}" class="btn-view" title="Lihat Detail">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="/admin/pengguna/${user.id}/edit" class="btn-edit" title="Edit Pengguna">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button class="btn-delete" title="Hapus Pengguna" data-id="${user.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Rebind event listeners to the new buttons
+            bindDeleteButtons();
+            bindViewButtons();
+        }
+        
+        // Helper function to get month name
+        function getMonthName(monthIndex) {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+            return months[monthIndex];
+        }
+        
+        // Function to bind event listeners to delete buttons
+        function bindDeleteButtons() {
+            document.querySelectorAll('.btn-delete').forEach(button => {
+                button.addEventListener('click', function() {
+                    const userId = this.getAttribute('data-id');
+                    deleteForm.action = `/admin/pengguna/${userId}`;
+                    deleteModal.style.display = 'flex';
+                });
+            });
+        }
+        
+        // Function to bind event listeners to view buttons
+        function bindViewButtons() {
+            document.querySelectorAll('.btn-view').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const row = this.closest('tr');
+                    const userId = row.querySelector('td:first-child').textContent;
+                    const userAvatar = row.querySelector('.pengguna-avatar img').src;
+                    const userName = row.querySelector('.pengguna-nama p').textContent;
+                    const userEmail = row.querySelector('td:nth-child(3)').textContent;
+                    const joinDate = row.querySelector('.pengguna-tanggal').textContent;
+                    const progressPercent = row.querySelector('.progress-text').textContent;
+                    
+                    // Isi data ke modal
+                    document.getElementById('modalUserAvatar').src = userAvatar;
+                    document.getElementById('modalUserName').textContent = userName;
+                    document.getElementById('modalUserEmail').textContent = userEmail;
+                    document.getElementById('modalJoinDate').textContent = joinDate;
+                    document.getElementById('modalOverallProgress').style.width = progressPercent;
+                    document.getElementById('modalProgressText').textContent = progressPercent;
+                    
+                    // Display dummy data for progress details (same as above)
+                    // ...
+                    
+                    progressModal.style.display = 'flex';
+                });
+            });
+        }
     });
 </script>
 @endsection

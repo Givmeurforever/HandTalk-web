@@ -6,176 +6,194 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class PenggunaController extends Controller
 {
     /**
-     * Menampilkan daftar pengguna
-     *
-     * @return \Illuminate\View\View
+     * Display a listing of the users.
      */
-    public function index(Request $request)
+    public function index()
     {
-        // Query dasar untuk mendapatkan semua pengguna
-        $query = User::query();
+        $users = User::orderBy('created_at', 'desc')->paginate(10);
         
-        // Filter berdasarkan pencarian jika ada
-        if ($request->has('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('username', 'like', "%{$search}%");
-            });
-        }
+        // Calculate stats
+        $totalUsers = User::count();
+        $activeUsers = User::whereNotNull('last_activity')->where('last_activity', '>', now()->subDays(30))->count();
+        $newUsers = User::where('created_at', '>', now()->subDays(7))->count();
         
-        // Ambil data dengan pagination (10 item per halaman)
-        $users = $query->orderBy('created_at', 'desc')->paginate(10);
+        // Calculate average progress (assuming you have a progress tracking system)
+        // This is a placeholder - you'll need to adjust based on your actual progress tracking logic
+        $averageProgress = 67; // Placeholder value
         
-        // Kembalikan view dengan data users
-        return view('admin.pengguna.index', compact('users'));
+        return view('admin.pengguna.index', compact('users', 'totalUsers', 'activeUsers', 'newUsers', 'averageProgress'));
     }
 
     /**
-     * Menyimpan pengguna baru
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * Show the form for creating a new user.
      */
-    public function store(Request $request)
-    {
-        // Validasi data input
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'username' => 'required|string|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'is_admin' => 'required|boolean',
-        ]);
-
-        // Buat pengguna baru
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'username' => $request->username,
-            'password' => Hash::make($request->password),
-            'is_admin' => $request->is_admin,
-            'status' => 'active',
-        ]);
-
-        // Redirect dengan pesan sukses
-        return redirect()->route('admin.pengguna.index')
-            ->with('success', 'Pengguna berhasil ditambahkan');
-    }
-
-    /**
-     * Memperbarui data pengguna
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(Request $request, $id)
-    {
-        // Cari pengguna yang akan diupdate
-        $user = User::findOrFail($id);
-        
-        // Validasi data input
-        $rules = [
-            'name' => 'required|string|max:255',
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('users')->ignore($user->id),
-            ],
-            'username' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('users')->ignore($user->id),
-            ],
-            'is_admin' => 'required|boolean',
-        ];
-        
-        // Jika password diisi, validasi juga password
-        if ($request->filled('password')) {
-            $rules['password'] = 'string|min:8|confirmed';
-        }
-        
-        $request->validate($rules);
-        
-        // Perbarui data pengguna
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->username = $request->username;
-        $user->is_admin = $request->is_admin;
-        
-        // Update password jika diisi
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
-        }
-        
-        $user->save();
-        
-        // Redirect dengan pesan sukses
-        return redirect()->route('admin.pengguna.index')
-            ->with('success', 'Data pengguna berhasil diperbarui');
-    }
-
-    /**
-     * Menghapus pengguna
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function destroy($id)
-    {
-        // Cari dan hapus pengguna
-        $user = User::findOrFail($id);
-        $user->delete();
-        
-        // Redirect dengan pesan sukses
-        return redirect()->route('admin.pengguna.index')
-            ->with('success', 'Pengguna berhasil dihapus');
-    }
-
-    /**
-     * Mengubah status pengguna (aktif/nonaktif)
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function updateStatus(Request $request, $id)
-    {
-        // Validasi data input
-        $request->validate([
-            'status' => 'required|in:active,inactive',
-        ]);
-        
-        // Cari dan update status pengguna
-        $user = User::findOrFail($id);
-        $user->status = $request->status;
-        $user->save();
-        
-        // Pesan yang akan ditampilkan
-        $message = $request->status == 'active' 
-            ? 'Pengguna berhasil diaktifkan' 
-            : 'Pengguna berhasil dinonaktifkan';
-        
-        // Redirect dengan pesan sukses
-        return redirect()->route('admin.pengguna.index')
-            ->with('success', $message);
-    }
-        public function create()
+    public function create()
     {
         return view('admin.pengguna.create');
     }
-        public function edit($id)
+
+    /**
+     * Store a newly created user in storage.
+     */
+    public function store(Request $request)
     {
-        $user = User::findOrFail($id);
-        return view('admin.pengguna.edit', compact('user'));
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'profile_picture' => 'nullable|image|max:2048', // 2MB Max
+        ]);
+
+        $user = new User();
+        $user->first_name = $validated['first_name'];
+        $user->last_name = $validated['last_name'];
+        $user->email = $validated['email'];
+        $user->password = Hash::make($validated['password']);
+
+        // Handle profile picture upload
+        if ($request->hasFile('profile_picture')) {
+            $profilePicture = $request->file('profile_picture');
+            $filename = time() . '.' . $profilePicture->getClientOriginalExtension();
+            $path = $profilePicture->storeAs('profile_pictures', $filename, 'public');
+            $user->profile_picture = $path;
+        }
+
+        $user->save();
+
+        return redirect()->route('admin.pengguna.index')
+            ->with('success', 'Pengguna berhasil ditambahkan!');
     }
 
+    /**
+     * Display the specified user.
+     */
+    public function show(User $pengguna)
+    {
+        // Load additional data related to user progress
+        // This is a placeholder - adjust based on your actual data structure
+        
+        return view('admin.pengguna.show', compact('pengguna'));
+    }
+
+    /**
+     * Show the form for editing the specified user.
+     */
+    public function edit(User $pengguna)
+    {
+        return view('admin.pengguna.edit', compact('pengguna'));
+    }
+
+    /**
+     * Update the specified user in storage.
+     */
+    public function update(Request $request, User $pengguna)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($pengguna->id),
+            ],
+            'password' => 'nullable|string|min:8|confirmed',
+            'profile_picture' => 'nullable|image|max:2048', // 2MB Max
+        ]);
+
+        $pengguna->first_name = $validated['first_name'];
+        $pengguna->last_name = $validated['last_name'];
+        $pengguna->email = $validated['email'];
+
+        // Update password only if provided
+        if (!empty($validated['password'])) {
+            $pengguna->password = Hash::make($validated['password']);
+        }
+
+        // Handle profile picture upload
+        if ($request->hasFile('profile_picture')) {
+            // Delete old picture if not default
+            if ($pengguna->profile_picture != 'profile_pictures/default.png') {
+                Storage::disk('public')->delete($pengguna->profile_picture);
+            }
+            
+            $profilePicture = $request->file('profile_picture');
+            $filename = time() . '.' . $profilePicture->getClientOriginalExtension();
+            $path = $profilePicture->storeAs('profile_pictures', $filename, 'public');
+            $pengguna->profile_picture = $path;
+        }
+
+        $pengguna->save();
+
+        return redirect()->route('admin.pengguna.index')
+            ->with('success', 'Pengguna berhasil diperbarui!');
+    }
+
+    /**
+     * Remove the specified user from storage.
+     */
+    public function destroy(User $pengguna)
+    {
+        // Delete profile picture if not default
+        if ($pengguna->profile_picture != 'profile_pictures/default.png') {
+            Storage::disk('public')->delete($pengguna->profile_picture);
+        }
+        
+        $pengguna->delete();
+
+        return redirect()->route('admin.pengguna.index')
+            ->with('success', 'Pengguna berhasil dihapus!');
+    }
+    
+    /**
+     * Search users by name or email
+     */
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        
+        $users = User::where('first_name', 'like', "%{$query}%")
+            ->orWhere('last_name', 'like', "%{$query}%")
+            ->orWhere('email', 'like', "%{$query}%")
+            ->paginate(10);
+            
+        return response()->json([
+            'users' => $users,
+            'pagination' => (string) $users->links()
+        ]);
+    }
+    
+    /**
+     * Filter users by status
+     */
+    public function filter(Request $request)
+    {
+        $status = $request->input('status');
+        
+        if ($status == 'active') {
+            $users = User::whereNotNull('last_activity')
+                ->where('last_activity', '>', now()->subDays(30))
+                ->paginate(10);
+        } elseif ($status == 'inactive') {
+            $users = User::where(function($query) {
+                $query->whereNull('last_activity')
+                    ->orWhere('last_activity', '<=', now()->subDays(30));
+            })->paginate(10);
+        } else {
+            $users = User::paginate(10);
+        }
+        
+        return response()->json([
+            'users' => $users,
+            'pagination' => (string) $users->links()
+        ]);
+    }
 }
