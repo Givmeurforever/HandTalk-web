@@ -52,4 +52,11 @@ class User extends Authenticatable
     {
         return "{$this->first_name} {$this->last_name}";
     }
+    public function getProfilePictureUrlAttribute()
+    {
+        return $this->profile_picture
+            ? asset('storage/public_profiles/' . $this->profile_picture)
+            : asset('img/profile-default.png');
+    }
+
 }

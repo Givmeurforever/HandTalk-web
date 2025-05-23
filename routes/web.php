@@ -45,24 +45,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    // CRUD Resources
-    Route::resource('pengguna', PenggunaController::class);
+    // Resource Routes dengan parameter override agar pakai "user"
+    Route::resource('pengguna', PenggunaController::class)->parameters([
+        'pengguna' => 'user'
+    ]);
+
     Route::resource('kursus', KursusController::class);
     Route::resource('materi', MateriController::class);
     Route::resource('latihan', LatihanController::class);
     Route::resource('kuis', KuisController::class);
     Route::resource('kamus', KamusController::class);
 
-    // pengguna - custom routes
-    Route::get('pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
-    Route::get('pengguna/create', [PenggunaController::class, 'create'])->name('pengguna.create');
-    Route::post('pengguna', [PenggunaController::class, 'store'])->name('pengguna.store');
-    Route::get('pengguna/{id}/edit', [PenggunaController::class, 'edit'])->name('pengguna.edit');
-    Route::put('pengguna/{id}', [PenggunaController::class, 'update'])->name('pengguna.update');
-    Route::delete('pengguna/{id}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
-    Route::patch('pengguna/{id}/status', [PenggunaController::class, 'updateStatus'])->name('pengguna.status');
-
-    // tambahan route untuk search dan filter
+    // Custom routes khusus pengguna
+    Route::patch('pengguna/{user}/status', [PenggunaController::class, 'updateStatus'])->name('pengguna.status');
     Route::get('pengguna/search', [PenggunaController::class, 'search'])->name('pengguna.search');
     Route::get('pengguna/filter', [PenggunaController::class, 'filter'])->name('pengguna.filter');
 });

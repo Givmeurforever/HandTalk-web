@@ -74,26 +74,26 @@ class PenggunaController extends Controller
     /**
      * Display the specified user.
      */
-    public function show(User $pengguna)
+    public function show(User $user)
     {
         // Load additional data related to user progress
         // This is a placeholder - adjust based on your actual data structure
         
-        return view('admin.pengguna.show', compact('pengguna'));
+        return view('admin.pengguna.show', compact('user'));
     }
 
     /**
      * Show the form for editing the specified user.
      */
-    public function edit(User $pengguna)
+    public function edit(User $user)
     {
-        return view('admin.pengguna.edit', compact('pengguna'));
+        return view('admin.pengguna.edit', compact('user'));
     }
 
     /**
      * Update the specified user in storage.
      */
-    public function update(Request $request, User $pengguna)
+    public function update(Request $request, User $user)
     {
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
@@ -103,35 +103,35 @@ class PenggunaController extends Controller
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('users')->ignore($pengguna->id),
+                Rule::unique('users')->ignore($user->id),
             ],
             'password' => 'nullable|string|min:8|confirmed',
             'profile_picture' => 'nullable|image|max:2048', // 2MB Max
         ]);
 
-        $pengguna->first_name = $validated['first_name'];
-        $pengguna->last_name = $validated['last_name'];
-        $pengguna->email = $validated['email'];
+        $user->first_name = $validated['first_name'];
+        $user->last_name = $validated['last_name'];
+        $user->email = $validated['email'];
 
         // Update password only if provided
         if (!empty($validated['password'])) {
-            $pengguna->password = Hash::make($validated['password']);
+            $user->password = Hash::make($validated['password']);
         }
 
         // Handle profile picture upload
         if ($request->hasFile('profile_picture')) {
             // Delete old picture if not default
-            if ($pengguna->profile_picture != 'profile_pictures/default.png') {
-                Storage::disk('public')->delete($pengguna->profile_picture);
+            if ($user->profile_picture != 'profile_pictures/default.png') {
+                Storage::disk('public')->delete($user->profile_picture);
             }
             
             $profilePicture = $request->file('profile_picture');
             $filename = time() . '.' . $profilePicture->getClientOriginalExtension();
             $path = $profilePicture->storeAs('profile_pictures', $filename, 'public');
-            $pengguna->profile_picture = $path;
+            $user->profile_picture = $path;
         }
 
-        $pengguna->save();
+        $user->save();
 
         return redirect()->route('admin.pengguna.index')
             ->with('success', 'Pengguna berhasil diperbarui!');
@@ -140,14 +140,14 @@ class PenggunaController extends Controller
     /**
      * Remove the specified user from storage.
      */
-    public function destroy(User $pengguna)
+    public function destroy(User $user)
     {
         // Delete profile picture if not default
-        if ($pengguna->profile_picture != 'profile_pictures/default.png') {
-            Storage::disk('public')->delete($pengguna->profile_picture);
+        if ($user->profile_picture != 'profile_pictures/default.png') {
+            Storage::disk('public')->delete($user->profile_picture);
         }
         
-        $pengguna->delete();
+        $user->delete();
 
         return redirect()->route('admin.pengguna.index')
             ->with('success', 'Pengguna berhasil dihapus!');

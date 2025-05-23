@@ -24,7 +24,7 @@
     @endif
 
     <div class="form-card">
-        <form action="{{ route('admin.pengguna.update', $pengguna->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.pengguna.update', $user->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             
@@ -34,17 +34,17 @@
                     
                     <div class="form-group">
                         <label for="first_name">Nama Depan <span class="required">*</span></label>
-                        <input type="text" id="first_name" name="first_name" value="{{ old('first_name', $pengguna->first_name) }}" required>
+                        <input type="text" id="first_name" name="first_name" value="{{ old('first_name', $user->first_name) }}" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="last_name">Nama Belakang <span class="required">*</span></label>
-                        <input type="text" id="last_name" name="last_name" value="{{ old('last_name', $pengguna->last_name) }}" required>
+                        <input type="text" id="last_name" name="last_name" value="{{ old('last_name', $user->last_name) }}" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="email">Email <span class="required">*</span></label>
-                        <input type="email" id="email" name="email" value="{{ old('email', $pengguna->email) }}" required>
+                        <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" required>
                     </div>
                 </div>
                 
@@ -70,8 +70,7 @@
                         <label for="profile_picture">Unggah Foto Profil</label>
                         <div class="profile-upload-container">
                             <div class="profile-preview">
-                                <img id="profilePreview" src="{{ $pengguna->profile_picture_url }}" alt="Preview">
-                            </div>
+                                <img id="profilePreview" src="{{ asset('storage/' . $user->profile_picture) }}" alt="Preview">
                             <div class="upload-controls">
                                 <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
                                 <p class="form-hint">Maksimal 2MB. Format: JPG, PNG</p>

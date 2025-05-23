@@ -92,7 +92,7 @@
                     <td>{{ $user->id }}</td>
                     <td class="pengguna-info">
                         <div class="pengguna-avatar">
-                            <img src="{{ $user->profile_picture_url }}" alt="Foto Profil {{ $user->full_name }}">
+                            <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="Foto Profil {{ $user->full_name }}">
                         </div>
                         <div class="pengguna-nama">
                             <p>{{ $user->full_name }}</p>
@@ -239,7 +239,8 @@
         deleteButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const userId = this.getAttribute('data-id');
-                deleteForm.action = `/admin/pengguna/${userId}`;
+                // Menggunakan setAttribute untuk menetapkan action dengan lebih reliable
+                deleteForm.setAttribute('action', `/admin/pengguna/${userId}`);
                 deleteModal.style.display = 'flex';
             });
         });
@@ -251,6 +252,28 @@
 
         cancelDelete.addEventListener('click', function() {
             deleteModal.style.display = 'none';
+        });
+
+        // Pastikan form delete berfungsi dengan baik
+        deleteForm.addEventListener('submit', function(e) {
+            // Memastikan method DELETE terpasang dengan benar
+            if (!this.querySelector('input[name="_method"]')) {
+                const methodField = document.createElement('input');
+                methodField.type = 'hidden';
+                methodField.name = '_method';
+                methodField.value = 'DELETE';
+                this.appendChild(methodField);
+            }
+            
+            // Memastikan token CSRF ada
+            if (!this.querySelector('input[name="_token"]')) {
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '_token';
+                tokenInput.value = csrfToken;
+                this.appendChild(tokenInput);
+            }
         });
 
         // Buka modal progress ketika tombol view diklik
@@ -439,7 +462,7 @@
                     <td>${user.id}</td>
                     <td class="pengguna-info">
                         <div class="pengguna-avatar">
-                            <img src="${user.profile_picture_url || '/storage/profile_pictures/default.png'}" alt="Foto Profil">
+                            <img src="${user.profile_picture || '/storage/profile_pictures/default.png'}" alt="Foto Profil">
                         </div>
                         <div class="pengguna-nama">
                             <p>${user.first_name} ${user.last_name}</p>
@@ -501,7 +524,8 @@
             document.querySelectorAll('.btn-delete').forEach(button => {
                 button.addEventListener('click', function() {
                     const userId = this.getAttribute('data-id');
-                    deleteForm.action = `/admin/pengguna/${userId}`;
+                    // Menggunakan setAttribute untuk menetapkan action
+                    deleteForm.setAttribute('action', `/admin/pengguna/${userId}`);
                     deleteModal.style.display = 'flex';
                 });
             });

@@ -1,7 +1,7 @@
 @extends('layouts.dashboardadmin')
 @section('title', 'Detail Pengguna - HandTalk')
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/page-pengguna-detail.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/page-pengguna-form.css') }}">
 @endpush
 
 @section('content')
@@ -9,7 +9,7 @@
     <div class="detail-header">
         <h1>Detail Pengguna</h1>
         <div class="header-actions">
-            <a href="{{ route('admin.pengguna.edit', $pengguna->id) }}" class="btn btn-primary">
+            <a href="{{ route('admin.pengguna.edit', $user->id) }}" class="btn btn-primary">
                 <i class="fas fa-edit"></i> Edit Pengguna
             </a>
             <a href="{{ route('admin.pengguna.index') }}" class="btn btn-secondary">
@@ -22,17 +22,17 @@
         <div class="profile-card">
             <div class="profile-header">
                 <div class="profile-avatar">
-                    <img src="{{ $pengguna->profile_picture_url }}" alt="Foto Profil {{ $pengguna->full_name }}">
+                    <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="Foto Profil {{ $user->full_name }}">
                 </div>
                 <div class="profile-info">
-                    <h2>{{ $pengguna->full_name }}</h2>
-                    <p class="profile-email">{{ $pengguna->email }}</p>
+                    <h2>{{ $user->full_name }}</h2>
+                    <p class="profile-email">{{ $user->email }}</p>
                     <p class="profile-join-date">
-                        <i class="fas fa-calendar-alt"></i> Bergabung: {{ $pengguna->created_at->format('d M Y') }}
+                        <i class="fas fa-calendar-alt"></i> Bergabung: {{ $user->created_at->format('d M Y') }}
                     </p>
                     <p class="profile-last-active">
                         <i class="fas fa-clock"></i> Terakhir aktif: 
-                        {{ $pengguna->last_activity ? $pengguna->last_activity->format('d M Y H:i') : 'Belum pernah' }}
+                        {{ $user->last_activity ? $user->last_activity->format('d M Y H:i') : 'Belum pernah' }}
                     </p>
                 </div>
             </div>
@@ -47,9 +47,9 @@
                     <h3>Progres Keseluruhan</h3>
                     <div class="progress-container large">
                         <div class="progress-bar">
-                            <div class="progress" style="width: {{ $pengguna->progress }}%"></div>
+                            <div class="progress" style="width: {{ $user->progress }}%"></div>
                         </div>
-                        <span class="progress-text">{{ $pengguna->progress }}%</span>
+                        <span class="progress-text">{{ $user->progress }}%</span>
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                 </div>
                 <div class="stat-info">
                     <h3>Materi Selesai</h3>
-                    <p class="stat-number">{{ floor($pengguna->progress / 100 * 8) }}/8</p>
+                    <p class="stat-number">{{ floor($user->progress / 100 * 8) }}/8</p>
                 </div>
             </div>
             
@@ -70,7 +70,7 @@
                 </div>
                 <div class="stat-info">
                     <h3>Latihan Selesai</h3>
-                    <p class="stat-number">{{ floor($pengguna->progress / 100 * 8) }}/8</p>
+                    <p class="stat-number">{{ floor($user->progress / 100 * 8) }}/8</p>
                 </div>
             </div>
             
@@ -80,7 +80,7 @@
                 </div>
                 <div class="stat-info">
                     <h3>Kuis Selesai</h3>
-                    <p class="stat-number">{{ floor($pengguna->progress / 100 * 8) }}/8</p>
+                    <p class="stat-number">{{ floor($user->progress / 100 * 8) }}/8</p>
                 </div>
             </div>
         </div>
