@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Kamus;
 
 class KamusUserController extends Controller
 {
@@ -10,34 +11,17 @@ class KamusUserController extends Controller
     {
         $kataDicari = $request->query('search');
 
-        $kamus = $this->getDummyKamus();
-
         $hasil = null;
         if ($kataDicari) {
-            $hasil = collect($kamus)->firstWhere('kata', strtolower($kataDicari));
+            $hasil = Kamus::where('kata', strtolower($kataDicari))->first();
+            if ($hasil) {
+                $hasil = [
+                    'kata' => $hasil->kata,
+                    'video' => asset('storage/kamus_videos/' . $hasil->video)
+                ];
+            }
         }
 
         return view('pages.kamus', compact('hasil', 'kataDicari'));
-    }
-
-    private function getDummyKamus()
-    {
-        return [
-            [
-                'kata' => 'makan',
-                'video' => asset('img/Makan.webm')
-
-            ],
-            [
-                'kata' => 'minum',
-                'video' => asset('img/Minum.webm')
-
-            ],
-            [
-                'kata' => 'saya',
-                'video' => asset('img/Saya.webm')
-
-            ],
-        ];
     }
 }

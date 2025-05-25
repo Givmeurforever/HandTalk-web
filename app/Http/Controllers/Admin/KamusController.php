@@ -4,68 +4,24 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Kamus;
+use Illuminate\Support\Facades\Storage;
 
 class KamusController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $pageTitle = 'Manajemen Kamus';
 
-        $categories = [
-            ['id' => 1, 'name' => 'Alfabet'],
-            ['id' => 2, 'name' => 'Angka'],
-            ['id' => 3, 'name' => 'Sapaan'],
-            ['id' => 4, 'name' => 'Keluarga'],
-            ['id' => 5, 'name' => 'Aktivitas Sehari-hari'],
-            ['id' => 6, 'name' => 'Tempat'],
-            ['id' => 7, 'name' => 'Makanan & Minuman'],
-        ];
+        $dictionary_items = Kamus::when($request->search, function ($query) use ($request) {
+            $query->where('kata', 'like', '%' . $request->search . '%');
+        })->orderBy('created_at', 'desc')->paginate(12);
 
-        $dictionary_items = [
-            [
-                'id' => 1,
-                'word' => 'Halo',
-                'category_id' => 3,
-                'category_name' => 'Sapaan',
-                'image' => 'huruf2.png',
-                'gif' => 'Saya.webm',
-                'views' => 245
-            ],
-            [
-                'id' => 2,
-                'word' => 'Terima Kasih',
-                'category_id' => 3,
-                'category_name' => 'Sapaan',
-                'image' => 'huruf1.png',
-                'gif' => 'Saya.webm',
-                'views' => 200
-            ],
-            [
-                'id' => 3,
-                'word' => 'A',
-                'category_id' => 1,
-                'category_name' => 'Alfabet',
-                'image' => 'angka1.png',
-                'gif' => 'Minum.webm',
-                'views' => 156
-            ],
-            [
-                'id' => 4,
-                'word' => 'Satu',
-                'category_id' => 2,
-                'category_name' => 'Angka',
-                'image' => 'angka2.png',
-                'gif' => 'satu.gif',
-                'views' => 112
-            ],
-        ];
-
-        return view('admin.kamus.index', compact('pageTitle', 'categories', 'dictionary_items'));
+        return view('admin.kamus.index', compact('pageTitle', 'dictionary_items'));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -80,38 +36,65 @@ class KamusController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'kata' => 'required|string|max:255|unique:kamus,kata',
+            'video' => 'required|mimes:webm|max:2048',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        $videoPath = $request->file('video')->store('kamus_videos', 'public');
+
+        Kamus::create([
+            'kata' => $request->kata,
+            'video' => $videoPath,
+            'views' => 0,
+        ]);
+
+        return redirect()->route('admin.kamus.index')->with('success', 'Kata berhasil ditambahkan.');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Kamus $kamus)
     {
-        return view('admin.kamus.edit');
+        return view('admin.kamus.edit', compact('kamus'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Kamus $kamus)
     {
-        //
+        $request->validate([
+            'kata' => 'required|string|max:255|unique:kamus,kata,' . $kamus->id,
+            'video' => 'nullable|mimes:webm|max:2048',
+        ]);
+
+        if ($request->hasFile('video')) {
+            if ($kamus->video && Storage::disk('public')->exists($kamus->video)) {
+                Storage::disk('public')->delete($kamus->video);
+            }
+
+            $kamus->video = $request->file('video')->store('kamus_videos', 'public');
+        }
+
+        $kamus->kata = $request->kata;
+        $kamus->save();
+
+        return redirect()->route('admin.kamus.index')->with('success', 'Kata berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Kamus $kamus)
     {
-        // return view('admin.kamus.destroy');
+        if ($kamus->video && Storage::disk('public')->exists($kamus->video)) {
+            Storage::disk('public')->delete($kamus->video);
+        }
+
+        $kamus->delete();
+
+        return redirect()->route('admin.kamus.index')->with('success', 'Kata berhasil dihapus.');
     }
 }

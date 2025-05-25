@@ -32,24 +32,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/kursus', [NavigationController::class, 'kursus'])->name('kursus');
     Route::get('/kursus/{topikSlug}/{materiSlug}', [TopikUserController::class, 'show'])->name('topik.show');
     Route::get('/kamus', [KamusUserController::class, 'index'])->name('kamus');
-    Route::get('/settings', [NavigationController::class, 'settings'])->name('settings');
-    Route::get('/dashboard',  [UserDashboardController::class, 'index'])->name('dashboard');
-    Route::get('/settings', [App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
-    Route::put('/settings', [App\Http\Controllers\SettingsController::class, 'update'])->name('settings.update');
-    Route::delete('/account', [App\Http\Controllers\SettingsController::class, 'deleteAccount'])->name('account.delete');
+    
+    // Settings
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
+    Route::delete('/account', [SettingsController::class, 'deleteAccount'])->name('account.delete');
+
+    Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
 });
 
-// Admin Dashboard
-
+// 🛠️ Admin Dashboard
 Route::prefix('admin')->name('admin.')->group(function () {
-    // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Resource Routes dengan parameter override agar pakai "user"
+    // Resource Routes
     Route::resource('pengguna', PenggunaController::class)->parameters([
         'pengguna' => 'user'
     ]);
-
     Route::resource('kursus', KursusController::class);
     Route::resource('materi', MateriController::class);
     Route::resource('latihan', LatihanController::class);
