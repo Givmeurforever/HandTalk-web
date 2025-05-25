@@ -53,7 +53,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('materi', MateriController::class);
     Route::resource('latihan', LatihanController::class);
     Route::resource('kuis', KuisController::class);
-    Route::resource('kamus', KamusController::class);
+    Route::resource('kamus', KamusController::class)->parameters([
+        'kamus' => 'kamus'
+    ]);
 
     // Custom routes khusus pengguna
     Route::patch('pengguna/{user}/status', [PenggunaController::class, 'updateStatus'])->name('pengguna.status');

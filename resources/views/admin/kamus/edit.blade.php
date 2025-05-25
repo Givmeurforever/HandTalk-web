@@ -1,29 +1,50 @@
 @extends('layouts.dashboardadmin')
 @section('title', 'Edit Kamus Isyarat')
+
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/form.css') }}">
 @endpush
 
 @section('content')
-    <h1>Edit Kata Isyarat</h1>
+    <h1 style="text-align: center; margin-bottom: 20px;">Edit Kata Isyarat</h1>
 
-    @php
-        $kamus = ['kata' => 'Terima Kasih', 'media' => 'terimakasih.gif'];
-    @endphp
+    @if ($errors->any())
+        <div class="alert alert-danger" style="max-width: 600px; margin: 0 auto 20px;">
+            <ul style="margin: 0; padding-left: 20px;">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-    <form action="#" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.kamus.update', $kamus->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
-        <label>Kata</label>
-        <input type="text" name="kata" value="{{ $kamus['kata'] }}" required>
+        <label for="kata">Kata</label>
+        <input type="text" name="kata" id="kata" required value="{{ old('kata', $kamus->kata) }}">
 
-        <label>Media Lama</label><br>
-        <img src="{{ asset('media/' . $kamus['media']) }}" width="100" alt="{{ $kamus['kata'] }}"><br><br>
+        <label>Media Saat Ini</label><br>
+        @if ($kamus->video_extension === 'gif')
+            <img src="{{ asset('storage/' . $kamus->video) }}" width="200" alt="{{ $kamus->kata }}">
+        @else
+            <video controls muted width="200">
+                <source src="{{ asset('storage/' . $kamus->video) }}" type="video/webm">
+                Tidak dapat memutar media.
+            </video>
+        @endif
 
-        <label>Ganti Media (opsional)</label>
-        <input type="file" name="media" accept=".gif,.webm">
+        <br><br>
 
-        <button type="submit">Update</button>
+        <label for="video">Ganti Media (opsional)</label>
+        <input type="file" name="video" id="video" accept=".webm,.gif">
+
+        <div style="display: flex; justify-content: space-between; gap: 10px;">
+            <a href="{{ route('admin.kamus.index') }}" class="btn btn-outline" style="flex: 1; text-align: center; background: #f3f3f3; color: #333; text-decoration: none;">
+                ← Kembali
+            </a>
+            <button type="submit" style="flex: 1;">Update</button>
+        </div>
     </form>
 @endsection

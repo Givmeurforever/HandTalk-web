@@ -17,7 +17,7 @@ class KamusUserController extends Controller
             if ($hasil) {
                 $hasil = [
                     'kata' => $hasil->kata,
-                    'video' => asset('storage/kamus_videos/' . $hasil->video)
+                    'video' => asset('storage/' . $hasil->video)
                 ];
             }
         }

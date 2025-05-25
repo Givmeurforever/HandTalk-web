@@ -46,7 +46,6 @@ class KamusController extends Controller
         Kamus::create([
             'kata' => $request->kata,
             'video' => $videoPath,
-            'views' => 0,
         ]);
 
         return redirect()->route('admin.kamus.index')->with('success', 'Kata berhasil ditambahkan.');
@@ -87,8 +86,11 @@ class KamusController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Kamus $kamus)
+    
+    
+     public function destroy(Kamus $kamus)
     {
+
         if ($kamus->video && Storage::disk('public')->exists($kamus->video)) {
             Storage::disk('public')->delete($kamus->video);
         }
