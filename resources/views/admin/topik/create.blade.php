@@ -10,7 +10,7 @@
 <div class="container mt-4">
     <h1 class="mb-4">Tambah Topik Baru</h1>
 
-    <form action="{{ route('admin.kursus.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.topik.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="form-group">
@@ -21,46 +21,33 @@
             @enderror
         </div>
 
-        <div class="form-group">
+        {{-- Hapus input slug jika slug auto-generate di backend --}}
+        {{-- <div class="form-group">
             <label for="slug">Slug (otomatis dibuat jika dikosongkan)</label>
             <input type="text" name="slug" id="slug" class="form-control @error('slug') is-invalid @enderror" value="{{ old('slug') }}">
             @error('slug')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
-        </div>
+        </div> --}}
 
         <div class="form-group">
             <label for="deskripsi">Deskripsi</label>
-            <textarea name="deskripsi" id="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror" rows="3" required>{{ old('deskripsi') }}</textarea>
+            <textarea name="deskripsi" id="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror" rows="3">{{ old('deskripsi') }}</textarea>
             @error('deskripsi')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
 
+        @foreach([1, 2, 3] as $i)
         <div class="form-group">
-            <label>Gambar 1</label>
-            <input type="file" name="gambar1" class="form-control-file @error('gambar1') is-invalid @enderror" accept="image/*">
+            <label for="gambar{{ $i }}">Gambar {{ $i }}</label>
+            <input type="file" name="gambar{{ $i }}" id="gambar{{ $i }}" class="form-control-file @error('gambar'.$i) is-invalid @enderror" accept="image/*">
             <small class="form-text text-muted">Maksimal 2MB. Format: JPG, PNG, JPEG.</small>
-            @error('gambar1')
+            @error('gambar'.$i)
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
-
-        <div class="form-group">
-            <label>Gambar 2</label>
-            <input type="file" name="gambar2" class="form-control-file @error('gambar2') is-invalid @enderror" accept="image/*">
-            @error('gambar2')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            <label>Gambar 3</label>
-            <input type="file" name="gambar3" class="form-control-file @error('gambar3') is-invalid @enderror" accept="image/*">
-            @error('gambar3')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
+        @endforeach
 
         <button type="submit" class="btn btn-primary mt-3">Simpan</button>
     </form>
@@ -69,16 +56,18 @@
 
 @push('scripts')
 <script>
-    document.getElementById('judul').addEventListener('input', function () {
-        const judul = this.value;
-        const slug = judul.toLowerCase()
+    const slugify = (text) => {
+        return text.toLowerCase()
             .replace(/[^a-z0-9\s-]/g, '')
             .replace(/[\s-]+/g, '-')
             .trim();
+    };
+
+    document.getElementById('judul').addEventListener('input', function () {
         const slugInput = document.getElementById('slug');
-        if (!slugInput.value) {
-            slugInput.value = slug;
-        }
+        if (!slugInput || slugInput.value) return; // jika input slug dihapus, skip
+
+        slugInput.value = slugify(this.value);
     });
 </script>
 @endpush

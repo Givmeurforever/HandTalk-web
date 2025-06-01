@@ -46,8 +46,8 @@
                         <a href="{{ route('admin.pengguna.index') }}"><i class="fas fa-users"></i> Manajemen Pengguna</a>
                     </li>
 
-                    <li class="{{ isActive('admin.kursus') }}">
-                        <a href="{{ route('admin.kursus.index') }}"><i class="fas fa-book"></i> Manajemen Topik</a>
+                    <li class="{{ isActive('admin.topik') }}">
+                        <a href="{{ route('admin.topik.index') }}"><i class="fas fa-book"></i> Manajemen Topik</a>
                     </li>
 
                     <li class="{{ isActive(['admin.materi', 'admin.latihan', 'admin.kuis']) }}">

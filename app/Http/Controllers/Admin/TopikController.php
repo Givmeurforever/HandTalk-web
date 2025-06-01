@@ -39,21 +39,22 @@ class TopikController extends Controller
         foreach ([1, 2, 3] as $i) {
             $fileKey = 'gambar' . $i;
             if ($request->hasFile($fileKey)) {
-                $topik->$fileKey = $request->file($fileKey)->store('kursus_images', 'public');
+                $topik->$fileKey = $request->file($fileKey)->store('topik_images', 'public');
             }
         }
 
         $topik->save();
 
-        return redirect()->route('admin.kursus.index')->with('success', 'Topik berhasil ditambahkan.');
+        return redirect()->route('admin.topik.index')->with('success', 'Topik berhasil ditambahkan.');
     }
 
-    public function edit(Topik $kursus)
+    public function edit($id)
     {
-        return view('admin.topik.edit', ['topik' => $kursus]);
+        $topik = Topik::findOrFail($id);
+        return view('admin.topik.edit', compact('topik'));
     }
 
-    public function update(Request $request, Topik $kursus)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'judul' => 'required|string|max:255',
@@ -63,37 +64,40 @@ class TopikController extends Controller
             'gambar3' => 'nullable|image|max:2048',
         ]);
 
-        $kursus->judul = $request->judul;
-        $kursus->slug = Str::slug($request->judul);
-        $kursus->deskripsi = $request->deskripsi;
+        $topik = Topik::findOrFail($id);
+        $topik->judul = $request->judul;
+        $topik->slug = Str::slug($request->judul);
+        $topik->deskripsi = $request->deskripsi;
 
         foreach ([1, 2, 3] as $i) {
             $fileKey = 'gambar' . $i;
             if ($request->hasFile($fileKey)) {
-                // Hapus gambar lama jika ada
-                if ($kursus->$fileKey && Storage::disk('public')->exists($kursus->$fileKey)) {
-                    Storage::disk('public')->delete($kursus->$fileKey);
+                // Hapus gambar lama dari disk 'public' jika ada
+                if ($topik->$fileKey) {
+                    Storage::disk('public')->delete($topik->$fileKey);
                 }
-                $kursus->$fileKey = $request->file($fileKey)->store('kursus_images', 'public');
+                $topik->$fileKey = $request->file($fileKey)->store('topik_images', 'public');
             }
         }
 
-        $kursus->save();
+        $topik->save();
 
-        return redirect()->route('admin.kursus.index')->with('success', 'Topik berhasil diperbarui.');
+        return redirect()->route('admin.topik.index')->with('success', 'Topik berhasil diperbarui.');
     }
 
-    public function destroy(Topik $kursus)
+    public function destroy($id)
     {
+        $topik = Topik::findOrFail($id);
+
         foreach ([1, 2, 3] as $i) {
             $fileKey = 'gambar' . $i;
-            if ($kursus->$fileKey && Storage::disk('public')->exists($kursus->$fileKey)) {
-                Storage::disk('public')->delete($kursus->$fileKey);
+            if ($topik->$fileKey) {
+                Storage::disk('public')->delete($topik->$fileKey);
             }
         }
 
-        $kursus->delete();
+        $topik->delete();
 
-        return redirect()->route('admin.kursus.index')->with('success', 'Topik berhasil dihapus.');
+        return redirect()->route('admin.topik.index')->with('success', 'Topik berhasil dihapus.');
     }
 }

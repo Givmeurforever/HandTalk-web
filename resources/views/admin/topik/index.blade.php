@@ -29,7 +29,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="card-title">Daftar Topik</h3>
-                    <a href="{{ route('admin.kursus.create') }}" class="btn btn-sm btn-primary">
+                    <a href="{{ route('admin.topik.create') }}" class="btn btn-sm btn-primary">
                         <i class="fas fa-plus"></i> Tambah Topik
                     </a>
                 </div>
@@ -60,11 +60,11 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.kursus.edit', $topik->id) }}" 
+                                            <a href="{{ route('admin.topik.edit', $topik->id) }}" 
                                                class="btn btn-sm btn-warning" title="Edit Topik">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('admin.kursus.destroy', $topik->id) }}" 
+                                            <form action="{{ route('admin.topik.destroy', $topik->id) }}" 
                                                   method="POST" class="d-inline" 
                                                   onsubmit="return confirm('Hapus topik ini?')">
                                                 @csrf

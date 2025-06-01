@@ -1,34 +1,81 @@
 @extends('layouts.dashboardadmin')
-@section('title', 'Tambah Kuis')
+
+@section('title', 'Tambah Kuis - Admin HandTalk')
+
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
+<link rel="stylesheet" href="{{ asset('css/page-latihan.css') }}">
+<link rel="stylesheet" href="{{ asset('css/page-latihan-form.css') }}">
 @endpush
 
 @section('content')
-<h1>Tambah Kuis</h1>
+<div class="latihan-container">
+    <div class="page-header">
+        <h1>Tambah Kuis Baru</h1>
+        <a href="{{ route('admin.kuis.index') }}" class="btn-secondary">
+            <i class="fas fa-arrow-left"></i> Kembali ke Daftar
+        </a>
+    </div>
 
-<form action="#" method="POST">
-    @csrf
-    <label>Judul Kuis</label>
-    <input type="text" name="judul" placeholder="Contoh: Kuis Alfabet" required>
+    <div class="form-container">
+        <form action="{{ route('admin.kuis.store') }}" method="POST">
+            @csrf
 
-    <label>Pertanyaan</label>
-    <textarea name="pertanyaan" rows="3" placeholder="Tulis pertanyaan di sini..." required></textarea>
+            <div class="form-section">
+                <h3>Informasi Kuis</h3>
 
-    <label>Pilihan Jawaban</label>
-    <input type="text" name="a" placeholder="A" required>
-    <input type="text" name="b" placeholder="B" required>
-    <input type="text" name="c" placeholder="C" required>
-    <input type="text" name="d" placeholder="D" required>
+                <div class="form-group">
+                    <label for="topik_id">Topik:</label>
+                    <select name="topik_id" id="topik_id" class="form-control" required>
+                        <option value="">Pilih Topik</option>
+                        @foreach($topikList as $topik)
+                            <option value="{{ $topik->id }}">{{ $topik->judul }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-    <label>Jawaban Benar</label>
-    <select name="jawaban_benar" required>
-        <option value="a">A</option>
-        <option value="b">B</option>
-        <option value="c">C</option>
-        <option value="d">D</option>
-    </select>
+                <div class="form-group">
+                    <label for="urutan">Urutan Soal:</label>
+                    <input type="number" name="urutan" id="urutan" class="form-control" min="1" required>
+                </div>
 
-    <button type="submit">Simpan</button>
-</form>
+                <div class="form-group">
+                    <label for="soal">Soal:</label>
+                    <textarea name="soal" id="soal" class="form-control" rows="3" required></textarea>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Opsi Jawaban</h3>
+
+                @foreach(['A', 'B', 'C', 'D'] as $label)
+                <div class="form-group">
+                    <label for="opsi_{{ strtolower($label) }}_kamus_id">Opsi {{ $label }}:</label>
+                    <select name="opsi_{{ strtolower($label) }}_kamus_id" class="form-control">
+                        <option value="">Pilih dari Kamus</option>
+                        @foreach($kamusList as $kamus)
+                            <option value="{{ $kamus->id }}">{{ $kamus->kata }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                @endforeach
+
+                <div class="form-group">
+                    <label for="jawaban_benar">Jawaban Benar:</label>
+                    <select name="jawaban_benar" id="jawaban_benar" class="form-control" required>
+                        <option value="">Pilih jawaban</option>
+                        <option value="A">Opsi A</option>
+                        <option value="B">Opsi B</option>
+                        <option value="C">Opsi C</option>
+                        <option value="D">Opsi D</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Simpan Kuis</button>
+                <a href="{{ route('admin.kuis.index') }}" class="btn-secondary">Batal</a>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection

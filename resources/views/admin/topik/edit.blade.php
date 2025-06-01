@@ -1,27 +1,52 @@
 @extends('layouts.dashboardadmin')
-@section('title', 'Tambah Topik')
+
+@section('title', 'Edit Topik')
+
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/form.css') }}">
 @endpush
 
 @section('content')
-<h1>Tambah Topik Baru</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Edit Topik</h1>
 
-<form action="#" method="POST">
-    @csrf
+    <form action="{{ route('admin.topik.update', $topik->id) }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
 
-    <label>Judul Topik</label>
-    <input type="text" name="judul" placeholder="Contoh: Bahasa Isyarat Alfabet" required>
+        <div class="form-group">
+            <label for="judul">Judul Topik</label>
+            <input type="text" name="judul" id="judul" class="form-control @error('judul') is-invalid @enderror" value="{{ old('judul', $topik->judul) }}" required>
+            @error('judul')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    <label>Deskripsi</label>
-    <textarea name="deskripsi" rows="3" placeholder="Deskripsi singkat topik..." required></textarea>
+        <div class="form-group">
+            <label for="deskripsi">Deskripsi</label>
+            <textarea name="deskripsi" id="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror" rows="3">{{ old('deskripsi', $topik->deskripsi) }}</textarea>
+            @error('deskripsi')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    <label>Status</label>
-    <select name="status">
-        <option value="aktif">Aktif</option>
-        <option value="nonaktif">Nonaktif</option>
-    </select>
+        @for ($i = 1; $i <= 3; $i++)
+        <div class="form-group">
+            <label>Gambar {{ $i }}</label>
+            <input type="file" name="gambar{{ $i }}" class="form-control-file @error('gambar' . $i) is-invalid @enderror" accept="image/*">
+            @php $gambarField = 'gambar' . $i; @endphp
+            @if ($topik->$gambarField)
+                <div class="mt-2">
+                    <img src="{{ asset('storage/' . $topik->$gambarField) }}" alt="Gambar {{ $i }}" style="max-height: 100px;">
+                </div>
+            @endif
+            @error('gambar' . $i)
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        @endfor
 
-    <button type="submit">Simpan</button>
-</form>
+        <button type="submit" class="btn btn-primary mt-3">Perbarui</button>
+    </form>
+</div>
 @endsection

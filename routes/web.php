@@ -46,20 +46,16 @@ Route::middleware('auth')->group(function () {
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Resource Routes
-    Route::resource('pengguna', PenggunaController::class)->parameters([
-        'pengguna' => 'user'
-    ]);
-    Route::resource('kursus', TopikController::class);
+    Route::resource('pengguna', PenggunaController::class)->parameters(['pengguna' => 'user']);
+    Route::resource('topik', TopikController::class);
     Route::resource('materi', MateriController::class);
     Route::resource('latihan', LatihanController::class);
     Route::resource('kuis', KuisController::class);
-    Route::resource('kamus', KamusController::class)->parameters([
-        'kamus' => 'kamus'
-    ]);
+    Route::resource('kamus', KamusController::class)->parameters(['kamus' => 'kamus']);
 
-    // Custom routes khusus pengguna
     Route::patch('pengguna/{user}/status', [PenggunaController::class, 'updateStatus'])->name('pengguna.status');
     Route::get('pengguna/search', [PenggunaController::class, 'search'])->name('pengguna.search');
     Route::get('pengguna/filter', [PenggunaController::class, 'filter'])->name('pengguna.filter');
 });
+
+
