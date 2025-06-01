@@ -22,17 +22,29 @@
 
             <div class="form-group">
                 <label>Topik:</label>
-                <p>{{ $kuis->topik->judul ?? '-' }}</p>
+                <p>
+                    @if(isset($kuis->topik))
+                        @if(is_object($kuis->topik))
+                            {{ $kuis->topik->judul }}
+                        @elseif(is_array($kuis->topik) && isset($kuis->topik['judul']))
+                            {{ $kuis->topik['judul'] }}
+                        @else
+                            -
+                        @endif
+                    @else
+                        -
+                    @endif
+                </p>
             </div>
 
             <div class="form-group">
                 <label>Urutan Soal:</label>
-                <p>{{ $kuis->urutan }}</p>
+                <p>{{ is_object($kuis) ? $kuis->urutan : '-' }}</p>
             </div>
 
             <div class="form-group">
                 <label>Soal:</label>
-                <p>{{ $kuis->soal }}</p>
+                <p>{{ is_object($kuis) ? $kuis->soal : '-' }}</p>
             </div>
         </div>
 
