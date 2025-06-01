@@ -10,10 +10,9 @@ class Kamus extends Model
 {
     use HasFactory;
 
-    protected $table = 'kamus'; // ⬅️ Tambahkan ini!
+    protected $table = 'kamus';
 
     protected $fillable = ['kata', 'video'];
-    // app/Models/Kamus.php
 
     public function getVideoExtensionAttribute()
     {

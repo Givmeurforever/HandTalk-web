@@ -24,8 +24,8 @@
         <label for="kata">Kata</label>
         <input type="text" name="kata" id="kata" placeholder="Contoh: Halo" required value="{{ old('kata') }}">
 
-        <label for="video">Video (.webm)</label>
-        <input type="file" name="video" id="video" accept=".webm" required>
+        <label for="video">Video (.webm/png)</label>
+        <input type="file" name="video" id="video" accept=".webm,.png,.gif" required>
 
         <div style="display: flex; justify-content: space-between; gap: 10px;">
             <a href="{{ route('admin.kamus.index') }}" class="btn btn-outline" style="flex: 1; text-align: center; background: #f3f3f3; color: #333; text-decoration: none;">

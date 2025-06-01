@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\LatihanController;
 use App\Http\Controllers\Admin\KuisController;
 use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\Admin\AdminLoginController;
+use App\Http\Controllers\Admin\TopikController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\UserDashboardController;
@@ -29,7 +30,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // 🛡️ Rute yang butuh login
 Route::middleware('auth')->group(function () {
-    Route::get('/kursus', [NavigationController::class, 'kursus'])->name('kursus');
+    Route::get('/kursus', [TopikUserController::class, 'index'])->name('kursus');
     Route::get('/kursus/{topikSlug}/{materiSlug}', [TopikUserController::class, 'show'])->name('topik.show');
     Route::get('/kamus', [KamusUserController::class, 'index'])->name('kamus');
     
@@ -49,7 +50,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('pengguna', PenggunaController::class)->parameters([
         'pengguna' => 'user'
     ]);
-    Route::resource('kursus', KursusController::class);
+    Route::resource('kursus', TopikController::class);
     Route::resource('materi', MateriController::class);
     Route::resource('latihan', LatihanController::class);
     Route::resource('kuis', KuisController::class);

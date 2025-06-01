@@ -4,7 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class kuis extends Model
+class Kuis extends Model
 {
-    //
+    protected $table = 'kuis';
+
+    public function topik()
+    {
+        return $this->belongsTo(Topik::class);
+    }
 }

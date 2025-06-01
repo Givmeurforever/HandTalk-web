@@ -18,33 +18,29 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.kamus.update', $kamus->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.kamus.update', $kamus->id) }}" method="POST" enctype="multipart/form-data" style="max-width: 600px; margin: 0 auto;">
         @csrf
         @method('PUT')
 
         <label for="kata">Kata</label>
-        <input type="text" name="kata" id="kata" required value="{{ old('kata', $kamus->kata) }}">
+        <input type="text" name="kata" id="kata" required value="{{ old('kata', $kamus->kata) }}" placeholder="Contoh: Halo">
 
-        <label>Media Saat Ini</label><br>
-        @if ($kamus->video_extension === 'gif')
-            <img src="{{ asset('storage/' . $kamus->video) }}" width="200" alt="{{ $kamus->kata }}">
-        @else
-            <video controls muted width="200">
-                <source src="{{ asset('storage/' . $kamus->video) }}" type="video/webm">
-                Tidak dapat memutar media.
-            </video>
-        @endif
+        <label>Video Saat Ini (.webm)</label><br>
+        <video controls muted width="300" style="margin: 10px 0;">
+            <source src="{{ asset('storage/' . $kamus->video) }}" type="video/webm">
+            Browser tidak mendukung video.
+        </video>
 
-        <br><br>
+        <br>
 
-        <label for="video">Ganti Media (opsional)</label>
-        <input type="file" name="video" id="video" accept=".webm,.gif">
+        <label for="video">Ganti Video (opsional)</label>
+        <input type="file" name="video" id="video" accept=".webm,.png,.gif">
 
-        <div style="display: flex; justify-content: space-between; gap: 10px;">
-            <a href="{{ route('admin.kamus.index') }}" class="btn btn-outline" style="flex: 1; text-align: center; background: #f3f3f3; color: #333; text-decoration: none;">
+        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+            <a href="{{ route('admin.kamus.index') }}" class="btn btn-outline" style="flex: 1; margin-right: 10px; text-align: center; text-decoration: none;">
                 ← Kembali
             </a>
-            <button type="submit" style="flex: 1;">Update</button>
+            <button type="submit" class="btn btn-primary" style="flex: 1;">Simpan Perubahan</button>
         </div>
     </form>
 @endsection

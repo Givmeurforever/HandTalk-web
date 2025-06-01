@@ -4,106 +4,119 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Latihan;
+use App\Models\Materi;
+use App\Models\Topik;
+use App\Models\Kamus;
 
 class LatihanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $latihanList = [
-            [
-                'id' => 1,
-                'soal' => 'Apa gerakan isyarat untuk kata "Halo"?',
-                'topik' => 'Sapaan Sehari-hari',
-                'jawaban' => 'Lambaikan tangan terbuka ke arah lawan bicara',
-                'media' => 'Gambar',
-                'tanggal' => '10-03-2025'
-            ],
-            [
-                'id' => 2,
-                'soal' => 'Tunjukkan gerakan isyarat untuk huruf "A"',
-                'topik' => 'Alfabet',
-                'jawaban' => 'Telapak tangan menghadap ke depan, semua jari mengepal kecuali jempol yang tegak',
-                'media' => 'Video',
-                'tanggal' => '11-03-2025'
-            ],
-            [
-                'id' => 3,
-                'soal' => 'Bagaimana cara menunjukkan angka "5" dalam bahasa isyarat?',
-                'topik' => 'Angka',
-                'jawaban' => 'Telapak tangan terbuka dengan lima jari terentang',
-                'media' => 'GIF',
-                'tanggal' => '12-03-2025'
-            ],
-            [
-                'id' => 4,
-                'soal' => 'Praktikkan gerakan isyarat untuk "Terima kasih"',
-                'topik' => 'Sapaan Sehari-hari',
-                'jawaban' => 'Tangan terbuka, disentuhkan ke dagu lalu digerakkan ke depan',
-                'media' => 'Video',
-                'tanggal' => '13-03-2025'
-            ],
-            [
-                'id' => 5,
-                'soal' => 'Tunjukkan bagaimana menyatakan "Saya mau belajar" dalam bahasa isyarat',
-                'topik' => 'Perkenalan Bahasa Isyarat',
-                'jawaban' => 'Kombinasi gerakan "saya", "mau", dan "belajar"',
-                'media' => 'Gambar',
-                'tanggal' => '14-03-2025'
-            ]
-        ];
+        $topikList = Topik::orderBy('judul')->get();
+        $materiList = Materi::with('topik')->orderBy('judul')->get();
 
-        return view('admin.latihan.index', compact('latihanList'));
+        $query = Latihan::with(['materi.topik']);
+
+        if ($request->filled('topik_id')) {
+            $materiIds = Materi::where('topik_id', $request->topik_id)->pluck('id');
+            $query->whereIn('materi_id', $materiIds);
+        }
+
+        if ($request->filled('materi_id')) {
+            $query->where('materi_id', $request->materi_id);
+        }
+
+        $latihanList = $query->latest()->get();
+
+        return view('admin.latihan.index', compact('latihanList', 'topikList', 'materiList'));
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view('admin.latihan.create');
+        $topikList = Topik::orderBy('judul')->get();
+        $materiList = Materi::with('topik')->orderBy('judul')->get();
+        $kamusList = Kamus::orderBy('kata')->get();
+
+        return view('admin.latihan.create', compact('topikList', 'materiList', 'kamusList'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'materi_id' => 'required|exists:materi,id',
+            'soal' => 'required|string|max:255',
+            'urutan' => 'required|integer|min:1',
+            'jawaban_benar' => 'required|in:A,B,C,D',
+        ]);
+
+        Latihan::create([
+            'materi_id' => $request->materi_id,
+            'soal' => $request->soal,
+            'urutan' => $request->urutan,
+            'jawaban_benar' => $request->jawaban_benar,
+            'opsi_a_kamus_id' => $request->opsi_a_kamus_id,
+            'opsi_b_kamus_id' => $request->opsi_b_kamus_id,
+            'opsi_c_kamus_id' => $request->opsi_c_kamus_id,
+            'opsi_d_kamus_id' => $request->opsi_d_kamus_id,
+            'opsi_a_teks' => $request->opsi_a_teks,
+            'opsi_b_teks' => $request->opsi_b_teks,
+            'opsi_c_teks' => $request->opsi_c_teks,
+            'opsi_d_teks' => $request->opsi_d_teks,
+        ]);
+
+        return redirect()->route('admin.latihan.index')->with('success', 'Latihan berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show($id)
     {
-        return view('admin.latihan.show');
+        $latihan = Latihan::with(['materi.topik', 'opsiA', 'opsiB', 'opsiC', 'opsiD'])->findOrFail($id);
+        return view('admin.latihan.show', compact('latihan'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit($id)
     {
-        return view('admin.latihan.edit');
+        $latihan = Latihan::findOrFail($id);
+        $topikList = Topik::orderBy('judul')->get();
+        $materiList = Materi::with('topik')->orderBy('judul')->get();
+        $kamusList = Kamus::orderBy('kata')->get();
+
+        return view('admin.latihan.edit', compact('latihan', 'topikList', 'materiList', 'kamusList'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
-    }
+        $latihan = Latihan::findOrFail($id);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+        $request->validate([
+            'materi_id' => 'required|exists:materi,id',
+            'soal' => 'required|string|max:255',
+            'urutan' => 'required|integer|min:1',
+            'jawaban_benar' => 'required|in:A,B,C,D',
+        ]);
+
+        $latihan->update([
+            'materi_id' => $request->materi_id,
+            'soal' => $request->soal,
+            'urutan' => $request->urutan,
+            'jawaban_benar' => $request->jawaban_benar,
+            'opsi_a_kamus_id' => $request->opsi_a_kamus_id,
+            'opsi_b_kamus_id' => $request->opsi_b_kamus_id,
+            'opsi_c_kamus_id' => $request->opsi_c_kamus_id,
+            'opsi_d_kamus_id' => $request->opsi_d_kamus_id,
+            'opsi_a_teks' => $request->opsi_a_teks,
+            'opsi_b_teks' => $request->opsi_b_teks,
+            'opsi_c_teks' => $request->opsi_c_teks,
+            'opsi_d_teks' => $request->opsi_d_teks,
+        ]);
+
+        return redirect()->route('admin.latihan.index')->with('success', 'Latihan berhasil diperbarui.');
+}
+    public function destroy($id)
     {
-        //
+        $latihan = Latihan::findOrFail($id);
+        $latihan->delete();
+
+        return redirect()->route('admin.latihan.index')->with('success', 'Latihan berhasil dihapus.');
     }
 }

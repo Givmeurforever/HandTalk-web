@@ -38,7 +38,7 @@ class KamusController extends Controller
     {
         $request->validate([
             'kata' => 'required|string|max:255|unique:kamus,kata',
-            'video' => 'required|mimes:webm|max:2048',
+            'video' => 'nullable|mimes:webm,png,gif|max:2048',
         ]);
 
         $videoPath = $request->file('video')->store('kamus_videos', 'public');
@@ -66,7 +66,7 @@ class KamusController extends Controller
     {
         $request->validate([
             'kata' => 'required|string|max:255|unique:kamus,kata,' . $kamus->id,
-            'video' => 'nullable|mimes:webm|max:2048',
+            'video' => 'nullable|mimes:webm,png,gif|max:2048',
         ]);
 
         if ($request->hasFile('video')) {

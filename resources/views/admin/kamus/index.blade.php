@@ -20,10 +20,26 @@
             @foreach ($dictionary_items as $item)
                 <div class="card">
                     <h3 class="card-title">{{ ucfirst($item->kata) }}</h3>
-                    <video controls muted class="video-preview">
-                        <source src="{{ asset('storage/' . $item->video) }}" type="video/webm">
-                        Browser tidak mendukung video.
-                    </video>
+
+                    @if(!empty($item->video))
+                        @php
+                            $ext = strtolower(pathinfo($item->video, PATHINFO_EXTENSION));
+                        @endphp
+
+                        @if(in_array($ext, ['webm', 'mp4']))
+                            <video controls muted class="video-preview" preload="metadata">
+                                <source src="{{ asset('storage/' . $item->video) }}" type="video/{{ $ext }}">
+                                Browser tidak mendukung video format {{ $ext }}.
+                            </video>
+                        @elseif(in_array($ext, ['png', 'jpg', 'jpeg', 'gif']))
+                            <img src="{{ asset('storage/' . $item->video) }}" class="video-preview" alt="{{ $item->kata }}">
+                        @else
+                            <p class="empty-msg">File tidak dapat ditampilkan (format tidak didukung)</p>
+                        @endif
+                    @else
+                        <p class="empty-msg">Tidak ada media tersedia</p>
+                    @endif
+
                     <div class="card-actions">
                         <a href="{{ route('admin.kamus.edit', $item->id) }}" class="btn warning-btn">
                             <i class="fas fa-edit"></i> Edit
@@ -116,6 +132,7 @@
     object-fit: cover;
     border-radius: 6px;
     margin-bottom: 10px;
+    background: #f8f9fa;
 }
 
 .card-actions {

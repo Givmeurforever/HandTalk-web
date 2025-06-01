@@ -1,24 +1,36 @@
 @extends('layouts.dashboardadmin')
+
 @section('title', 'Detail Materi')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/page-materi.css') }}">
+@endpush
+
 @section('content')
-<h1>Detail Materi</h1>
+<div class="container mt-4">
+    <h1 class="mb-3">Detail Materi</h1>
 
-@php
-    $materi = [
-        'judul' => 'Isyarat Alfabet A-C',
-        'deskripsi' => 'Belajar huruf A sampai C dalam bahasa isyarat.',
-        'video' => 'abcd123',
-        'kursus' => 'Bahasa Isyarat Alfabet',
-    ];
-@endphp
+    <p><strong>Judul:</strong> {{ $materi->judul }}</p>
+    <p><strong>Topik:</strong> {{ $materi->topik->judul ?? '-' }}</p>
+    <p><strong>Deskripsi:</strong></p>
+    <div class="bg-light p-3 rounded mb-3">
+        {!! nl2br(e($materi->deskripsi)) !!}
+    </div>
 
-<p><strong>Judul:</strong> {{ $materi['judul'] }}</p>
-<p><strong>Kursus:</strong> {{ $materi['kursus'] }}</p>
-<p><strong>Deskripsi:</strong> {{ $materi['deskripsi'] }}</p>
-<p><strong>Video:</strong></p>
-<iframe width="320" height="180" src="https://www.youtube.com/embed/{{ $materi['video'] }}" frameborder="0" allowfullscreen></iframe>
+    <p><strong>Video Pembelajaran:</strong></p>
+    @if(Str::length($materi->video) <= 20)
+        {{-- Embed YouTube --}}
+        <iframe width="480" height="270" src="https://www.youtube.com/embed/{{ $materi->video }}" frameborder="0" allowfullscreen></iframe>
+    @else
+        {{-- Path file video --}}
+        <video width="480" height="270" controls>
+            <source src="{{ asset('storage/' . $materi->video) }}" type="video/mp4">
+            Browser Anda tidak mendukung pemutar video.
+        </video>
+    @endif
 
-<br><br>
-<a href="{{ route('admin.materi.index') }}" class="btn-aksi">← Kembali</a>
+    <div class="mt-4">
+        <a href="{{ route('admin.materi.index') }}" class="btn btn-secondary">← Kembali</a>
+    </div>
+</div>
 @endsection

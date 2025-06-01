@@ -1,30 +1,65 @@
 @extends('layouts.dashboardadmin')
 @section('title', 'Tambah Materi')
+
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/form.css') }}">
 @endpush
 
 @section('content')
-<h1>Tambah Materi Baru</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Tambah Materi Baru</h1>
 
-<form action="#" method="POST">
-    @csrf
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0 mt-2">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-    <label>Judul Materi</label>
-    <input type="text" name="judul" required>
+    <form action="{{ route('admin.materi.store') }}" method="POST">
+        @csrf
 
-    <label>Deskripsi</label>
-    <textarea name="deskripsi" rows="3" required></textarea>
+        <div class="form-group">
+            <label>Judul Materi</label>
+            <input type="text" name="judul" class="form-control" value="{{ old('judul') }}" required>
+        </div>
 
-    <label>ID Video YouTube</label>
-    <input type="text" name="video" placeholder="Contoh: dQw4w9WgXcQ" required>
+        <div class="form-group">
+            <label>Slug (otomatis jika kosong)</label>
+            <input type="text" name="slug" class="form-control" value="{{ old('slug') }}">
+        </div>
 
-    <label>Kursus</label>
-    <select name="kursus_id">
-        <option value="1">Bahasa Isyarat Alfabet</option>
-        <option value="2">Bahasa Isyarat Angka</option>
-    </select>
+        <div class="form-group">
+            <label>Deskripsi</label>
+            <textarea name="deskripsi" rows="4" class="form-control">{{ old('deskripsi') }}</textarea>
+        </div>
 
-    <button type="submit">Simpan</button>
-</form>
+        <div class="form-group">
+            <label>ID Video YouTube / File Path</label>
+            <input type="text" name="video" class="form-control" value="{{ old('video') }}" placeholder="Contoh: dQw4w9WgXcQ atau path/video.mp4">
+        </div>
+
+        <div class="form-group">
+            <label>Topik</label>
+            <select name="topik_id" class="form-control" required>
+                <option value="">-- Pilih Topik --</option>
+                @foreach ($topiks as $topik)
+                    <option value="{{ $topik->id }}" {{ old('topik_id') == $topik->id ? 'selected' : '' }}>
+                        {{ $topik->judul }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Urutan</label>
+            <input type="number" name="urutan" class="form-control" min="1" value="{{ old('urutan', 1) }}">
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Simpan</button>
+    </form>
+</div>
 @endsection

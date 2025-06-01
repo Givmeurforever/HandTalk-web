@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 
 class NavigationController extends Controller
 {
-    public function kursus()
-    {
-        return view('pages.kursus');
-    }
+    // public function kursus()
+    // {
+    //     return view('pages.kursus');
+    // }
 
     public function settings()
     {
