@@ -2,32 +2,36 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Kuis extends Model
 {
+    use HasFactory;
+
     protected $table = 'kuis';
 
     protected $fillable = [
         'topik_id',
-        'soal',
         'urutan',
-        'media_type',
-        'media_path',
-        'jawaban_benar',
+        'soal',
         'opsi_a_kamus_id',
-        'opsi_b_kamus_id',
+        'opsi_b_kamus_id', 
         'opsi_c_kamus_id',
         'opsi_d_kamus_id',
+        'jawaban_benar'
     ];
 
-    // Relasi ke Topik
+    protected $casts = [
+        'jawaban_benar' => 'string',
+    ];
+
     public function topik()
     {
-        return $this->belongsTo(Topik::class);
+        return $this->belongsTo(Topik::class, 'topik_id');
     }
 
-    // Relasi ke Kamus untuk opsi jawaban
+    // Relasi ke model Kamus
     public function opsiA()
     {
         return $this->belongsTo(Kamus::class, 'opsi_a_kamus_id');
@@ -48,17 +52,14 @@ class Kuis extends Model
         return $this->belongsTo(Kamus::class, 'opsi_d_kamus_id');
     }
 
-    // (Opsional) Jika kamu tidak menyimpan media_type tapi ingin menebaknya otomatis
-    public function getGuessedMediaTypeAttribute()
+    // Scope untuk query yang sering digunakan
+    public function scopeForTopik($query, $topikId)
     {
-        if (!$this->media_path) return null;
+        return $query->where('topik_id', $topikId);
+    }
 
-        $ext = strtolower(pathinfo($this->media_path, PATHINFO_EXTENSION));
-        return match ($ext) {
-            'png', 'jpg', 'jpeg' => 'image',
-            'gif' => 'gif',
-            'webm', 'mp4' => 'video',
-            default => 'unknown',
-        };
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('urutan', 'asc');
     }
 }

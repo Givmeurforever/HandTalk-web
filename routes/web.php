@@ -6,21 +6,19 @@ use App\Http\Controllers\KamusUserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PenggunaController;
-use App\Http\Controllers\Admin\KursusController;
-use App\Http\Controllers\Admin\KamusController;
+use App\Http\Controllers\Admin\TopikController;
 use App\Http\Controllers\Admin\MateriController;
 use App\Http\Controllers\Admin\LatihanController;
 use App\Http\Controllers\Admin\KuisController;
-use App\Http\Controllers\Admin\PengaturanController;
-use App\Http\Controllers\Admin\AdminLoginController;
-use App\Http\Controllers\Admin\TopikController;
+use App\Http\Controllers\Admin\KamusController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\SettingsController;
+use Illuminate\Support\Facades\DB;
 
-// ✨ Halaman publik
-Route::get('/', fn() => view('pages.home'))->name('home');
+// ✨ Halaman Publik
+Route::get('/', fn () => view('pages.home'))->name('home');
 Route::get('/tentang', [NavigationController::class, 'tentang'])->name('tentang');
 Route::get('/signup', [AuthController::class, 'showForm'])->name('signup');
 Route::post('/signup', [AuthController::class, 'register']);
@@ -28,24 +26,41 @@ Route::get('/login', [AuthController::class, 'showFormLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// 🛡️ Rute yang butuh login
+// 🛡️ Rute User Login
 Route::middleware('auth')->group(function () {
+    // Dashboard User
+    Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
+
+    // Kursus (Topik)
     Route::get('/kursus', [TopikUserController::class, 'index'])->name('kursus');
-    Route::get('/kursus/{topikSlug}/{materiSlug}', [TopikUserController::class, 'show'])->name('topik.show');
-    Route::get('/kamus', [KamusUserController::class, 'index'])->name('kamus');
+    Route::get('/kursus/{topikSlug}/{materiSlug}', [TopikUserController::class, 'show'])->name('kursus.show');
     
+    // Latihan Routes (New Structure - Multiple questions per page)
+    Route::get('/kursus/{topikSlug}/{materiSlug}/latihan/{page?}', [TopikUserController::class, 'latihan'])
+        ->name('kursus.latihan')
+        ->where('page', '[0-9]+');
+    
+    Route::post('/latihan/check', [TopikUserController::class, 'checkLatihan'])->name('latihan.check');
+    
+    // Kuis Routes (New Structure - All questions in one page)
+    Route::get('/kursus/{topikSlug}/kuis', [TopikUserController::class, 'kuis'])->name('kursus.kuis');
+    Route::post('/kursus/{topikSlug}/kuis/submit', [TopikUserController::class, 'submitKuis'])->name('kursus.kuis.submit');
+    Route::get('/kursus/{topikSlug}/kuis/hasil', [TopikUserController::class, 'hasilKuis'])->name('kursus.kuis.hasil');
+
+    // Kamus
+    Route::get('/kamus', [KamusUserController::class, 'index'])->name('kamus');
+
     // Settings
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
     Route::delete('/account', [SettingsController::class, 'deleteAccount'])->name('account.delete');
-
-    Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
 });
 
 // 🛠️ Admin Dashboard
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Resource Management
     Route::resource('pengguna', PenggunaController::class)->parameters(['pengguna' => 'user']);
     Route::resource('topik', TopikController::class);
     Route::resource('materi', MateriController::class);
@@ -53,9 +68,37 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('kuis', KuisController::class);
     Route::resource('kamus', KamusController::class)->parameters(['kamus' => 'kamus']);
 
+    // Pengguna custom routes
     Route::patch('pengguna/{user}/status', [PenggunaController::class, 'updateStatus'])->name('pengguna.status');
     Route::get('pengguna/search', [PenggunaController::class, 'search'])->name('pengguna.search');
     Route::get('pengguna/filter', [PenggunaController::class, 'filter'])->name('pengguna.filter');
 });
 
 
+// CHECK DATABASE STRUCTURE
+Route::get('/struktur-db', function () {
+    $tables = DB::select('SHOW TABLES');
+    $databaseName = DB::getDatabaseName();
+    $output = [];
+
+    foreach ($tables as $tableObj) {
+        $table = array_values((array) $tableObj)[0];
+        $columns = DB::table('information_schema.columns')
+            ->select('column_name', 'data_type')
+            ->where('table_schema', $databaseName)
+            ->where('table_name', $table)
+            ->get();
+
+        $output[$table] = $columns;
+    }
+
+    echo "<pre>";
+    foreach ($output as $table => $columns) {
+        echo "TABEL: $table\n";
+        foreach ($columns as $col) {
+            echo "- {$col->column_name} ({$col->data_type})\n";
+        }
+        echo "\n";
+    }
+    echo "</pre>";
+});
