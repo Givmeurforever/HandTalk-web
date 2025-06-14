@@ -10,7 +10,7 @@
 
 <div class="latihan-container">
     <div class="kuis-header">
-        <h2>Kuis: {{ $topik->nama ?? 'Tidak ada topik' }}</h2>
+        <h2>Kuis: {{ $topik->judul}}</h2>
         <p class="kuis-info">Total {{ $kuisQuestions->count() }} soal - Jawab semua soal lalu submit</p>
     </div>
 
@@ -74,7 +74,8 @@ document.getElementById('form-kuis').addEventListener('submit', function(e) {
     
     let allAnswered = true;
     soalIds.forEach(id => {
-        const answered = this.querySelector(`input[name="jawaban[${id}]"]:checked`);
+        // Perbaikan syntax JavaScript
+        const answered = this.querySelector('input[name="jawaban[' + id + ']"]:checked');
         if (!answered) {
             allAnswered = false;
         }

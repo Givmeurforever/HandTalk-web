@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('title', 'Materi: ' . $materi['judul'])
 
 @push('styles')
@@ -10,6 +9,12 @@
 <a href="{{ route('kursus') }}" class="back-btn">← Kembali ke Kursus</a>
 
 <div class="topik-body">
+    {{-- DEBUG INFO --}}
+{{-- <div style="background: #f8f9fa; padding: 10px; margin: 10px 0;">
+    <p><strong>Topik Slug:</strong> {{ $topik['slug'] ?? 'null' }}</p>
+    <p><strong>Materi Slug:</strong> {{ $materi['slug'] ?? 'null' }}</p>
+    <p><strong>Generated URL:</strong> {{ route('kursus.kuis', $topik['slug']) }}</p>
+</div> --}}
     {{-- Kiri: Konten --}}
     <div class="topik-left animate-fade-up">
         {{-- Video --}}
@@ -30,10 +35,13 @@
 
         {{-- Navigasi ke latihan & kuis --}}
         <div class="mt-4">
-            <a href="{{ route('latihan.index', [$topik['slug'], $materi['slug'], 1]) }}" class="btn btn-outline-primary">
+            {{-- Gunakan route baru yang konsisten --}}
+            <a href="{{ route('kursus.latihan', [$topik['slug'], $materi['slug'], 1]) }}" class="btn btn-outline-primary">
                 Mulai Latihan
             </a>
-            <a href="{{ url('/topik/' . $topik['slug'] . '/kuis') }}" class="btn btn-outline-secondary ml-2">
+            
+            {{-- Route kuis yang diperbaiki --}}
+            <a href="{{ route('kursus.kuis', $topik['slug']) }}" class="btn btn-outline-secondary ml-2">
                 Kerjakan Kuis
             </a>
         </div>

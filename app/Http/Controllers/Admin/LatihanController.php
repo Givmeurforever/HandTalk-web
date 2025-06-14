@@ -13,8 +13,8 @@ class LatihanController extends Controller
 {
     public function index(Request $request)
     {
-        $topikList = Topik::orderBy('judul')->get();
-        $materiList = Materi::with('topik')->orderBy('judul')->get();
+        $topikList = Topik::orderBy('created_at', 'asc')->get();
+        $materiList = Materi::with('topik')->orderBy('created_at', 'asc')->get();
 
         $query = Latihan::with(['materi.topik']);
 

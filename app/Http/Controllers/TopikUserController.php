@@ -7,6 +7,7 @@ use App\Models\Materi;
 use App\Models\Latihan;
 use App\Models\Kuis;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TopikUserController extends Controller
 {
@@ -111,51 +112,91 @@ class TopikUserController extends Controller
     // Kuis - Show all questions at once
     public function kuis($topikSlug)
     {
+        // Ambil topik berdasarkan slug, 404 kalau tidak ada
         $topik = Topik::where('slug', $topikSlug)->firstOrFail();
 
+        // Ambil soal kuis berdasarkan topik
         $kuisQuestions = Kuis::with(['opsiA', 'opsiB', 'opsiC', 'opsiD'])
-            ->forTopik($topik->id)
-            ->ordered()
+            ->where('topik_id', $topik->id)
+            ->orderBy('urutan')
             ->get();
 
         if ($kuisQuestions->isEmpty()) {
+            // Kalau soal kuis belum ada, redirect balik dengan pesan error
             return redirect()->back()->with('error', 'Belum ada kuis untuk topik ini.');
         }
 
-        return view('pages.kursus.kuis', compact('kuisQuestions', 'topik', 'topikSlug'));
+        // Debug: pastikan data terkirim dengan benar
+        Log::info('Kuis Data:', [
+            'topik' => $topik->toArray(),
+            'kuisQuestions' => $kuisQuestions->count(),
+            'topikSlug' => $topikSlug
+        ]);
+
+        // PERBAIKAN: Gunakan path view yang sesuai dengan lokasi file
+        return view('pages.kursus.kuis', [
+            'kuisQuestions' => $kuisQuestions,
+            'topik' => $topik,
+            'topikSlug' => $topikSlug,
+        ]);
     }
 
-    // Submit all kuis answers
     public function submitKuis(Request $request, $topikSlug)
     {
+        // Validasi input
+        $request->validate([
+            'jawaban' => 'required|array',
+            'jawaban.*' => 'required|in:A,B,C,D'
+        ], [
+            'jawaban.required' => 'Mohon jawab minimal satu soal.',
+            'jawaban.*.required' => 'Semua soal harus dijawab.',
+            'jawaban.*.in' => 'Pilihan jawaban tidak valid.'
+        ]);
+
         $topik = Topik::where('slug', $topikSlug)->firstOrFail();
-        
-        $kuisQuestions = Kuis::forTopik($topik->id)->ordered()->get();
+
+        // Perbaikan: gunakan query yang sama seperti di method kuis()
+        $kuisQuestions = Kuis::with(['opsiA', 'opsiB', 'opsiC', 'opsiD'])
+            ->where('topik_id', $topik->id)
+            ->orderBy('urutan')
+            ->get();
+
         $jawabanUser = $request->input('jawaban', []);
-        
+
+        // Validasi tambahan: pastikan semua soal dijawab
+        if (count($jawabanUser) !== $kuisQuestions->count()) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Mohon jawab semua soal sebelum submit.');
+        }
+
         // Hitung score
         $totalSoal = $kuisQuestions->count();
         $benar = 0;
-        
+
         $hasil = [];
         foreach ($kuisQuestions as $kuis) {
             $jawabanUserUntukSoal = $jawabanUser[$kuis->id] ?? null;
             $isBenar = $jawabanUserUntukSoal === $kuis->jawaban_benar;
-            
+
             if ($isBenar) {
                 $benar++;
             }
-            
+
             $hasil[$kuis->id] = [
                 'soal' => $kuis->soal,
                 'jawaban_user' => $jawabanUserUntukSoal,
                 'jawaban_benar' => $kuis->jawaban_benar,
-                'is_benar' => $isBenar
+                'is_benar' => $isBenar,
+                'opsi_a' => $kuis->opsiA,
+                'opsi_b' => $kuis->opsiB,
+                'opsi_c' => $kuis->opsiC,
+                'opsi_d' => $kuis->opsiD,
             ];
         }
-        
+
         $score = $totalSoal > 0 ? round(($benar / $totalSoal) * 100) : 0;
-        
+
         // Store results in session for hasil page
         session([
             'kuis_hasil' => [
@@ -163,23 +204,30 @@ class TopikUserController extends Controller
                 'hasil' => $hasil,
                 'total_soal' => $totalSoal,
                 'benar' => $benar,
-                'score' => $score
+                'score' => $score,
+                'topikSlug' => $topikSlug
             ]
         ]);
 
         return redirect()->route('kursus.kuis.hasil', $topikSlug);
     }
-    
-    // Show kuis results
+
     public function hasilKuis($topikSlug)
     {
         $hasilData = session('kuis_hasil');
-        
+
         if (!$hasilData) {
             return redirect()->route('kursus.kuis', $topikSlug)
-                ->with('error', 'Data hasil kuis tidak ditemukan.');
+                ->with('error', 'Data hasil kuis tidak ditemukan. Silakan kerjakan kuis terlebih dahulu.');
         }
-        
+
+        // Validasi topik slug sesuai dengan session
+        if (isset($hasilData['topikSlug']) && $hasilData['topikSlug'] !== $topikSlug) {
+            return redirect()->route('kursus.kuis', $topikSlug)
+                ->with('error', 'Data hasil tidak sesuai dengan topik yang diminta.');
+        }
+
+        // PERBAIKAN: Gunakan path view yang sesuai
         return view('pages.kursus.kuis-hasil', $hasilData);
     }
 }

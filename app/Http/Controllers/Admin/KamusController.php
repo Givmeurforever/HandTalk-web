@@ -18,7 +18,7 @@ class KamusController extends Controller
 
         $dictionary_items = Kamus::when($request->search, function ($query) use ($request) {
             $query->where('kata', 'like', '%' . $request->search . '%');
-        })->orderBy('created_at', 'desc')->paginate(12);
+        })->orderBy('created_at', 'asc')->paginate(12);
 
         return view('admin.kamus.index', compact('pageTitle', 'dictionary_items'));
     }

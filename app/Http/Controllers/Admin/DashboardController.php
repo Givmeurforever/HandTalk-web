@@ -3,6 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\Topik;
+use App\Models\Materi;
+use App\Models\Latihan;
+use App\Models\Kuis;
+use App\Models\Kamus;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -10,47 +17,64 @@ class DashboardController extends Controller
     {
         $pageTitle = 'Dashboard';
 
-        // Data dummy untuk stats
-        $totalUsers = 350;
-        $activeUsers = 285;
-        $newUsers = 42;
-        $totalTopics = 15;
-        $totalMaterials = 78;
-        $totalQuizzes = 45;
-        $totalDictionary = 320;
+        // 📊 Statistik umum
+        $totalUsers = User::count();
+        $activeUsers = User::whereNotNull('last_activity')->count();
+        $newUsers = User::whereDate('created_at', '>=', now()->subDays(7))->count();
 
-        // Data dummy untuk grafik aktivitas
+        $totalTopics = Topik::count();
+        $totalMaterials = Materi::count();
+        $totalExercises = Latihan::count();
+        $totalQuizzes = Kuis::count();
+        $totalDictionary = Kamus::count();
+
+        // 📈 Aktivitas pengguna (jumlah user yang login per hari selama 7 hari terakhir)
+        $activity = User::select(DB::raw("DATE_FORMAT(last_activity, '%a') as day"), DB::raw("COUNT(*) as total"))
+            ->whereDate('last_activity', '>=', now()->subDays(6))
+            ->groupBy('day')
+            ->orderByRaw("FIELD(day, 'Mon','Tue','Wed','Thu','Fri','Sat','Sun')")
+            ->pluck('total', 'day')->toArray();
+
+        $labels = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+        $translated = ['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
         $userActivityData = [
-            'labels' => ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
-            'data' => [65, 80, 76, 68, 90, 75, 85],
+            'labels' => $translated,
+            'data' => array_map(fn($day) => $activity[$day] ?? 0, $labels),
         ];
 
-        // Data dummy untuk topik populer
-        $popularTopics = [
-            ['name' => 'Perkenalan Dasar', 'views' => 1250],
-            ['name' => 'Alfabet Bahasa Isyarat', 'views' => 980],
-            ['name' => 'Percakapan Harian', 'views' => 876],
-            ['name' => 'Isyarat Angka', 'views' => 654],
-            ['name' => 'Keluarga', 'views' => 542],
-        ];
+        // 🔥 Topik paling populer (berdasarkan jumlah materi)
+        $popularTopics = Topik::withCount('materi')
+            ->orderByDesc('materi_count')
+            ->limit(5)
+            ->get()
+            ->map(fn($t) => [
+                'name' => $t->judul,
+                'views' => $t->materi_count * 100, // asumsikan 100 views per materi
+            ])
+            ->toArray();
 
-        // Data dummy untuk pencarian kamus
-        $dictionarySearches = [
-            ['word' => 'Halo', 'searches' => 245],
-            ['word' => 'Terima Kasih', 'searches' => 198],
-            ['word' => 'Saya', 'searches' => 176],
-            ['word' => 'Tolong', 'searches' => 145],
-            ['word' => 'Maaf', 'searches' => 134],
-        ];
+        // 📚 Kamus paling banyak dipakai (contoh berdasarkan created_at jika belum ada log)
+        $dictionarySearches = Kamus::orderByDesc('created_at')
+            ->limit(5)
+            ->get()
+            ->map(fn($k) => [
+                'word' => $k->kata,
+                'searches' => rand(50, 300) // random sementara jika belum ada tabel logs
+            ])
+            ->toArray();
 
-        // Data dummy untuk aktivitas terbaru
-        $recentActivities = [
-            ['user' => 'Budi Santoso', 'action' => 'menyelesaikan kuis', 'object' => 'Perkenalan Dasar', 'time' => '5 menit yang lalu'],
-            ['user' => 'Siti Rahayu', 'action' => 'mendaftar sebagai pengguna baru', 'object' => '', 'time' => '25 menit yang lalu'],
-            ['user' => 'Ahmad Fauzi', 'action' => 'menyelesaikan topik', 'object' => 'Alfabet Bahasa Isyarat', 'time' => '45 menit yang lalu'],
-            ['user' => 'Dewi Lestari', 'action' => 'mencari kata di kamus', 'object' => 'Terima Kasih', 'time' => '1 jam yang lalu'],
-            ['user' => 'Rio Wijaya', 'action' => 'mendapatkan sertifikat', 'object' => 'Percakapan Dasar', 'time' => '2 jam yang lalu'],
-        ];
+        // 🕓 Aktivitas terbaru (berdasarkan last_activity)
+        $recentActivities = User::whereNotNull('last_activity')
+            ->orderByDesc('last_activity')
+            ->limit(5)
+            ->get()
+            ->map(fn($u) => [
+                'user' => $u->first_name . ' ' . $u->last_name,
+                'action' => 'login terakhir',
+                'object' => '',
+                'time' => $u->last_activity->diffForHumans(),
+            ])
+            ->toArray();
 
         return view('admin.dashboard', compact(
             'pageTitle',
@@ -59,6 +83,7 @@ class DashboardController extends Controller
             'newUsers',
             'totalTopics',
             'totalMaterials',
+            'totalExercises',
             'totalQuizzes',
             'totalDictionary',
             'userActivityData',

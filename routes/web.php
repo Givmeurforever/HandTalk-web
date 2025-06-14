@@ -28,33 +28,47 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // 🛡️ Rute User Login
 Route::middleware('auth')->group(function () {
-    // Dashboard User
+
+    // 🏠 Dashboard User
     Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
 
-    // Kursus (Topik)
+    // 📚 Kursus (Topik & Materi)
     Route::get('/kursus', [TopikUserController::class, 'index'])->name('kursus');
-    Route::get('/kursus/{topikSlug}/{materiSlug}', [TopikUserController::class, 'show'])->name('kursus.show');
-    
-    // Latihan Routes (New Structure - Multiple questions per page)
-    Route::get('/kursus/{topikSlug}/{materiSlug}/latihan/{page?}', [TopikUserController::class, 'latihan'])
-        ->name('kursus.latihan')
-        ->where('page', '[0-9]+');
-    
-    Route::post('/latihan/check', [TopikUserController::class, 'checkLatihan'])->name('latihan.check');
-    
-    // Kuis Routes (New Structure - All questions in one page)
+
+    // 🧠 Kuis (New Structure: semua soal sekaligus)
     Route::get('/kursus/{topikSlug}/kuis', [TopikUserController::class, 'kuis'])->name('kursus.kuis');
     Route::post('/kursus/{topikSlug}/kuis/submit', [TopikUserController::class, 'submitKuis'])->name('kursus.kuis.submit');
     Route::get('/kursus/{topikSlug}/kuis/hasil', [TopikUserController::class, 'hasilKuis'])->name('kursus.kuis.hasil');
 
-    // Kamus
-    Route::get('/kamus', [KamusUserController::class, 'index'])->name('kamus');
+    // 📖 Tampilkan Materi (show page)
+    Route::get('/kursus/{topikSlug}/{materiSlug}', [TopikUserController::class, 'show'])->name('kursus.show');
 
-    // Settings
+    // 📝 Latihan (New Structure: multiple questions per page)
+    Route::get('/kursus/{topikSlug}/{materiSlug}/latihan/{page?}', [TopikUserController::class, 'latihan'])
+        ->name('kursus.latihan')
+        ->where('page', '[0-9]+');
+
+    Route::post('/kursus/{topikSlug}/{materiSlug}/latihan/submit', [TopikUserController::class, 'submitLatihan'])
+        ->name('kursus.latihan.submit');
+
+    Route::get('/kursus/{topikSlug}/{materiSlug}/latihan/{page}/hasil', [TopikUserController::class, 'hasilLatihan'])
+        ->name('kursus.latihan.hasil')
+        ->where('page', '[0-9]+');
+
+    // 🔁 Latihan (Old: satu soal per halaman) — untuk kompatibilitas
+    Route::get('/topik/{topik_slug}/materi/{materi_slug}/latihan/{urutan}', [TopikUserController::class, 'latihan'])
+        ->name('latihan.index');
+    Route::post('/latihan/check', [TopikUserController::class, 'checkLatihan'])->name('latihan.check');
+    // 🔁 Kuis (Old: per soal) — untuk kompatibilitas
+    Route::get('/topik/{topik_slug}/kuis/{urutan}', [TopikUserController::class, 'kuisOld'])->name('kuis.index');
+    // 📘 Kamus
+    Route::get('/kamus', [KamusUserController::class, 'index'])->name('kamus');
+    // ⚙️ Settings
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
     Route::delete('/account', [SettingsController::class, 'deleteAccount'])->name('account.delete');
 });
+
 
 // 🛠️ Admin Dashboard
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -102,3 +116,6 @@ Route::get('/struktur-db', function () {
     }
     echo "</pre>";
 });
+Route::get('/debug-kuis/{topikSlug}', function($topikSlug) {
+    dd('Route reached with slug: ' . $topikSlug);
+})->name('debug.kuis');

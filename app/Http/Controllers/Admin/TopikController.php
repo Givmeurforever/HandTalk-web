@@ -12,7 +12,7 @@ class TopikController extends Controller
 {
     public function index()
     {
-        $topiks = Topik::latest()->paginate(10);
+        $topiks = Topik::oldest()->paginate(10);
         return view('admin.topik.index', compact('topiks'));
     }
 
