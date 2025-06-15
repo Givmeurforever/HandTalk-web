@@ -70,7 +70,7 @@
                         <td>{{ $latihan->soal }}</td>
                         <td>{{ $latihan->materi->topik->judul ?? '-' }}</td>
                         <td>{{ $latihan->jawaban_benar }}</td>
-                        <td><span class="badge-media">{{ ucfirst($latihan->media_type) }}</span></td>
+                        <td><span class="badge-media">{{ ucfirst($latihan->media_type ?? '-') }}</span></td>
                         <td>{{ $latihan->created_at->format('d-m-Y') }}</td>
                         <td class="action-buttons">
                             <a href="{{ route('admin.latihan.show', $latihan->id) }}" class="btn-view" title="Lihat Detail"><i class="fas fa-eye"></i></a>
@@ -85,8 +85,37 @@
                 @endforelse
             </tbody>
         </table>
-    </div>
 
+        {{-- Pagination --}}
+        <div class="pagination-wrapper">
+            <ul class="pagination">
+                {{-- Previous --}}
+                @if ($latihanList->onFirstPage())
+                    <li class="disabled"><span>&laquo;</span></li>
+                @else
+                    <li><a href="{{ $latihanList->previousPageUrl() }}">&laquo;</a></li>
+                @endif
+
+                {{-- Page numbers --}}
+                @for ($i = 1; $i <= $latihanList->lastPage(); $i++)
+                    @if ($i == $latihanList->currentPage())
+                        <li class="active"><span>{{ $i }}</span></li>
+                    @else
+                        <li><a href="{{ $latihanList->url($i) }}">{{ $i }}</a></li>
+                    @endif
+                @endfor
+
+                {{-- Next --}}
+                @if ($latihanList->hasMorePages())
+                    <li><a href="{{ $latihanList->nextPageUrl() }}">&raquo;</a></li>
+                @else
+                    <li class="disabled"><span>&raquo;</span></li>
+                @endif
+            </ul>
+        </div>
+
+
+    </div>
     {{-- Modal Hapus --}}
     <div id="deleteModal" class="modal">
         <div class="modal-content modal-sm">

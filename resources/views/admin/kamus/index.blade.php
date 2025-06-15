@@ -1,6 +1,10 @@
 @extends('layouts.dashboardadmin')
 @section('title', 'Dashboard Admin - Kamus')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/page-kamus.css') }}">
+@endpush
+
 @section('content')
 <div class="kamus-container">
     <div class="header-bar">

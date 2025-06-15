@@ -27,7 +27,8 @@ class LatihanController extends Controller
             $query->where('materi_id', $request->materi_id);
         }
 
-        $latihanList = $query->latest()->get();
+        // Gunakan paginate, dan bawa query string untuk mempertahankan filter saat navigasi
+        $latihanList = $query->latest()->paginate(5)->appends($request->all());
 
         return view('admin.latihan.index', compact('latihanList', 'topikList', 'materiList'));
     }
@@ -71,6 +72,7 @@ class LatihanController extends Controller
     public function show($id)
     {
         $latihan = Latihan::with(['materi.topik', 'opsiA', 'opsiB', 'opsiC', 'opsiD'])->findOrFail($id);
+
         return view('admin.latihan.show', compact('latihan'));
     }
 
@@ -111,7 +113,8 @@ class LatihanController extends Controller
         ]);
 
         return redirect()->route('admin.latihan.index')->with('success', 'Latihan berhasil diperbarui.');
-}
+    }
+
     public function destroy($id)
     {
         $latihan = Latihan::findOrFail($id);
@@ -119,4 +122,14 @@ class LatihanController extends Controller
 
         return redirect()->route('admin.latihan.index')->with('success', 'Latihan berhasil dihapus.');
     }
+    
+    public function getMateriByTopik($topikId)
+    {
+        $materi = Materi::where('topik_id', $topikId)
+                        ->orderBy('urutan')
+                        ->get(['id', 'judul']); // hanya ambil id dan judul
+
+        return response()->json($materi);
+    }
+
 }

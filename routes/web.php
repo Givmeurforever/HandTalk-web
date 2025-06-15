@@ -72,20 +72,31 @@ Route::middleware('auth')->group(function () {
 
 // 🛠️ Admin Dashboard
 Route::prefix('admin')->name('admin.')->group(function () {
+
+    // Dashboard Admin
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Resource Management
+    // Resource: Pengguna
     Route::resource('pengguna', PenggunaController::class)->parameters(['pengguna' => 'user']);
-    Route::resource('topik', TopikController::class);
-    Route::resource('materi', MateriController::class);
-    Route::resource('latihan', LatihanController::class);
-    Route::resource('kuis', KuisController::class);
-    Route::resource('kamus', KamusController::class)->parameters(['kamus' => 'kamus']);
-
-    // Pengguna custom routes
     Route::patch('pengguna/{user}/status', [PenggunaController::class, 'updateStatus'])->name('pengguna.status');
     Route::get('pengguna/search', [PenggunaController::class, 'search'])->name('pengguna.search');
     Route::get('pengguna/filter', [PenggunaController::class, 'filter'])->name('pengguna.filter');
+
+    // Resource: Topik
+    Route::resource('topik', TopikController::class);
+
+    // Resource: Materi
+    Route::resource('materi', MateriController::class);
+
+    // Resource: Latihan
+    Route::resource('latihan', LatihanController::class);
+    Route::get('latihan/materi-by-topik/{topik_id}', [LatihanController::class, 'getMateriByTopik'])->name('latihan.materi-by-topik');
+
+    // Resource: Kuis
+    Route::resource('kuis', KuisController::class);
+
+    // Resource: Kamus
+    Route::resource('kamus', KamusController::class)->parameters(['kamus' => 'kamus']);
 });
 
 

@@ -3,8 +3,7 @@
 @section('title', 'Tambah Latihan Baru - Admin HandTalk')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/page-latihan.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/page-latihan-form.css') }}">
+<link rel="stylesheet" href="{{ asset('css/page-latihan-form.css') }}">
 @endpush
 
 @section('content')
@@ -20,12 +19,13 @@
         <form action="{{ route('admin.latihan.store') }}" method="POST">
             @csrf
 
+            {{-- Informasi Latihan --}}
             <div class="form-section">
                 <h3>Informasi Latihan</h3>
 
                 <div class="form-group">
                     <label for="topik">Topik:</label>
-                    <select id="topik" class="form-control" required>
+                    <select id="topik" name="topik_id" class="form-control" required>
                         <option value="">Pilih Topik</option>
                         @foreach($topikList as $topik)
                             <option value="{{ $topik->id }}">{{ $topik->judul }}</option>
@@ -37,9 +37,6 @@
                     <label for="materi_id">Materi:</label>
                     <select id="materi_id" name="materi_id" class="form-control" required>
                         <option value="">Pilih Materi</option>
-                        @foreach($materiList as $materi)
-                            <option value="{{ $materi->id }}" data-topik="{{ $materi->topik_id }}">{{ $materi->judul }}</option>
-                        @endforeach
                     </select>
                 </div>
 
@@ -54,6 +51,7 @@
                 </div>
             </div>
 
+            {{-- Opsi Jawaban --}}
             <div class="form-section">
                 <h3>Opsi Jawaban</h3>
 
@@ -83,8 +81,11 @@
                 </div>
             </div>
 
+            {{-- Aksi --}}
             <div class="form-actions">
-                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Simpan Latihan</button>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-save"></i> Simpan Latihan
+                </button>
                 <a href="{{ route('admin.latihan.index') }}" class="btn-secondary">Batal</a>
             </div>
         </form>
@@ -92,7 +93,7 @@
 </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const topikSelect = document.getElementById('topik');
@@ -100,20 +101,24 @@
 
         topikSelect.addEventListener('change', function () {
             const selectedTopikId = this.value;
+            materiSelect.innerHTML = '<option value="">Pilih Materi</option>';
 
-            [...materiSelect.options].forEach(option => {
-                if (!option.value) {
-                    option.hidden = false;
-                    option.disabled = false;
-                } else {
-                    const match = option.dataset.topik === selectedTopikId;
-                    option.hidden = !match;
-                    option.disabled = !match;
-                }
-            });
-
-            materiSelect.value = '';
+            if (selectedTopikId) {
+                fetch(`{{ url('admin/latihan/materi-by-topik') }}/${selectedTopikId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(materi => {
+                            const option = document.createElement('option');
+                            option.value = materi.id;
+                            option.textContent = materi.judul;
+                            materiSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+            }
         });
     });
 </script>
-@endsection
+@endpush
