@@ -16,8 +16,8 @@ class NavigationController extends Controller
         return view('pages.settings');
     }
 
-    public function tentang()
+    public function about()
     {
-        return view('pages.tentang');
+        return view('pages.about-handtalk');
     }
 }

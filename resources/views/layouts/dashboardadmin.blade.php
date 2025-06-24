@@ -62,23 +62,6 @@
                     <li class="{{ isActive('admin.kamus') }}">
                         <a href="{{ route('admin.kamus.index') }}"><i class="fas fa-book-open"></i> Manajemen Kamus</a>
                     </li>
-
-                    <li class="{{ isActive('laporan') }}">
-                        <a href="#"><i class="fas fa-chart-bar"></i> Laporan & Analitik</a>
-                        <ul class="submenu">
-                            <li><a href="#">Kemajuan Pengguna</a></li>
-                            <li><a href="#">Statistik Penggunaan</a></li>
-                            <li><a href="#">Performa Kuis</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="{{ isActive('settings') }}">
-                        <a href="#"><i class="fas fa-cog"></i> Pengaturan</a>
-                        <ul class="submenu">
-                            <li><a href="#">Profil Admin</a></li>
-                            <li><a href="#">Pengaturan Website</a></li>
-                        </ul>
-                    </li>
                 </ul>
             </nav>
             

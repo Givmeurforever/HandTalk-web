@@ -34,8 +34,7 @@
         <div class="footer-right">
             <h4>Tentang Kami</h4>
             <ul>
-                <li><a href="{{ route('tentang') }}#apa-itu-handtalk">Apa itu HandTalk</a></li>
-                <li><a href="{{ route('tentang') }}#tujuan-kami">Tujuan Kami</a></li>
+                <li><a href="{{ route('about') }}">Apa itu HandTalk</a></li>
             </ul>
         </div>
 
@@ -58,7 +57,7 @@
 
     <!-- 🔹 Copyright -->
     <div class="footer-bottom">
-        <p>© 2024 HandTalk. All rights reserved.</p>
+        <p>© 2025 HandTalk. All rights reserved.</p>
     </div>
 </footer>
   

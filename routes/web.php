@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminLoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TopikUserController;
 use App\Http\Controllers\KamusUserController;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\DB;
 
 // ✨ Halaman Publik
 Route::get('/', fn () => view('pages.home'))->name('home');
-Route::get('/tentang', [NavigationController::class, 'tentang'])->name('tentang');
+Route::get('/tentang', [NavigationController::class, 'about'])->name('about');
 Route::get('/signup', [AuthController::class, 'showForm'])->name('signup');
 Route::post('/signup', [AuthController::class, 'register']);
 Route::get('/login', [AuthController::class, 'showFormLogin'])->name('login');
@@ -72,31 +73,27 @@ Route::middleware('auth')->group(function () {
 
 // 🛠️ Admin Dashboard
 Route::prefix('admin')->name('admin.')->group(function () {
+    // Autentikasi admin
+    Route::get('login', [AdminLoginController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [AdminLoginController::class, 'login'])->name('login.submit');
+    Route::post('logout', [AdminLoginController::class, 'logout'])->name('logout');
 
-    // Dashboard Admin
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    // Proteksi semua route admin
+    Route::middleware('auth:admin')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Resource: Pengguna
-    Route::resource('pengguna', PenggunaController::class)->parameters(['pengguna' => 'user']);
-    Route::patch('pengguna/{user}/status', [PenggunaController::class, 'updateStatus'])->name('pengguna.status');
-    Route::get('pengguna/search', [PenggunaController::class, 'search'])->name('pengguna.search');
-    Route::get('pengguna/filter', [PenggunaController::class, 'filter'])->name('pengguna.filter');
+        Route::resource('pengguna', PenggunaController::class)->parameters(['pengguna' => 'user']);
+        Route::patch('pengguna/{user}/status', [PenggunaController::class, 'updateStatus'])->name('pengguna.status');
+        Route::get('pengguna/search', [PenggunaController::class, 'search'])->name('pengguna.search');
+        Route::get('pengguna/filter', [PenggunaController::class, 'filter'])->name('pengguna.filter');
 
-    // Resource: Topik
-    Route::resource('topik', TopikController::class);
-
-    // Resource: Materi
-    Route::resource('materi', MateriController::class);
-
-    // Resource: Latihan
-    Route::resource('latihan', LatihanController::class);
-    Route::get('latihan/materi-by-topik/{topik_id}', [LatihanController::class, 'getMateriByTopik'])->name('latihan.materi-by-topik');
-
-    // Resource: Kuis
-    Route::resource('kuis', KuisController::class);
-
-    // Resource: Kamus
-    Route::resource('kamus', KamusController::class)->parameters(['kamus' => 'kamus']);
+        Route::resource('topik', TopikController::class);
+        Route::resource('materi', MateriController::class);
+        Route::resource('latihan', LatihanController::class);
+        Route::get('latihan/materi-by-topik/{topik_id}', [LatihanController::class, 'getMateriByTopik'])->name('latihan.materi-by-topik');
+        Route::resource('kuis', KuisController::class);
+        Route::resource('kamus', KamusController::class)->parameters(['kamus' => 'kamus']);
+    });
 });
 
 

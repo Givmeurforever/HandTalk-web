@@ -14,24 +14,20 @@ class AdminLoginController extends Controller
         return view('admin.login');
     }
 
-    // Proses login admin
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
 
-        // Validasi input
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
-
-        // Coba login menggunakan guard default
-        if (Auth::attempt($credentials, $request->remember)) {
-            return redirect()->intended('/admin/dashboard');
+        if (Auth::guard('admin')->attempt($credentials)) {
+            return redirect()->intended('/admin'); // Ganti sesuai dashboard admin
         }
 
-        // Jika gagal, redirect kembali ke form dengan error
-        return redirect()->back()->withInput($request->only('email', 'remember'))
-                         ->with('error', 'Email atau password salah.');
+        return back()->withErrors(['email' => 'Login gagal']);
+    }
+
+    public function logout()
+    {
+        Auth::guard('admin')->logout();
+        return redirect()->route('admin.login');
     }
 }
