@@ -72,7 +72,7 @@
                     <a href="#" class="forgot-password">Lupa password?</a>
                 </div>
                 
-                <a href="{{ route('admin.dashboard') }}" class="btn-login">Masuk ke Dashboard</a>
+                <button type="submit" class="btn-login">Masuk ke Dashboard</button>
                 
                 {{-- <div class="error-message {{ session('error') ? 'show' : '' }}" id="loginError">
                     {{ session('error') }}

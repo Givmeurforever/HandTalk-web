@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="dashboard-container">
-
     <!-- Stats Cards -->
     <div class="stats-cards">
         <!-- Pengguna -->
@@ -17,7 +16,7 @@
                 <p>Total Pengguna</p>
                 <div class="stat-details">
                     <span>{{ $activeUsers }} Aktif</span>
-                    <span>{{ $newUsers }} Baru</span>
+                    <span>{{ $newUsers }} Baru (7 hari)</span>
                 </div>
             </div>
         </div>
@@ -30,6 +29,9 @@
             <div class="stat-info">
                 <h3>{{ $totalTopics }}</h3>
                 <p>Total Topik</p>
+                <div class="stat-details">
+                    <span>{{ $topicsWithMaterials }} Berisi Materi</span>
+                </div>
             </div>
         </div>
 
@@ -57,90 +59,166 @@
             <div class="stat-info">
                 <h3>{{ $totalDictionary }}</h3>
                 <p>Item Kamus</p>
+                <div class="stat-details">
+                    <span>{{ $videoCount }} Video</span>
+                    <span>{{ $imageCount }} Gambar</span>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Grafik dan Topik Populer -->
     <div class="dashboard-row">
-        <!-- Grafik Aktivitas -->
+        <!-- Grafik Registrasi Pengguna -->
         <div class="dashboard-col">
             <div class="dashboard-card">
                 <div class="card-header">
-                    <h3>Aktivitas Pengguna (7 Hari Terakhir)</h3>
+                    <h3>Registrasi Pengguna (30 Hari Terakhir)</h3>
                 </div>
                 <div class="card-body">
-                    <canvas id="userActivityChart"></canvas>
+                    <canvas id="userRegistrationChart"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- Topik Populer -->
+        <!-- Topik Terbanyak Materi -->
         <div class="dashboard-col">
             <div class="dashboard-card">
                 <div class="card-header">
-                    <h3>Topik Paling Populer</h3>
+                    <h3>Topik Dengan Materi Terbanyak</h3>
                 </div>
                 <div class="card-body">
                     <ul class="popular-list">
-                        @foreach ($popularTopics as $topic)
+                        @forelse ($topicsWithMostMaterials as $topic)
                         <li>
-                            <span class="popular-name">{{ $topic['name'] }}</span>
-                            <span class="popular-value">{{ $topic['views'] }} views</span>
+                            <span class="popular-name">{{ $topic->judul }}</span>
+                            <span class="popular-value">{{ $topic->materials_count }} materi</span>
                         </li>
-                        @endforeach
+                        @empty
+                        <li>
+                            <span class="popular-name">Belum ada data</span>
+                        </li>
+                        @endforelse
                     </ul>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Pencarian Kamus dan Aktivitas Terbaru -->
+    <!-- Statistik Konten dan Pengguna -->
     <div class="dashboard-row">
-        <!-- Kamus Teratas -->
+        <!-- Distribusi Media Kamus -->
         <div class="dashboard-col">
             <div class="dashboard-card">
                 <div class="card-header">
-                    <h3>Pencarian Kamus Teratas</h3>
+                    <h3>Distribusi Media Kamus</h3>
                 </div>
                 <div class="card-body">
-                    <ul class="popular-list">
-                        @foreach ($dictionarySearches as $search)
+                    <canvas id="mediaDistributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pengguna Terbaru -->
+        <div class="dashboard-col">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Pengguna Terbaru</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="activity-list">
+                        @forelse ($recentUsers as $user)
                         <li>
-                            <span class="popular-name">{{ $search['word'] }}</span>
-                            <span class="popular-value">{{ $search['searches'] }} pencarian</span>
+                            <div class="activity-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="activity-info">
+                                <p>
+                                    <strong>{{ $user->first_name }} {{ $user->last_name }}</strong>
+                                    <br>
+                                    <small>{{ $user->email }}</small>
+                                </p>
+                                <span class="activity-time">{{ $user->created_at->diffForHumans() }}</span>
+                            </div>
                         </li>
-                        @endforeach
+                        @empty
+                        <li>
+                            <div class="activity-info">
+                                <p>Belum ada pengguna baru</p>
+                            </div>
+                        </li>
+                        @endforelse
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Konten Terbaru -->
+    <div class="dashboard-row">
+        <!-- Materi Terbaru -->
+        <div class="dashboard-col">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Materi Terbaru</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="activity-list">
+                        @forelse ($recentMaterials as $material)
+                        <li>
+                            <div class="activity-icon">
+                                <i class="fas fa-file-text"></i>
+                            </div>
+                            <div class="activity-info">
+                                <p>
+                                    <strong>{{ $material->judul }}</strong>
+                                    <br>
+                                    <small>Topik: {{ $material->topik_judul }}</small>
+                                </p>
+                                <span class="activity-time">{{ $material->created_at->diffForHumans() }}</span>
+                            </div>
+                        </li>
+                        @empty
+                        <li>
+                            <div class="activity-info">
+                                <p>Belum ada materi</p>
+                            </div>
+                        </li>
+                        @endforelse
                     </ul>
                 </div>
             </div>
         </div>
 
-        <!-- Aktivitas Terbaru -->
+        <!-- Kata Kamus Terbaru -->
         <div class="dashboard-col">
             <div class="dashboard-card">
                 <div class="card-header">
-                    <h3>Aktivitas Terbaru</h3>
+                    <h3>Kata Kamus Terbaru</h3>
                 </div>
                 <div class="card-body">
                     <ul class="activity-list">
-                        @foreach ($recentActivities as $activity)
+                        @forelse ($recentDictionary as $word)
                         <li>
                             <div class="activity-icon">
-                                <i class="fas fa-circle"></i>
+                                <i class="fas fa-{{ $word->media_type == 'video' ? 'video' : 'image' }}"></i>
                             </div>
                             <div class="activity-info">
                                 <p>
-                                    <strong>{{ $activity['user'] }}</strong> 
-                                    {{ $activity['action'] }}
-                                    @if (!empty($activity['object']))
-                                        <strong>{{ $activity['object'] }}</strong>
-                                    @endif
+                                    <strong>{{ $word->kata }}</strong>
+                                    <br>
+                                    <small>Media: {{ ucfirst($word->media_type) }}</small>
                                 </p>
-                                <span class="activity-time">{{ $activity['time'] }}</span>
+                                <span class="activity-time">{{ $word->created_at->diffForHumans() }}</span>
                             </div>
                         </li>
-                        @endforeach
+                        @empty
+                        <li>
+                            <div class="activity-info">
+                                <p>Belum ada kata dalam kamus</p>
+                            </div>
+                        </li>
+                        @endforelse
                     </ul>
                 </div>
             </div>
@@ -151,17 +229,18 @@
 <!-- Chart.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 <script>
-const ctx = document.getElementById('userActivityChart').getContext('2d');
-new Chart(ctx, {
+// Grafik Registrasi Pengguna
+const userCtx = document.getElementById('userRegistrationChart').getContext('2d');
+new Chart(userCtx, {
     type: 'line',
     data: {
-        labels: @json($userActivityData['labels']),
+        labels: @json($userRegistrationData['labels']),
         datasets: [{
-            label: 'Aktivitas Pengguna',
-            data: @json($userActivityData['data']),
+            label: 'Registrasi Harian',
+            data: @json($userRegistrationData['data']),
             fill: true,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
             tension: 0.3
         }]
     },
@@ -169,7 +248,49 @@ new Chart(ctx, {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-            y: { beginAtZero: true }
+            y: { 
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: true
+            }
+        }
+    }
+});
+
+// Grafik Distribusi Media Kamus
+const mediaCtx = document.getElementById('mediaDistributionChart').getContext('2d');
+new Chart(mediaCtx, {
+    type: 'doughnut',
+    data: {
+        labels: @json($mediaDistributionData['labels']),
+        datasets: [{
+            data: @json($mediaDistributionData['data']),
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.8)',
+                'rgba(54, 162, 235, 0.8)',
+                'rgba(255, 205, 86, 0.8)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 205, 86, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
         }
     }
 });

@@ -3,93 +3,185 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\Topik;
-use App\Models\Materi;
-use App\Models\Latihan;
-use App\Models\Kuis;
-use App\Models\Kamus;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+
+// Gunakan model yang sudah ada di project Anda
+// Sesuaikan namespace dengan struktur project Anda
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $pageTitle = 'Dashboard';
+        // Statistik Pengguna - menggunakan query builder untuk keamanan
+        $totalUsers = DB::table('users')->count();
+        $activeUsers = DB::table('users')
+            ->where('last_activity', '>=', Carbon::now()->subDays(30))
+            ->count();
+        $newUsers = DB::table('users')
+            ->where('created_at', '>=', Carbon::now()->subDays(7))
+            ->count();
 
-        // 📊 Statistik umum
-        $totalUsers = User::count();
-        $activeUsers = User::whereNotNull('last_activity')->count();
-        $newUsers = User::whereDate('created_at', '>=', now()->subDays(7))->count();
+        // Statistik Topik
+        $totalTopics = DB::table('topik')->count();
+        $topicsWithMaterials = DB::table('topik')
+            ->whereExists(function ($query) {
+                $query->select(DB::raw(1))
+                      ->from('materi')
+                      ->whereRaw('materi.topik_id = topik.id');
+            })->count();
 
-        $totalTopics = Topik::count();
-        $totalMaterials = Materi::count();
-        $totalExercises = Latihan::count();
-        $totalQuizzes = Kuis::count();
-        $totalDictionary = Kamus::count();
+        // Statistik Konten Pembelajaran
+        $totalMaterials = DB::table('materi')->count();
+        $totalExercises = DB::table('latihan')->count();
+        $totalQuizzes = DB::table('kuis')->count();
 
-        // 📈 Aktivitas pengguna (jumlah user yang login per hari selama 7 hari terakhir)
-        $activity = User::select(DB::raw("DATE_FORMAT(last_activity, '%a') as day"), DB::raw("COUNT(*) as total"))
-            ->whereDate('last_activity', '>=', now()->subDays(6))
-            ->groupBy('day')
-            ->orderByRaw("FIELD(day, 'Mon','Tue','Wed','Thu','Fri','Sat','Sun')")
-            ->pluck('total', 'day')->toArray();
+        // Statistik Kamus
+        $totalDictionary = DB::table('kamus')->count();
+        $videoCount = DB::table('kamus')->where('media_type', 'video')->count();
+        $imageCount = DB::table('kamus')->where('media_type', 'image')->count();
 
-        $labels = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-        $translated = ['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
-        $userActivityData = [
-            'labels' => $translated,
-            'data' => array_map(fn($day) => $activity[$day] ?? 0, $labels),
-        ];
+        // Data untuk grafik registrasi pengguna (30 hari terakhir)
+        $userRegistrationData = $this->getUserRegistrationData();
 
-        // 🔥 Topik paling populer (berdasarkan jumlah materi)
-        $popularTopics = Topik::withCount('materi')
-            ->orderByDesc('materi_count')
-            ->limit(5)
+        // Data untuk grafik distribusi media kamus
+        $mediaDistributionData = $this->getMediaDistributionData();
+
+        // Topik dengan materi terbanyak
+        $topicsWithMostMaterials = DB::table('topik')
+            ->leftJoin('materi', 'topik.id', '=', 'materi.topik_id')
+            ->select('topik.judul', DB::raw('COUNT(materi.id) as materials_count'))
+            ->groupBy('topik.id', 'topik.judul')
+            ->orderBy('materials_count', 'desc')
+            ->take(5)
+            ->get();
+
+        // Pengguna terbaru
+        $recentUsers = DB::table('users')
+            ->select('first_name', 'last_name', 'email', 'created_at')
+            ->orderBy('created_at', 'desc')
+            ->take(5)
             ->get()
-            ->map(fn($t) => [
-                'name' => $t->judul,
-                'views' => $t->materi_count * 100, // asumsikan 100 views per materi
-            ])
-            ->toArray();
+            ->map(function ($user) {
+                $user->created_at = Carbon::parse($user->created_at);
+                return $user;
+            });
 
-        // 📚 Kamus paling banyak dipakai (contoh berdasarkan created_at jika belum ada log)
-        $dictionarySearches = Kamus::orderByDesc('created_at')
-            ->limit(5)
+        // Materi terbaru
+        $recentMaterials = DB::table('materi')
+            ->join('topik', 'materi.topik_id', '=', 'topik.id')
+            ->select('materi.judul', 'topik.judul as topik_judul', 'materi.created_at')
+            ->orderBy('materi.created_at', 'desc')
+            ->take(5)
             ->get()
-            ->map(fn($k) => [
-                'word' => $k->kata,
-                'searches' => rand(50, 300) // random sementara jika belum ada tabel logs
-            ])
-            ->toArray();
+            ->map(function ($material) {
+                $material->created_at = Carbon::parse($material->created_at);
+                return $material;
+            });
 
-        // 🕓 Aktivitas terbaru (berdasarkan last_activity)
-        $recentActivities = User::whereNotNull('last_activity')
-            ->orderByDesc('last_activity')
-            ->limit(5)
+        // Kata kamus terbaru
+        $recentDictionary = DB::table('kamus')
+            ->select('kata', 'media_type', 'created_at')
+            ->orderBy('created_at', 'desc')
+            ->take(5)
             ->get()
-            ->map(fn($u) => [
-                'user' => $u->first_name . ' ' . $u->last_name,
-                'action' => 'login terakhir',
-                'object' => '',
-                'time' => $u->last_activity->diffForHumans(),
-            ])
-            ->toArray();
+            ->map(function ($word) {
+                $word->created_at = Carbon::parse($word->created_at);
+                return $word;
+            });
 
         return view('admin.dashboard', compact(
-            'pageTitle',
             'totalUsers',
-            'activeUsers',
+            'activeUsers', 
             'newUsers',
             'totalTopics',
+            'topicsWithMaterials',
             'totalMaterials',
             'totalExercises',
             'totalQuizzes',
             'totalDictionary',
-            'userActivityData',
-            'popularTopics',
-            'dictionarySearches',
-            'recentActivities'
+            'videoCount',
+            'imageCount',
+            'userRegistrationData',
+            'mediaDistributionData',
+            'topicsWithMostMaterials',
+            'recentUsers',
+            'recentMaterials',
+            'recentDictionary'
         ));
+    }
+
+    private function getUserRegistrationData()
+    {
+        $days = 30;
+        $labels = [];
+        $data = [];
+
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $date = Carbon::now()->subDays($i);
+            $labels[] = $date->format('d/m');
+            
+            $count = DB::table('users')
+                ->whereDate('created_at', $date)
+                ->count();
+            $data[] = $count;
+        }
+
+        return [
+            'labels' => $labels,
+            'data' => $data
+        ];
+    }
+
+    private function getMediaDistributionData()
+    {
+        $videoCount = DB::table('kamus')->where('media_type', 'video')->count();
+        $imageCount = DB::table('kamus')->where('media_type', 'image')->count();
+        $otherCount = DB::table('kamus')->whereNotIn('media_type', ['video', 'image'])->count();
+
+        $labels = [];
+        $data = [];
+
+        if ($videoCount > 0) {
+            $labels[] = 'Video';
+            $data[] = $videoCount;
+        }
+
+        if ($imageCount > 0) {
+            $labels[] = 'Gambar';
+            $data[] = $imageCount;
+        }
+
+        if ($otherCount > 0) {
+            $labels[] = 'Lainnya';
+            $data[] = $otherCount;
+        }
+
+        // Jika tidak ada data, berikan data default
+        if (empty($labels)) {
+            $labels = ['Belum ada data'];
+            $data = [1];
+        }
+
+        return [
+            'labels' => $labels,
+            'data' => $data
+        ];
+    }
+
+    public function getStats()
+    {
+        // API endpoint untuk mendapatkan statistik real-time
+        return response()->json([
+            'total_users' => DB::table('users')->count(),
+            'active_users' => DB::table('users')->where('last_activity', '>=', Carbon::now()->subDays(30))->count(),
+            'new_users' => DB::table('users')->where('created_at', '>=', Carbon::now()->subDays(7))->count(),
+            'total_topics' => DB::table('topik')->count(),
+            'total_materials' => DB::table('materi')->count(),
+            'total_exercises' => DB::table('latihan')->count(),
+            'total_quizzes' => DB::table('kuis')->count(),
+            'total_dictionary' => DB::table('kamus')->count(),
+        ]);
     }
 }
