@@ -336,8 +336,8 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -377,8 +377,8 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         ),
         'League\\Uri\\' => 
         array (
-            0 => __DIR__ . '/..' . '/league/uri-interfaces',
-            1 => __DIR__ . '/..' . '/league/uri',
+            0 => __DIR__ . '/..' . '/league/uri',
+            1 => __DIR__ . '/..' . '/league/uri-interfaces',
         ),
         'League\\MimeTypeDetection\\' => 
         array (
@@ -516,7 +516,30 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
     );
 
     public static $classMap = array (
+        'App\\Http\\Controllers\\Admin\\AdminLoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/AdminLoginController.php',
+        'App\\Http\\Controllers\\Admin\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/DashboardController.php',
+        'App\\Http\\Controllers\\Admin\\KamusController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/KamusController.php',
+        'App\\Http\\Controllers\\Admin\\KuisController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/KuisController.php',
+        'App\\Http\\Controllers\\Admin\\LatihanController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/LatihanController.php',
+        'App\\Http\\Controllers\\Admin\\MateriController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/MateriController.php',
+        'App\\Http\\Controllers\\Admin\\PengaturanController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/PengaturanController.php',
+        'App\\Http\\Controllers\\Admin\\PenggunaController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/PenggunaController.php',
+        'App\\Http\\Controllers\\Admin\\TopikController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/TopikController.php',
+        'App\\Http\\Controllers\\AuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/AuthController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\KamusUserController' => __DIR__ . '/../..' . '/app/Http/Controllers/KamusUserController.php',
+        'App\\Http\\Controllers\\KuisController' => __DIR__ . '/../..' . '/app/Http/Controllers/KuisController.php',
+        'App\\Http\\Controllers\\LatihanController' => __DIR__ . '/../..' . '/app/Http/Controllers/LatihanController.php',
+        'App\\Http\\Controllers\\NavigationController' => __DIR__ . '/../..' . '/app/Http/Controllers/NavigationController.php',
+        'App\\Http\\Controllers\\SettingsController' => __DIR__ . '/../..' . '/app/Http/Controllers/SettingsController.php',
+        'App\\Http\\Controllers\\TopikUserController' => __DIR__ . '/../..' . '/app/Http/Controllers/TopikUserController.php',
+        'App\\Http\\Controllers\\UserDashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserDashboardController.php',
+        'App\\Models\\Admin' => __DIR__ . '/../..' . '/app/Models/Admin.php',
+        'App\\Models\\Kamus' => __DIR__ . '/../..' . '/app/Models/Kamus.php',
+        'App\\Models\\Kuis' => __DIR__ . '/../..' . '/app/Models/Kuis.php',
+        'App\\Models\\Latihan' => __DIR__ . '/../..' . '/app/Models/Latihan.php',
+        'App\\Models\\Materi' => __DIR__ . '/../..' . '/app/Models/Materi.php',
+        'App\\Models\\Topik' => __DIR__ . '/../..' . '/app/Models/Topik.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
@@ -637,6 +660,7 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'Cron\\MinutesField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/MinutesField.php',
         'Cron\\MonthField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/MonthField.php',
         'Database\\Factories\\UserFactory' => __DIR__ . '/../..' . '/database/factories/UserFactory.php',
+        'Database\\Seeders\\AdminSeeder' => __DIR__ . '/../..' . '/database/seeders/AdminSeeder.php',
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
         'DateError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateError.php',
         'DateException' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateException.php',
@@ -1617,6 +1641,7 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'Illuminate\\Cache\\DynamoDbLock' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/DynamoDbLock.php',
         'Illuminate\\Cache\\DynamoDbStore' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/DynamoDbStore.php',
         'Illuminate\\Cache\\Events\\CacheEvent' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/Events/CacheEvent.php',
+        'Illuminate\\Cache\\Events\\CacheFlushFailed' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/Events/CacheFlushFailed.php',
         'Illuminate\\Cache\\Events\\CacheFlushed' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/Events/CacheFlushed.php',
         'Illuminate\\Cache\\Events\\CacheFlushing' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/Events/CacheFlushing.php',
         'Illuminate\\Cache\\Events\\CacheHit' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/Events/CacheHit.php',
@@ -1638,6 +1663,7 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'Illuminate\\Cache\\MemcachedConnector' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/MemcachedConnector.php',
         'Illuminate\\Cache\\MemcachedLock' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/MemcachedLock.php',
         'Illuminate\\Cache\\MemcachedStore' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/MemcachedStore.php',
+        'Illuminate\\Cache\\MemoizedStore' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/MemoizedStore.php',
         'Illuminate\\Cache\\NoLock' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/NoLock.php',
         'Illuminate\\Cache\\NullStore' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/NullStore.php',
         'Illuminate\\Cache\\PhpRedisLock' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Cache/PhpRedisLock.php',
@@ -1732,6 +1758,7 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'Illuminate\\Console\\View\\Components\\Task' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Console/View/Components/Task.php',
         'Illuminate\\Console\\View\\Components\\TwoColumnDetail' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Console/View/Components/TwoColumnDetail.php',
         'Illuminate\\Console\\View\\Components\\Warn' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Console/View/Components/Warn.php',
+        'Illuminate\\Console\\View\\TaskResult' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Console/View/TaskResult.php',
         'Illuminate\\Container\\Attributes\\Auth' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Container/Attributes/Auth.php',
         'Illuminate\\Container\\Attributes\\Authenticated' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Container/Attributes/Authenticated.php',
         'Illuminate\\Container\\Attributes\\Cache' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Container/Attributes/Cache.php',
@@ -1982,6 +2009,7 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'Illuminate\\Database\\Eloquent\\Concerns\\HidesAttributes' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HidesAttributes.php',
         'Illuminate\\Database\\Eloquent\\Concerns\\PreventsCircularRecursion' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/PreventsCircularRecursion.php',
         'Illuminate\\Database\\Eloquent\\Concerns\\QueriesRelationships' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/QueriesRelationships.php',
+        'Illuminate\\Database\\Eloquent\\Concerns\\TransformsToResource' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/TransformsToResource.php',
         'Illuminate\\Database\\Eloquent\\Factories\\BelongsToManyRelationship' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Eloquent/Factories/BelongsToManyRelationship.php',
         'Illuminate\\Database\\Eloquent\\Factories\\BelongsToRelationship' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Eloquent/Factories/BelongsToRelationship.php',
         'Illuminate\\Database\\Eloquent\\Factories\\CrossJoinSequence' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Eloquent/Factories/CrossJoinSequence.php',
@@ -2737,6 +2765,7 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'Illuminate\\Support\\Traits\\Macroable' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Macroable/Traits/Macroable.php',
         'Illuminate\\Support\\Traits\\ReflectsClosures' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/Traits/ReflectsClosures.php',
         'Illuminate\\Support\\Traits\\Tappable' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/Traits/Tappable.php',
+        'Illuminate\\Support\\Traits\\TransformsToResourceCollection' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Collections/Traits/TransformsToResourceCollection.php',
         'Illuminate\\Support\\Uri' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/Uri.php',
         'Illuminate\\Support\\UriQueryString' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/UriQueryString.php',
         'Illuminate\\Support\\ValidatedInput' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/ValidatedInput.php',
@@ -2789,6 +2818,7 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'Illuminate\\Validation\\NotPwnedVerifier' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Validation/NotPwnedVerifier.php',
         'Illuminate\\Validation\\PresenceVerifierInterface' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Validation/PresenceVerifierInterface.php',
         'Illuminate\\Validation\\Rule' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Validation/Rule.php',
+        'Illuminate\\Validation\\Rules\\AnyOf' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Validation/Rules/AnyOf.php',
         'Illuminate\\Validation\\Rules\\ArrayRule' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Validation/Rules/ArrayRule.php',
         'Illuminate\\Validation\\Rules\\Can' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Validation/Rules/Can.php',
         'Illuminate\\Validation\\Rules\\DatabaseRule' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Validation/Rules/DatabaseRule.php',

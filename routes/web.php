@@ -79,7 +79,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('logout', [AdminLoginController::class, 'logout'])->name('logout');
 
     // Proteksi semua route admin
-    Route::middleware('admin.auth')->group(function () {
+    Route::middleware('auth:admin')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::resource('pengguna', PenggunaController::class)->parameters(['pengguna' => 'user']);

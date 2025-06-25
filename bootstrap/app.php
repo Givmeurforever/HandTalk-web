@@ -12,15 +12,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Global Middleware jika ada
-        // $middleware->append(SomeGlobalMiddleware::class);
-
-        // Daftarkan route middleware alias (opsional)
+        // Daftarkan middleware alias (route middleware)
         $middleware->alias([
             'admin.auth' => AdminAuthenticate::class,
         ]);
+
+        // Tambahkan middleware global jika perlu:
+        // $middleware->append(\App\Http\Middleware\ExampleGlobalMiddleware::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        // Bisa dibiarkan kosong jika belum custom exception
+        // Tambahkan custom exception handler di sini jika dibutuhkan
     })
     ->create();
