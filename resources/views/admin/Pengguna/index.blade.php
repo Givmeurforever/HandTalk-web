@@ -108,8 +108,6 @@
                             <span class="progress-text">{{ $user->progress }}%</span>
                         </div>
                         <div class="progress-detail">
-                            <!-- Progress details would be populated dynamically based on user's actual progress -->
-                            <!-- This is placeholder data - replace with actual progress tracking -->
                             <span class="badge materi-complete">
                                 <i class="fas fa-book"></i> {{ floor($user->progress / 100 * 8) }}/8
                             </span>
@@ -130,7 +128,7 @@
                             <a href="{{ route('admin.pengguna.edit', $user->id) }}" class="btn-edit" title="Edit Pengguna">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <button class="btn-delete" title="Hapus Pengguna" data-id="{{ $user->id }}">
+                            <button class="btn-delete" title="Hapus Pengguna" data-id="{{ $user->id }}" data-name="{{ $user->full_name }}">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
@@ -203,12 +201,12 @@
             <span class="close-modal">&times;</span>
         </div>
         <div class="modal-body">
-            <p>Apakah Anda yakin ingin menghapus pengguna ini?</p>
+            <p>Apakah Anda yakin ingin menghapus pengguna <strong id="deleteUserName"></strong>?</p>
             <p>Tindakan ini akan menghapus semua data terkait pengguna dan tidak dapat dibatalkan.</p>
         </div>
         <div class="modal-footer">
             <button class="btn btn-cancel" id="cancelDelete">Batal</button>
-            <form id="deleteForm" action="" method="POST" style="display: inline;">
+            <form id="deleteForm" method="POST" style="display: inline;">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-delete" id="confirmDelete">Hapus</button>
@@ -218,7 +216,7 @@
 </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
     // Ketika dokumen siap
     document.addEventListener('DOMContentLoaded', function() {
@@ -561,4 +559,4 @@
         }
     });
 </script>
-@endsection
+@endpush

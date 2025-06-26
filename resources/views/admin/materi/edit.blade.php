@@ -44,6 +44,16 @@
         </div>
 
         <div class="form-group">
+            <label>Durasi (dalam detik)</label>
+            <input type="number" name="durasi" class="form-control" min="0" value="{{ old('durasi', $materi->durasi) }}" placeholder="Contoh: 300 untuk 5 menit">
+            <small class="form-text text-muted">
+                @if($materi->durasi)
+                    Durasi saat ini: {{ floor($materi->durasi / 60) }} menit {{ $materi->durasi % 60 }} detik
+                @endif
+            </small>
+        </div>
+
+        <div class="form-group">
             <label>Topik</label>
             <select name="topik_id" class="form-control" required>
                 <option value="">-- Pilih Topik --</option>

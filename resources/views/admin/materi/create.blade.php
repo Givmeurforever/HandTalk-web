@@ -43,6 +43,25 @@
         </div>
 
         <div class="form-group">
+            <label>Durasi Video</label>
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="number" id="menit" class="form-control" min="0" placeholder="Menit" value="{{ old('menit') }}">
+                    <small class="form-text text-muted">Menit</small>
+                </div>
+                <div class="col-md-6">
+                    <input type="number" id="detik" class="form-control" min="0" max="59" placeholder="Detik" value="{{ old('detik') }}">
+                    <small class="form-text text-muted">Detik</small>
+                </div>
+            </div>
+            <input type="hidden" name="durasi" id="durasi_total" value="{{ old('durasi') }}">
+            <small class="form-text text-muted mt-2">
+                <strong>Tips:</strong> Untuk YouTube, Anda bisa melihat durasi video di halaman YouTube. 
+                <br>Contoh: Video 5 menit 30 detik = 5 menit dan 30 detik
+            </small>
+        </div>
+
+        <div class="form-group">
             <label>Topik</label>
             <select name="topik_id" class="form-control" required>
                 <option value="">-- Pilih Topik --</option>
@@ -62,4 +81,38 @@
         <button type="submit" class="btn btn-primary mt-3">Simpan</button>
     </form>
 </div>
-@endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const menitInput = document.getElementById('menit');
+    const detikInput = document.getElementById('detik');
+    const durasiTotalInput = document.getElementById('durasi_total');
+
+    // Fungsi untuk menghitung total durasi dalam detik
+    function hitungDurasiTotal() {
+        const menit = parseInt(menitInput.value) || 0;
+        const detik = parseInt(detikInput.value) || 0;
+        const totalDetik = (menit * 60) + detik;
+        durasiTotalInput.value = totalDetik;
+    }
+
+    // Event listener untuk perubahan input
+    menitInput.addEventListener('input', hitungDurasiTotal);
+    detikInput.addEventListener('input', hitungDurasiTotal);
+
+    // Jika ada old value, konversi kembali ke menit dan detik
+    const oldDurasi = durasiTotalInput.value;
+    if (oldDurasi) {
+        const totalDetik = parseInt(oldDurasi);
+        const menit = Math.floor(totalDetik / 60);
+        const detik = totalDetik % 60;
+        menitInput.value = menit;
+        detikInput.value = detik;
+    }
+
+    // Hitung durasi total saat halaman dimuat
+    hitungDurasiTotal();
+});
+</script>
+@endpush

@@ -37,7 +37,6 @@
         </div>
     </form>
 
-
     {{-- Tabel Materi --}}
     <div class="materi-table-container">
         <table class="materi-table">
@@ -46,6 +45,7 @@
                     <th>ID</th>
                     <th>Judul Materi</th>
                     <th>Topik</th>
+                    <th>Durasi</th>
                     <th>Urutan</th>
                     <th>Tanggal Dibuat</th>
                     <th>Aksi</th>
@@ -57,6 +57,13 @@
                     <td>{{ $materi->id }}</td>
                     <td>{{ $materi->judul }}</td>
                     <td>{{ $materi->topik->judul ?? '-' }}</td>
+                    <td>
+                        @if($materi->durasi)
+                            {{ floor($materi->durasi / 60) }}:{{ str_pad($materi->durasi % 60, 2, '0', STR_PAD_LEFT) }} menit
+                        @else
+                            -
+                        @endif
+                    </td>
                     <td>{{ $materi->urutan }}</td>
                     <td>{{ $materi->created_at->format('d-m-Y') }}</td>
                     <td class="action-buttons">
@@ -71,7 +78,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="text-center text-muted">Belum ada materi tersedia.</td>
+                    <td colspan="7" class="text-center text-muted">Belum ada materi tersedia.</td>
                 </tr>
                 @endforelse
             </tbody>
