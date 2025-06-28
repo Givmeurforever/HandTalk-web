@@ -19,7 +19,7 @@
 
         <!-- Bagian Kanan -->
         <div class="right-section">
-            <img src="{{ asset('img/Logo.png') }}" alt="Logo HandTalk" class="logo">
+            <img src="{{ asset('img/logo.png') }}" alt="Logo HandTalk" class="logo">
             @yield('content')
         </div>
     </div>

@@ -22,13 +22,13 @@ class RedirectIfAuthenticated
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle($request, Closure $next, ...$guards)
+    public function handle(Request $request, Closure $next, string ...$guards): Response
     {
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect('/admin'); // pastikan redirect path benar
+                return redirect($this->redirectTo($request))->toResponse($request);
             }
         }
 
@@ -40,9 +40,13 @@ class RedirectIfAuthenticated
      */
     protected function redirectTo(Request $request): ?string
     {
-        return static::$redirectToCallback
-            ? call_user_func(static::$redirectToCallback, $request)
-            : $this->defaultRedirectUri();
+        // Redirect berdasarkan guard yang digunakan
+        if (Auth::guard('admin')->check()) {
+            return route('admin.dashboard'); // atau '/admin' jika ingin ke /admin
+        }
+
+        // Default redirect untuk user biasa
+        return route('dashboard'); // atau '/home'
     }
 
     /**

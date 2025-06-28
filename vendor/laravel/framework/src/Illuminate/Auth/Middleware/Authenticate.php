@@ -111,14 +111,10 @@ class Authenticate implements AuthenticatesRequests
      * @param  \Illuminate\Http\Request  $request
      * @return string|null
      */
-    protected function redirectTo($request)
+    protected function redirectTo(Request $request)
     {
-        if (! $request->expectsJson()) {
-            if ($request->is('admin') || $request->is('admin/*')) {
-                return route('admin.login');
-            }
-
-            return route('login');
+        if (static::$redirectToCallback) {
+            return call_user_func(static::$redirectToCallback, $request);
         }
     }
 

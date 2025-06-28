@@ -73,6 +73,10 @@ Route::middleware('auth')->group(function () {
 
 // 🛠️ Admin Dashboard
 Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('', function () {
+        return redirect()->route('admin.login');
+    });
+    
     // Autentikasi admin
     Route::get('login', [AdminLoginController::class, 'showLoginForm'])->name('login');
     Route::post('login', [AdminLoginController::class, 'login'])->name('login.submit');
