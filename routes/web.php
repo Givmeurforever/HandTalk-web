@@ -70,6 +70,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/account', [SettingsController::class, 'deleteAccount'])->name('account.delete');
 });
 
+Route::redirect('/admin', '/admin/login');
+Route::redirect('/admin/', '/admin/login');
 
 // 🛠️ Admin Dashboard
 Route::prefix('admin')->name('admin.')->group(function () {
