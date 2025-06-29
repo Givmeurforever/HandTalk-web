@@ -8,6 +8,8 @@ use App\Models\Latihan;
 use App\Models\Kuis;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Models\UserProgress;
+use Illuminate\Support\Facades\Auth;
 
 class TopikUserController extends Controller
 {
@@ -18,35 +20,46 @@ class TopikUserController extends Controller
     }
 
     public function show($topikSlug, $materiSlug)
-    {
-        $topik = Topik::with('materi')->where('slug', $topikSlug)->firstOrFail();
-        $materi = $topik->materi->where('slug', $materiSlug)->first();
+{
+    $topik = Topik::with('materi')->where('slug', $topikSlug)->firstOrFail();
+    $materi = $topik->materi->where('slug', $materiSlug)->first();
 
-        if (!$materi) {
-            abort(404);
-        }
-
-        return view('pages.kursus.materi', [
-            'topik' => [
-                'judul' => $topik->judul,
-                'slug' => $topik->slug,
-                'description' => $topik->deskripsi,
-                'materi' => $topik->materi->map(function ($m) {
-                    return [
-                        'judul' => $m->judul,
-                        'slug' => $m->slug,
-                        'durasi' => '3 Menit',
-                    ];
-                }),
-            ],
-            'materi' => [
-                'judul' => $materi->judul,
-                'slug' => $materi->slug,
-                'video' => $materi->video,
-                'deskripsi' => $materi->deskripsi,
-            ]
-        ]);
+    if (!$materi) {
+        abort(404);
     }
+
+    // Cek apakah user sudah menyelesaikan materi ini
+    $materiSelesai = false;
+    if (Auth::check()) {
+        $materiSelesai = UserProgress::where('user_id', Auth::id())
+            ->where('content_type', 'materi')
+            ->where('content_id', $materi->id)
+            ->where('completed', true)
+            ->exists();
+    }
+
+    return view('pages.kursus.materi', [
+        'topik' => [
+            'judul' => $topik->judul,
+            'slug' => $topik->slug,
+            'description' => $topik->deskripsi,
+            'materi' => $topik->materi->map(function ($m) {
+                return [
+                    'judul' => $m->judul,
+                    'slug' => $m->slug,
+                    'durasi' => '3 Menit', // jika kamu punya field durasi, bisa diganti
+                ];
+            }),
+        ],
+        'materi' => [
+            'judul' => $materi->judul,
+            'slug' => $materi->slug,
+            'video' => $materi->video,
+            'deskripsi' => $materi->deskripsi,
+        ],
+        'materi_selesai' => $materiSelesai
+    ]);
+}
 
     public function latihan($topikSlug, $materiSlug, $page = 1)
     {
@@ -208,6 +221,16 @@ class TopikUserController extends Controller
                 'topikSlug' => $topikSlug
             ]
         ]);
+        // Simpan hasil kuis ke user_progress (multi entry karena kuis bisa diulang)
+
+        $entry = UserProgress::create([
+            'user_id' => Auth::id(),
+            'content_type' => 'kuis',
+            'content_id' => $topik->id,
+            'completed' => true,
+            'score' => $score,
+            'completed_at' => now(),
+        ]);
 
         return redirect()->route('kursus.kuis.hasil', $topikSlug);
     }
@@ -229,5 +252,23 @@ class TopikUserController extends Controller
 
         // PERBAIKAN: Gunakan path view yang sesuai
         return view('pages.kursus.kuis-hasil', $hasilData);
+    }
+    public function completeMateri($topikSlug, $materiSlug)
+    {
+        $materi = Materi::where('slug', $materiSlug)->firstOrFail();
+
+        UserProgress::updateOrCreate(
+            [
+                'user_id' => Auth::id(),
+                'content_type' => 'materi',
+                'content_id' => $materi->id,
+            ],
+            [
+                'completed' => true,
+                'completed_at' => now(),
+            ]
+        );
+
+        return redirect()->back()->with('success', 'Materi ditandai selesai.');
     }
 }

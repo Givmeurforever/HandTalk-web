@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
 
     // 📖 Tampilkan Materi (show page)
     Route::get('/kursus/{topikSlug}/{materiSlug}', [TopikUserController::class, 'show'])->name('kursus.show');
+    Route::post('/kursus/{topikSlug}/{materiSlug}/complete', [TopikUserController::class, 'completeMateri'])
+    ->name('materi.complete');
 
     // 📝 Latihan (New Structure: multiple questions per page)
     Route::get('/kursus/{topikSlug}/{materiSlug}/latihan/{page?}', [TopikUserController::class, 'latihan'])

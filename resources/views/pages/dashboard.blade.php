@@ -6,55 +6,72 @@
 @endpush
 
 @section('content')
-    <div class="container"> {{-- Atau class pembungkus global jika ada --}}
-        <div class="user-dashboard fade-in">
-            <div class="dashboard-header fade-in delay-1">
-                <a href="{{ url()->previous() }}" class="btn-back">
-                    <i class="fas fa-arrow-left"></i> Kembali
-                </a>
-                <h2><i class="fas fa-user-circle"></i> Halo, {{ $user->first_name }} 👋</h2>
-                <a href="{{ route('kursus') }}" class="btn-lanjut">📚 Lanjutkan Belajar</a>
-            </div>
+<a href="{{ route('kursus') }}" class="back-btn-enhanced">
+    <i class="fas fa-arrow-left"></i> Kembali ke Kursus
+</a>
 
-            <div class="dashboard-stats fade-in delay-2">
-                <div class="stat-card">
-                    <i class="fas fa-graduation-cap stat-icon"></i>
-                    <h4>Topik Selesai</h4>
-                    <p>{{ $totalCompleted }} / {{ $totalTopik }}</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: {{ ($totalCompleted / max($totalTopik, 1)) * 100 }}%;"></div>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-star stat-icon"></i>
-                    <h4>Kamus Favorit</h4>
-                    <p>{{ count($favorites) }}</p>
-                </div>
+<div class="dashboard-container">
+    <!-- Header Section -->
+    <div class="dashboard-header">
+        <div class="user-info">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
             </div>
-
-            <div class="dashboard-section fade-in delay-3">
-                <h3><i class="fas fa-book-open"></i> Progres Belajar</h3>
-                <ul class="progress-list">
-                    @foreach ($progress as $item)
-                        <li>
-                            <strong>{{ $item['topik'] }}</strong><br>
-                            <span class="badge {{ $item['materi'] === 'completed' ? 'success' : 'pending' }}">Materi: {{ $item['materi'] }}</span>
-                            <span class="badge {{ $item['latihan'] === 'completed' ? 'success' : 'pending' }}">Latihan: {{ $item['latihan'] }}</span>
-                            <span class="badge {{ $item['kuis'] === 'completed' ? 'success' : 'pending' }}">Kuis: {{ $item['kuis'] }}</span>
-                            <span class="badge score">Skor: {{ $item['skor'] }}</span>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-
-            <div class="dashboard-section fade-in delay-3">
-                <h3><i class="fas fa-book"></i> Kamus Favorit</h3>
-                <ul class="favorite-list">
-                    @foreach ($favorites as $fav)
-                        <li><i class="fas fa-hand-peace"></i> {{ $fav['word'] }}</li>
-                    @endforeach
-                </ul>
+            <div class="user-details">
+                <h2>Halo, {{ $user->first_name }} {{ $user->last_name }}</h2>
+                <p class="user-email"><i class="fas fa-envelope"></i> {{ $user->email }}</p>
             </div>
         </div>
     </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-book"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ $totalTopik }}</h3>
+                <p>Total Topik</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon completed">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ $totalCompleted }}</h3>
+                <p>Diselesaikan</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Section -->
+    <div class="progress-section">
+        <h3><i class="fas fa-chart-line"></i> Progress Kamu</h3>
+        <div class="progress-list">
+            @foreach ($progress as $item)
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <h4>{{ $item['topik'] }}</h4>
+                    </div>
+                    <div class="progress-details">
+                        <div class="detail-item">
+                            <i class="fas fa-file-text"></i>
+                            <span>Materi: {{ $item['materi'] }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-question-circle"></i>
+                            <span>Kuis: {{ $item['kuis'] }}</span>
+                        </div>
+                        <div class="detail-item score">
+                            <i class="fas fa-star"></i>
+                            <span>Skor: {{ $item['skor'] }}</span>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</div>
 @endsection

@@ -24,4 +24,9 @@ class Materi extends Model
     {
         return $this->hasMany(Latihan::class);
     }
+    public function progress()
+    {
+        return $this->hasMany(UserProgress::class, 'content_id')->where('content_type', 'materi');
+    }
+
 }

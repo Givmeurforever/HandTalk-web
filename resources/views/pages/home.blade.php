@@ -58,7 +58,7 @@
 
         <div class="fitur-container">
             @foreach([
-                ['Materi.png', '4 Topik', 'Materi', 'Pelajari bahasa isyarat melalui video interaktif yang mudah dipahami.'],
+                ['materi.png', '4 Topik', 'Materi', 'Pelajari bahasa isyarat melalui video interaktif yang mudah dipahami.'],
                 ['latihan.png', '100 Soal', 'Latihan', 'Uji pemahamanmu dengan latihan soal interaktif.'],
                 ['kamus.png', '100+ Kata', 'Kamus', 'Cari dan temukan berbagai kata dalam bahasa isyarat.'],
                 ['kuis.png', '10 Kuis', 'Kuis', 'Tantang dirimu dengan kuis interaktif.'],

@@ -62,4 +62,10 @@ class Kuis extends Model
     {
         return $query->orderBy('urutan', 'asc');
     }
+
+    public function progress()
+    {
+        return $this->hasMany(UserProgress::class, 'content_id')->where('content_type', 'kuis');
+    }
+
 }
