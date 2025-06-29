@@ -47,7 +47,6 @@
     
             <div class="user-dropdown">
                 <a href="/dashboard"><i class="fas fa-user"></i> Dashboard</a>
-                <a href="/notifications"><i class="fas fa-bell"></i> Notifikasi</a>
                 <a href="/settings"><i class="fas fa-cog"></i> Pengaturan</a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
